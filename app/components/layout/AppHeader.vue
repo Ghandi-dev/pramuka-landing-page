@@ -1,95 +1,87 @@
 <script setup lang="ts">
-import { ref } from 'vue'
+import { ref } from "vue";
 
-const isMobileMenuOpen = ref(false)
+const isMobileMenuOpen = ref(false);
 
 const links = [
-  { name: 'Home', path: '/' },
-  { name: 'About', path: '/about' },
-  { name: 'Activities', path: '/activities' },
-  { name: 'News', path: '/news' },
-  { name: 'Members', path: '/members' },
-  { name: 'Contact', path: '/contact' },
-]
+  { name: "Home", path: "/" },
+  { name: "About", path: "/about" },
+  { name: "Activities", path: "/activities" },
+  { name: "Members", path: "/members" },
+  { name: "Contact", path: "/contact" },
+];
 
 function toggleMenu() {
-  isMobileMenuOpen.value = !isMobileMenuOpen.value
+  isMobileMenuOpen.value = !isMobileMenuOpen.value;
 }
 </script>
 
 <template>
-  <header class="fixed top-0 inset-x-0 z-50 bg-background/80 backdrop-blur-md border-b border-border/40 transition-colors duration-300">
+  <header
+    class="fixed top-0 inset-x-0 z-50 bg-background/80 backdrop-blur-md border-b border-border/40 transition-colors duration-300">
     <div class="container mx-auto px-4 sm:px-6 lg:px-8 max-w-7xl">
       <div class="flex items-center justify-between h-20">
         <!-- Logo -->
-        <NuxtLink to="/" class="flex items-center gap-3 group">
-          <div class="w-10 h-10 rounded-full bg-primary flex items-center justify-center text-primary-foreground font-display font-bold text-xl group-hover:bg-accent transition-colors duration-300">
-            P
+        <NuxtLink to="/" class="flex items-center gap-1 group max-w-fit">
+          <div class="w-10 h-10 flex-shrink-0 overflow-hidden">
+            <img src="/images/logo.webp" alt="Pramuka Logo" class="w-full h-full object-contain" />
           </div>
-          <div class="flex flex-col">
-            <span class="font-display font-semibold text-lg leading-tight tracking-tight text-foreground group-hover:text-primary transition-colors">Pramuka</span>
-            <span class="text-[10px] uppercase tracking-widest text-muted-foreground font-medium">SMAN 1 Pasawahan</span>
+
+          <div class="flex flex-col justify-center">
+            <span
+              class="font-display font-bold text-base md:text-lg leading-none tracking-tight text-foreground group-hover:text-primary transition-colors">
+              Pramuka
+            </span>
+            <span
+              class="text-[9px] md:text-[10px] uppercase tracking-[0.15em] text-muted-foreground font-semibold mt-0.5">
+              SMAN 1 Pasawahan
+            </span>
           </div>
         </NuxtLink>
 
         <!-- Desktop Navigation -->
         <nav class="hidden md:flex items-center gap-8">
-          <NuxtLink 
-            v-for="link in links" 
-            :key="link.path" 
-            :to="link.path"
+          <NuxtLink v-for="link in links" :key="link.path" :to="link.path"
             class="text-sm font-medium text-foreground/80 hover:text-primary transition-colors relative after:absolute after:-bottom-1 after:left-0 after:h-px after:w-0 after:bg-primary after:transition-all hover:after:w-full"
-            active-class="text-primary after:w-full"
-          >
+            active-class="text-primary after:w-full">
             {{ link.name }}
           </NuxtLink>
         </nav>
 
         <!-- CTA & Mobile Toggle -->
         <div class="flex items-center gap-4">
-          <NuxtLink 
-             to="/contact" 
-             class="hidden md:inline-flex h-10 items-center justify-center rounded-sm bg-primary px-6 text-sm font-medium text-primary-foreground transition-all hover:bg-primary/90 hover:shadow-lg hover:shadow-primary/20 hover:-translate-y-0.5"
-          >
+          <NuxtLink to="/contact"
+            class="hidden md:inline-flex h-10 items-center justify-center rounded-sm bg-primary px-6 text-sm font-medium text-primary-foreground transition-all hover:bg-primary/90 hover:shadow-lg hover:shadow-primary/20 hover:-translate-y-0.5">
             Join Us
           </NuxtLink>
 
-          <button 
-            @click="toggleMenu" 
-            class="md:hidden flex flex-col justify-center gap-1.5 w-8 h-8 rounded-full"
-            aria-label="Toggle menu"
-          >
-            <span class="block w-6 h-0.5 bg-foreground transition-transform" :class="{ 'rotate-45 translate-y-2': isMobileMenuOpen }"></span>
-            <span class="block w-6 h-0.5 bg-foreground transition-opacity" :class="{ 'opacity-0': isMobileMenuOpen }"></span>
-            <span class="block w-6 h-0.5 bg-foreground transition-transform" :class="{ '-rotate-45 -translate-y-2': isMobileMenuOpen }"></span>
+          <button @click="toggleMenu" class="md:hidden flex flex-col justify-center gap-1.5 w-8 h-8 rounded-full"
+            aria-label="Toggle menu">
+            <span class="block w-6 h-0.5 bg-foreground transition-transform"
+              :class="{ 'rotate-45 translate-y-2': isMobileMenuOpen }"></span>
+            <span class="block w-6 h-0.5 bg-foreground transition-opacity"
+              :class="{ 'opacity-0': isMobileMenuOpen }"></span>
+            <span class="block w-6 h-0.5 bg-foreground transition-transform"
+              :class="{ '-rotate-45 -translate-y-2': isMobileMenuOpen }"></span>
           </button>
         </div>
       </div>
     </div>
 
     <!-- Mobile Navigation -->
-    <div 
-      v-show="isMobileMenuOpen" 
-      class="md:hidden border-t border-border/40 bg-background/95 backdrop-blur-xl absolute top-20 inset-x-0 h-[calc(100vh-5rem)] overflow-y-auto"
-    >
+    <div v-show="isMobileMenuOpen"
+      class="md:hidden border-t border-border/40 bg-background/95 backdrop-blur-xl absolute top-20 inset-x-0 h-[calc(100vh-5rem)] overflow-y-auto">
       <nav class="flex flex-col p-6 space-y-6 container mx-auto">
-        <NuxtLink 
-          v-for="link in links" 
-          :key="link.path" 
-          :to="link.path"
+        <NuxtLink v-for="link in links" :key="link.path" :to="link.path"
           class="font-display text-3xl font-semibold text-foreground hover:text-primary transition-colors"
-          active-class="text-primary"
-          @click="isMobileMenuOpen = false"
-        >
+          active-class="text-primary" @click="isMobileMenuOpen = false">
           {{ link.name }}
         </NuxtLink>
-        
+
         <div class="pt-8 mt-8 border-t border-border">
-          <NuxtLink 
-            to="/contact" 
+          <NuxtLink to="/contact"
             class="inline-flex h-12 w-full items-center justify-center rounded-sm bg-primary px-8 text-base font-medium text-primary-foreground"
-            @click="isMobileMenuOpen = false"
-          >
+            @click="isMobileMenuOpen = false">
             Join Us
           </NuxtLink>
         </div>

@@ -106,3 +106,26 @@ export const members = [
     image: "https://images.unsplash.com/photo-1517841905240-472988babdf9?auto=format&fit=crop&q=80&w=400",
   }
 ];
+
+export const pramukaImagesForPinBoard = [
+  { id: 1, image: "https://placehold.co/400x300?text=Kegiatan+1", title: "Upacara Pembukaan", x: 200, y: 150 },
+  { id: 2, image: "https://placehold.co/400x300?text=Kegiatan+2", title: "Latihan Tali Temali", x: 850, y: 300 },
+  { id: 3, image: "https://placehold.co/400x300?text=Kegiatan+3", title: "Penjelajahan Hutan", x: 1500, y: 100 },
+  { id: 4, image: "https://placehold.co/400x300?text=Kegiatan+4", title: "Api Unggun", x: 2200, y: 450 },
+  { id: 5, image: "https://placehold.co/400x300?text=Kegiatan+5", title: "Penyuluhan Saka", x: 3100, y: 200 },
+  { id: 6, image: "https://placehold.co/400x300?text=Kegiatan+6", title: "Lomba Pionering", x: 400, y: 900 },
+  { id: 7, image: "https://placehold.co/400x300?text=Kegiatan+7", title: "Bakti Sosial", x: 1100, y: 1100 },
+  { id: 8, image: "https://placehold.co/400x300?text=Kegiatan+8", title: "Kemah Bersama", x: 1900, y: 850 },
+  { id: 9, image: "https://placehold.co/400x300?text=Kegiatan+9", title: "Latihan Sandi", x: 2700, y: 1000 },
+  { id: 10, image: "https://placehold.co/400x300?text=Kegiatan+10", title: "P3K Dasar", x: 3400, y: 750 },
+  { id: 11, image: "https://placehold.co/400x300?text=Kegiatan+11", title: "Memasak Rimba", x: 150, y: 1800 },
+  { id: 12, image: "https://placehold.co/400x300?text=Kegiatan+12", title: "Navigasi Darat", x: 950, y: 2000 },
+  { id: 13, image: "https://placehold.co/400x300?text=Kegiatan+13", title: "Senam Pramuka", x: 1750, y: 1600 },
+  { id: 14, image: "https://placehold.co/400x300?text=Kegiatan+14", title: "Rapat Dewan Galang", x: 2500, y: 1900 },
+  { id: 15, image: "https://placehold.co/400x300?text=Kegiatan+15", title: "Pelantikan Bantara", x: 3200, y: 2100 },
+  { id: 16, image: "https://placehold.co/400x300?text=Kegiatan+16", title: "Pentas Seni", x: 500, y: 2800 },
+  { id: 17, image: "https://placehold.co/400x300?text=Kegiatan+17", title: "Kunjungan Museum", x: 1300, y: 3100 },
+  { id: 18, image: "https://placehold.co/400x300?text=Kegiatan+18", title: "Lari Lintas Alam", x: 2100, y: 2900 },
+  { id: 19, image: "https://placehold.co/400x300?text=Kegiatan+19", title: "Upacara Penutupan", x: 2900, y: 3200 },
+  { id: 20, image: "https://placehold.co/400x300?text=Kegiatan+20", title: "Evaluasi Kegiatan", x: 3500, y: 2700 }
+];
