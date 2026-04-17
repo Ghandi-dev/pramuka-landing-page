@@ -1,0 +1,28 @@
+{
+  "nav": {
+    "home": "Home",
+    "about": "About Us",
+    "activities": "Activities",
+    "members": "Members",
+    "contact": "Contact"
+  },
+  "home": {
+    "title": "Welcome to Scouts of SMA Negeri 1 Pasawahan",
+    "description": "Building national character through the scouting movement.",
+    "hero": {
+      "badge": "Pangkalan SMA Negeri 1 Pasawahan",
+      "title_1": "Brave.",
+      "title_2": "Disciplined.",
+      "title_3": "Prepared.",
+      "description": "Building noble character through the spirit of scouting in nature. Becoming resilient role models for the future.",
+      "cta_join": "Join Application",
+      "cta_history": "Learn Our History"
+    },
+    "banner": {
+      "title": "Satyaku Kudarmakan,",
+      "title_2": "Darmaku Kubaktikan.",
+      "description": "More than just an extracurricular activity, the SMA Negeri 1 Pasawahan Scout organization is a big family that builds leadership, strong brotherhood, and survival skills in every situation."
+    }
+  }
+  
+}

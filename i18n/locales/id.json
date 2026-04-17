@@ -1,0 +1,27 @@
+{
+  "nav": {
+    "home": "Beranda",
+    "about": "Tentang Kami",
+    "activities": "Kegiatan",
+    "members": "Anggota",
+    "contact": "Kontak"
+  },
+  "home": {
+    "title": "Selamat Datang di Pramuka SMA Negeri 1 Pasawahan",
+    "description": "Membangun karakter bangsa melalui gerakan kepramukaan.",
+    "hero": {
+      "badge": "Pangkalan SMA Negeri 1 Pasawahan",
+      "title_1": "Berani.",
+      "title_2": "Disiplin.",
+      "title_3": "Siap.",
+      "description": "Membangun karakter mulia dengan semangat kepramukaan di alam raya. Menjadi teladan tangguh untuk masa depan.",
+      "cta_join": "Daftar Sekarang",
+      "cta_history": "Pelajari Sejarah Kami"
+    },
+    "banner": {
+      "title": "Satyaku Kudarmakan,",
+      "title_2": "Darmaku Kubaktikan.",
+      "description": "Lebih dari sekadar ekstrakurikuler, Pramuka SMA Negeri 1 Pasawahan adalah keluarga besar yang menempa kepemimpinan, persaudaraan tanpa batas, dan keterampilan bertahan di setiap kondisi."
+    }
+  }
+}

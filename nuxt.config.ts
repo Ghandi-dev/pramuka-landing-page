@@ -9,7 +9,14 @@ export default defineNuxtConfig({
     },
     compatibilityDate: "2025-07-15",
     devtools: { enabled: true },
-    modules: ["@nuxtjs/tailwindcss", "shadcn-nuxt"],
+    modules: ["@nuxtjs/tailwindcss", "shadcn-nuxt", '@nuxtjs/i18n'],
+    i18n: {
+    locales: [
+      { code: 'en', language: 'en-US',file: 'en.json' },
+      { code: 'id', language: 'id-ID',file: 'id.json' }
+    ],
+    defaultLocale: 'id'
+  },
     app: {
         head: {
             titleTemplate: '%s - Pramuka SMA Negeri 1 Pasawahan',

@@ -29,25 +29,29 @@ const recentActivities = activities.slice(0, 3)
           <div
             class="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-primary/10 text-primary text-xs font-semibold tracking-wide uppercase mb-6">
             <span class="w-2 h-2 rounded-full bg-primary animate-pulse"></span>
-            Pangkalan SMAN 1 Pasawahan
+            {{ $t('home.hero.badge') }}
           </div>
+
           <h1
             class="font-display text-5xl md:text-6xl lg:text-7xl font-bold text-foreground leading-[1.1] tracking-tight mb-8">
-            Brave.<br />
-            <span class="text-primary">Disciplined.</span><br />
-            Prepared.
+            {{ $t('home.hero.title_1') }}<br />
+            <span class="text-primary">{{ $t('home.hero.title_2') }}</span><br />
+            {{ $t('home.hero.title_3') }}
           </h1>
+
           <p class="text-lg md:text-xl text-muted-foreground leading-relaxed mb-10 max-w-lg">
-            Membangun karakter mulia dengan semangat kepanduan di alam raya. Menjadi teladan tangguh untuk masa depan.
+            {{ $t('home.hero.description') }}
           </p>
+
           <div class="flex flex-col sm:flex-row gap-4">
             <NuxtLink to="/contact"
               class="inline-flex h-12 items-center justify-center rounded-sm bg-primary px-8 text-sm font-medium text-primary-foreground transition-all hover:bg-primary/90 hover:scale-[1.02] hover:shadow-xl hover:shadow-primary/20">
-              Join Application
+              {{ $t('home.hero.cta_join') }}
             </NuxtLink>
+
             <NuxtLink to="/about"
               class="inline-flex h-12 items-center justify-center rounded-sm border-2 border-border bg-transparent px-8 text-sm font-medium text-foreground transition-colors hover:border-primary hover:text-primary">
-              Learn Our History
+              {{ $t('home.hero.cta_history') }}
             </NuxtLink>
           </div>
         </div>
@@ -66,11 +70,11 @@ const recentActivities = activities.slice(0, 3)
     <section class="w-full bg-primary text-primary-foreground py-24">
       <div class="container mx-auto px-4 sm:px-6 lg:px-8 max-w-5xl text-center">
         <h2 class="font-display text-3xl md:text-5xl font-bold mb-8 leading-tight">
-          Satyaku Kudarmakan,<br />Darmaku Kubaktikan.
+          {{ $t('home.banner.title') }}<br />
+          {{ $t('home.banner.title_2') }}
         </h2>
         <p class="text-lg text-primary-foreground/80 leading-relaxed max-w-3xl mx-auto">
-          Lebih dari sekadar ekstrakurikuler, Pramuka SMA Negeri 1 Pasawahan adalah keluarga besar yang menempa
-          kepemimpinan, persaudaraan tanpa batas, dan keterampilan bertahan di setiap kondisi.
+          {{ $t('home.banner.description') }}
         </p>
       </div>
     </section>

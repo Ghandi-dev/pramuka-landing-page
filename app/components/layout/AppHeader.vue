@@ -1,18 +1,21 @@
 <script setup lang="ts">
-import { ref } from "vue";
+import { ref, computed } from "vue"
+import { useI18n } from "#imports"
 
-const isMobileMenuOpen = ref(false);
+const { t } = useI18n()
 
-const links = [
-  { name: "Home", path: "/" },
-  { name: "About", path: "/about" },
-  { name: "Activities", path: "/activities" },
-  { name: "Members", path: "/members" },
-  { name: "Contact", path: "/contact" },
-];
+const isMobileMenuOpen = ref(false)
+
+const links = computed(() => [
+  { name: t('nav.home'), path: "/" },
+  { name: t('nav.about'), path: "/about" },
+  { name: t('nav.activities'), path: "/activities" },
+  { name: t('nav.members'), path: "/members" },
+  { name: t('nav.contact'), path: "/contact" },
+])
 
 function toggleMenu() {
-  isMobileMenuOpen.value = !isMobileMenuOpen.value;
+  isMobileMenuOpen.value = !isMobileMenuOpen.value
 }
 </script>
 
@@ -50,6 +53,8 @@ function toggleMenu() {
 
         <!-- CTA & Mobile Toggle -->
         <div class="flex items-center gap-4">
+          <LanguageSwitcher />
+
           <NuxtLink to="/contact"
             class="hidden md:inline-flex h-10 items-center justify-center rounded-sm bg-primary px-6 text-sm font-medium text-primary-foreground transition-all hover:bg-primary/90 hover:shadow-lg hover:shadow-primary/20 hover:-translate-y-0.5">
             Join Us
