@@ -52,12 +52,12 @@ const recentActivities = activities.slice(0, 3)
           </div>
         </div>
 
-        <div class="relative hidden lg:block h-[600px]">
+        <div class="relative hidden lg:block h-150">
           <div
             class="absolute inset-0 bg-primary/5 rounded-2xl transform rotate-3 scale-105 transition-transform duration-700 hover:rotate-6">
           </div>
-          <img src="/images/pramuka1.jpeg" alt="Pramuka Activities"
-            class="relative z-10 w-full h-full object-cover rounded-2xl shadow-2xl grayscale-[20%] hover:grayscale-0 transition-all duration-700" />
+          <img src="/images/pramuka1.webp" alt="Pramuka Activities"
+            class="relative z-10 w-full h-full object-cover rounded-2xl shadow-2xl grayscale-20 hover:grayscale-0 transition-all duration-700" />
         </div>
       </div>
     </section>
@@ -77,7 +77,7 @@ const recentActivities = activities.slice(0, 3)
 
     <!-- Pinboard -->
     <section class="py-24 bg-background">
-      <div class="container mx-auto px-4 sm:px-6 lg:px-8 max-w-7xl">
+      <div class="container px-4 mx-auto">
         <PinBoard />
       </div>
     </section>
@@ -100,10 +100,10 @@ const recentActivities = activities.slice(0, 3)
 
         <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
           <article v-for="activity in recentActivities" :key="activity.id"
-            class="group group/card relative h-[450px] overflow-hidden rounded-sm bg-muted">
+            class="group group/card relative h-112.5 overflow-hidden rounded-sm bg-muted">
             <img :src="activity.image" :alt="activity.title"
               class="absolute inset-0 w-full h-full object-cover transition-transform duration-700 group-hover/card:scale-110" />
-            <div class="absolute inset-0 bg-gradient-to-t from-black/80 via-black/40 to-transparent"></div>
+            <div class="absolute inset-0 bg-linear-to-t from-black/80 via-black/40 to-transparent"></div>
 
             <div class="absolute inset-0 p-8 flex flex-col justify-end">
               <span
