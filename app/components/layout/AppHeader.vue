@@ -23,7 +23,7 @@ function toggleMenu() {
       <div class="flex items-center justify-between h-20">
         <!-- Logo -->
         <NuxtLink to="/" class="flex items-center gap-1 group max-w-fit">
-          <div class="w-10 h-10 flex-shrink-0 overflow-hidden">
+          <div class="w-10 h-10 shrink-0 overflow-hidden">
             <img src="/images/logo.webp" alt="Pramuka Logo" class="w-full h-full object-contain" />
           </div>
 
