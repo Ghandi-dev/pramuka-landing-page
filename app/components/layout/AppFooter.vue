@@ -1,4 +1,7 @@
 <script setup lang="ts">
+import { useI18n, useLocalePath } from "#imports"
+const { t } = useI18n()
+const localePath = useLocalePath()
 
 </script>
 
@@ -8,7 +11,7 @@
       <div class="grid grid-cols-1 md:grid-cols-4 gap-12 lg:gap-24">
         <!-- Brand / Identity -->
         <div class="md:col-span-1 flex flex-col items-start">
-          <NuxtLink to="/" class="flex items-center gap-3 mb-6">
+          <NuxtLink :to="localePath('/')" class="flex items-center gap-3 mb-6">
             <div class="w-10 h-10 shrink-0 overflow-hidden">
               <img src="/images/logo.webp" alt="Pramuka Logo" class="w-full h-full object-contain" />
             </div>
@@ -18,51 +21,50 @@
             </div>
           </NuxtLink>
           <p class="text-sm text-muted-foreground leading-relaxed">
-            Gerakan Pramuka Gugus Depan SMAN 1 Pasawahan. Membangun karakter, kemandirian, dan kepemimpinan generasi
-            muda.
+            {{ t("footer.description") }}
           </p>
         </div>
 
         <!-- Links -->
         <div>
-          <h4 class="font-display font-semibold text-foreground mb-6 uppercase tracking-wider text-xs">Explore</h4>
+          <h4 class="font-display font-semibold text-foreground mb-6 uppercase tracking-wider text-xs">{{ t("footer.explore") }}</h4>
           <ul class="space-y-4">
             <li>
-              <NuxtLink to="/about" class="text-sm text-muted-foreground hover:text-primary transition-colors">About
-                History</NuxtLink>
+              <NuxtLink :to="localePath('/about')" class="text-sm text-muted-foreground hover:text-primary transition-colors">{{ t("footer.aboutHistory") }}
+                </NuxtLink>
             </li>
             <li>
-              <NuxtLink to="/activities" class="text-sm text-muted-foreground hover:text-primary transition-colors">
-                Latest Activities</NuxtLink>
+              <NuxtLink :to="localePath('/activities')" class="text-sm text-muted-foreground hover:text-primary transition-colors">
+                {{ t("footer.latestActivities") }}</NuxtLink>
             </li>
           </ul>
         </div>
 
         <!-- Links -->
         <div>
-          <h4 class="font-display font-semibold text-foreground mb-6 uppercase tracking-wider text-xs">Organization</h4>
+          <h4 class="font-display font-semibold text-foreground mb-6 uppercase tracking-wider text-xs">{{ t("footer.organization") }}</h4>
           <ul class="space-y-4">
             <li>
-              <NuxtLink to="/members" class="text-sm text-muted-foreground hover:text-primary transition-colors">Ambalan
-                Hierarchy</NuxtLink>
+              <NuxtLink :to="localePath('/members')" class="text-sm text-muted-foreground hover:text-primary transition-colors">{{ t("footer.ambalanHierarchy") }}
+                </NuxtLink>
             </li>
             <li>
-              <NuxtLink to="/members" class="text-sm text-muted-foreground hover:text-primary transition-colors">Dewan
-                Ambalan</NuxtLink>
+              <NuxtLink :to="localePath('/members')" class="text-sm text-muted-foreground hover:text-primary transition-colors">{{ t("footer.dewanAmbalan") }}
+                </NuxtLink>
             </li>
             <li>
-              <NuxtLink to="/contact" class="text-sm text-muted-foreground hover:text-primary transition-colors">Become
-                a Member</NuxtLink>
+              <NuxtLink :to="localePath('/contact')" class="text-sm text-muted-foreground hover:text-primary transition-colors">{{ t("footer.becomeMember") }}
+                </NuxtLink>
             </li>
           </ul>
         </div>
 
         <!-- Contact/Social -->
         <div>
-          <h4 class="font-display font-semibold text-foreground mb-6 uppercase tracking-wider text-xs">Connect</h4>
+          <h4 class="font-display font-semibold text-foreground mb-6 uppercase tracking-wider text-xs">{{ t("footer.connect") }}</h4>
           <address class="not-italic text-sm text-muted-foreground space-y-4">
             <p>
-              Jl. Kapten Halim No.1, Pasawahan,<br />Kab. Purwakarta, Jawa Barat
+              {{ t("footer.address_1") }}<br />{{ t("footer.address_2") }}
             </p>
             <p>
               <a href="mailto:pramukasmanpas@gmail.com"
@@ -94,7 +96,7 @@
 
       <div
         class="mt-16 pt-8 border-t border-border/50 flex flex-col md:flex-row justify-between items-center gap-4 text-xs text-muted-foreground">
-        <p>&copy; {{ new Date().getFullYear() }} Pramuka SMAN 1 Pasawahan. All rights reserved.</p>
+        <p>&copy; {{ new Date().getFullYear() }} {{ t("footer.copyright") }}.</p>
         <p class="font-medium tracking-wide">SATYAKU KUDARMAKAN, DARMAKU KUBAKTIKAN</p>
       </div>
     </div>

@@ -6,6 +6,21 @@
     "members": "Anggota",
     "contact": "Kontak"
   },
+  "footer": {
+    "description": "Gerakan Pramuka Gugus Depan SMAN 1 Pasawahan. Membangun karakter, kemandirian, dan kepemimpinan generasi muda.",
+    "explore": "Jelajahi",
+    "aboutHistory": "Sejarah Pramuka",
+    "latestActivities": "Kegiatan Terbaru",
+    "organization": "Organisasi",
+    "ambalanHierarchy": "Struktur Ambalan",
+    "dewanAmbalan": "Dewan Ambalan",
+    "becomeMember": "Menjadi Anggota",
+    "connect": "Hubungi",
+    "address_1": "Jl. Kapten Halim No.1, Pasawahan, ",
+    "address_2": "Kab. Purwakarta, Jawa Barat 41172",
+    "copyright": "Pramuka SMAN 1 Pasawahan. Hak cipta dilindungi.",
+    "motto": "SATYAKU KUDARMAKAN, DARMAKU KUBAKTIKAN"
+  },
   "home": {
     "title": "Selamat Datang di Pramuka SMA Negeri 1 Pasawahan",
     "description": "Membangun karakter bangsa melalui gerakan kepramukaan.",

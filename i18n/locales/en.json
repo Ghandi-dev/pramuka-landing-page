@@ -6,6 +6,21 @@
     "members": "Members",
     "contact": "Contact"
   },
+  "footer": {
+    "description": "Scout Movement of SMAN 1 Pasawahan. Building character, independence, and leadership for the young generation.",
+    "explore": "Explore",
+    "aboutHistory": "Scout History",
+    "latestActivities": "Latest Activities",
+    "organization": "Organization",
+    "ambalanHierarchy": "Ambalan Hierarchy",
+    "dewanAmbalan": "Ambalan Council",
+    "becomeMember": "Become a Member",
+    "connect": "Connect",
+    "address_1": "St. Kapten Halim No.1, Pasawahan, ",
+    "address_2": "Purwakarta Regency, West Java",
+    "copyright": "Pramuka SMAN 1 Pasawahan. All rights reserved.",
+    "motto": "MY PROMISE I WILL FULFILL, MY DUTY I WILL DEVOTE"
+  },
   "home": {
     "title": "Welcome to Scouts of SMA Negeri 1 Pasawahan",
     "description": "Building national character through the scouting movement.",
@@ -24,5 +39,4 @@
       "description": "More than just an extracurricular activity, the SMA Negeri 1 Pasawahan Scout organization is a big family that builds leadership, strong brotherhood, and survival skills in every situation."
     }
   }
-  
 }
