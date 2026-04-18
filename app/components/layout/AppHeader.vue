@@ -1,17 +1,18 @@
 <script setup lang="ts">
 import { ref, computed } from "vue"
-import { useI18n } from "#imports"
+import { useI18n, useLocalePath } from "#imports"
 
 const { t } = useI18n()
+const localePath = useLocalePath()
 
 const isMobileMenuOpen = ref(false)
 
 const links = computed(() => [
-  { name: t('nav.home'), path: "/" },
-  { name: t('nav.about'), path: "/about" },
-  { name: t('nav.activities'), path: "/activities" },
-  { name: t('nav.members'), path: "/members" },
-  { name: t('nav.contact'), path: "/contact" },
+  { name: t('nav.home'), path: localePath('/') },
+  { name: t('nav.about'), path: localePath('/about') },
+  { name: t('nav.activities'), path: localePath('/activities') },
+  { name: t('nav.members'), path: localePath('/members') },
+  { name: t('nav.contact'), path: localePath('/contact') },
 ])
 
 function toggleMenu() {
@@ -25,7 +26,7 @@ function toggleMenu() {
     <div class="container mx-auto px-4 sm:px-6 lg:px-8 max-w-7xl">
       <div class="flex items-center justify-between h-20">
         <!-- Logo -->
-        <NuxtLink to="/" class="flex items-center gap-1 group max-w-fit">
+        <NuxtLink :to="localePath('/')" class="flex items-center gap-1 group max-w-fit">
           <div class="w-10 h-10 shrink-0 overflow-hidden">
             <img src="/images/logo.webp" alt="Pramuka Logo" class="w-full h-full object-contain" />
           </div>
