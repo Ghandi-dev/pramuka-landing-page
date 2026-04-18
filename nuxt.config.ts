@@ -1,4 +1,5 @@
 // https://nuxt.com/docs/api/configuration/nuxt-config
+import tailwindcss from '@tailwindcss/vite'
 export default defineNuxtConfig({
     runtimeConfig: {
         public: {
@@ -10,12 +11,17 @@ export default defineNuxtConfig({
         optimizeDeps: {
             include: [
                 '@panzoom/panzoom',
+                '@supabase/supabase-js',
             ]
-        }
+        },
+        plugins: [
+            tailwindcss(),
+        ],
     },
     compatibilityDate: "2025-07-15",
     devtools: { enabled: true },
-    modules: ["@nuxtjs/tailwindcss", "shadcn-nuxt", '@nuxtjs/i18n'],
+    css: ['~/assets/css/tailwind.css'],
+    modules: ["shadcn-nuxt", '@nuxtjs/i18n'],
     i18n: {
         locales: [
             { code: 'en', language: 'en-US', file: 'en.json' },

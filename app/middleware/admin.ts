@@ -1,9 +1,11 @@
 import type { SupabaseClient } from '@supabase/supabase-js'
 
 export default defineNuxtRouteMiddleware(async (to, from) => {
+    // Allow access to login page without auth
+    if (to.path === '/admin/login') return
+
     const nuxtApp = useNuxtApp()
     const supabase = nuxtApp.$supabase as SupabaseClient
-
 
     const {
         data: { session }
