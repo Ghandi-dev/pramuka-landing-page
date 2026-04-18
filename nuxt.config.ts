@@ -1,5 +1,11 @@
 // https://nuxt.com/docs/api/configuration/nuxt-config
 export default defineNuxtConfig({
+    runtimeConfig: {
+        public: {
+            supabaseUrl: process.env.SUPABASE_URL,
+            supabasePublishableKey: process.env.SUPABASE_PUBLISHABLE_KEY,
+        },
+    },
     vite: {
         optimizeDeps: {
             include: [
@@ -11,12 +17,12 @@ export default defineNuxtConfig({
     devtools: { enabled: true },
     modules: ["@nuxtjs/tailwindcss", "shadcn-nuxt", '@nuxtjs/i18n'],
     i18n: {
-    locales: [
-      { code: 'en', language: 'en-US',file: 'en.json' },
-      { code: 'id', language: 'id-ID',file: 'id.json' }
-    ],
-    defaultLocale: 'id'
-  },
+        locales: [
+            { code: 'en', language: 'en-US', file: 'en.json' },
+            { code: 'id', language: 'id-ID', file: 'id.json' }
+        ],
+        defaultLocale: 'id'
+    },
     app: {
         head: {
             titleTemplate: '%s - Pramuka SMA Negeri 1 Pasawahan',
