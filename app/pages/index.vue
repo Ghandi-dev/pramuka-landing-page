@@ -91,13 +91,13 @@ const recentActivities = activities.slice(0, 3)
       <div class="container mx-auto px-4 sm:px-6 lg:px-8 max-w-7xl">
         <div class="flex flex-col md:flex-row justify-between items-end mb-16 gap-6">
           <div class="max-w-xl">
-            <h2 class="font-display text-4xl font-bold text-foreground mb-4">Latest Expedition</h2>
-            <p class="text-muted-foreground text-lg">Jejak langkah kami di berbagai medan, dari lapangan sekolah hingga
-              puncak gunung.</p>
+            <h2 class="font-display text-4xl font-bold text-foreground mb-4">{{ $t('home.activities.latest_expedition')
+              }}</h2>
+            <p class="text-muted-foreground text-lg">{{ $t('home.activities.description') }}</p>
           </div>
           <NuxtLink to="/activities"
             class="group inline-flex items-center gap-2 text-primary font-semibold hover:text-primary/80 transition-colors">
-            View All Documentation
+            {{ $t('home.activities.view_all') }}
             <span class="transform transition-transform group-hover:translate-x-1">→</span>
           </NuxtLink>
         </div>

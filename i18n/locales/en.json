@@ -37,6 +37,33 @@
       "title": "Satyaku Kudarmakan,",
       "title_2": "Darmaku Kubaktikan.",
       "description": "More than just an extracurricular activity, the SMA Negeri 1 Pasawahan Scout organization is a big family that builds leadership, strong brotherhood, and survival skills in every situation."
+    },
+    "activities": {
+      "latest_expedition": "Latest Expedition",
+      "description": "Our footsteps across many terrains, from the school field to mountain peaks.",
+      "view_all": "View All Documentation"
+    }
+  },
+  "about": {
+    "header": {
+      "title": "Our Heritage",
+      "description": "Standing strong as a pillar for shaping youth character, the Scout Movement of SMA Negeri 1 Pasawahan has united creativity, feeling, and initiative"
+    },
+    "history": {
+      "title": "A Brief History",
+      "paragraph1": "The beginning of the SMA Negeri 1 Pasawahan scout base cannot be separated from the spirit of its predecessors who wished to create a positive place to shape discipline and mental strength.",
+      "paragraph2": "Year after year, this scout unit has continued to grow, both in the quality of its members and in the number of participations in competitions at branch and regional levels. Guided by the Tri Satya and Dasa Darma, we actively dedicate ourselves to serving the community.",
+      "quote": "We were not only taught how to tie knots, but how to tie bonds of brotherhood that will never break."
+    },
+    "cta": {
+      "text": "Be part of our ongoing story.",
+      "button": "Join Application"
+    }
+  },
+  "activities": {
+    "header": {
+      "title": "Field & Formations",
+      "description": "Meaningful moments in the brown uniform. From camping adventures to social service activities within the community."
     }
   }
 }

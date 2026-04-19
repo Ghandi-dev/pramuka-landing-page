@@ -37,6 +37,33 @@
       "title": "Satyaku Kudarmakan,",
       "title_2": "Darmaku Kubaktikan.",
       "description": "Lebih dari sekadar ekstrakurikuler, Pramuka SMA Negeri 1 Pasawahan adalah keluarga besar yang menempa kepemimpinan, persaudaraan tanpa batas, dan keterampilan bertahan di setiap kondisi."
+    },
+    "activities": {
+      "latest_expedition": "Ekspedisi Terbaru",
+      "description": "Jejak langkah kami di berbagai medan, dari lapangan sekolah hingga puncak gunung.",
+      "view_all": "Lihat Semua Dokumentasi"
+    }
+  },
+  "about": {
+    "header": {
+      "title": "Warisan Kami",
+      "description": "Berdiri kuat sebagai pilar penempa karakter pemuda, Gerakan Pramuka SMA Negeri 1 Pasawahan menyatukan cipta, rasa, dan karsa"
+    },
+    "history": {
+      "title": "Sejarah Singkat",
+      "paragraph1": "Awal mula berdirinya pangkalan SMA Negeri 1 Pasawahan tak lepas dari semangat para pendahulu yang menginginkan sebuah wadah positif penempa kedisiplinan dan mental.",
+      "paragraph2": "Dari tahun ke tahun, ambalan ini terus berkembang, baik secara kualitas anggota maupun kuantitas keikutsertaan dalam berbagai lomba tingkat cabang hingga daerah. Berbekal Tri Satya dan Dasa Darma, kami senantiasa berperan aktif membaktikan diri di tengah masyarakat.",
+      "quote": "Kami tidak hanya diajarkan cara mengikat tali, tapi bagaimana cara mengikat persaudaraan yang tak akan pernah putus."
+    },
+    "cta": {
+      "text": "Jadilah bagian dari cerita kami.",
+      "button": "Daftar Sekarang"
+    }
+  },
+  "activities": {
+    "header": {
+      "title": "Kegiatan & Formasi",
+      "description": "Momen berharga dalam balutan seragam coklat. Mulai dari perkemahan hingga bakti aksi sosial di tengah masyarakat."
     }
   }
 }
