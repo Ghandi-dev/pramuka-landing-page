@@ -1,9 +1,11 @@
 <script setup lang="ts">
 const props = defineProps({
-  image: String,
+  image_url: String,
   x: Number,
   y: Number,
-  title: String
+  title: String,
+  description: String,
+  rotation: Number
 })
 
 // Definisikan emit agar bisa didengar oleh parent
@@ -30,7 +32,8 @@ const handleClick = () => {
 <template>
   <div
     class="group absolute w-40 p-4 bg-white shadow-lg transition-all duration-200 ease-in-out z-10 hover:scale-105 hover:shadow-2xl hover:z-20 cursor-pointer select-none"
-    :style="{ left: `${x}px`, top: `${y}px` }" @dblclick="handleDoubleClick" @click="handleClick">
+    :style="{ left: `${x}px`, top: `${y}px`, rotate: `${rotation}deg` }" @dblclick="handleDoubleClick"
+    @click="handleClick">
 
     <div
       class="absolute -top-3 left-1/2 -translate-x-1/2 w-6 h-6 bg-red-600 rounded-full border-[3px] border-white shadow-md z-30 flex items-center justify-center">
@@ -38,7 +41,7 @@ const handleClick = () => {
     </div>
 
     <div class="w-full h-50 overflow-hidden relative">
-      <img :src="image" :alt="title" class="w-full h-full object-cover" loading="lazy" />
+      <img :src="image_url" :alt="title" class="w-full h-full object-cover" loading="lazy" />
 
       <!-- ✅ Overlay muncul saat hover -->
       <div

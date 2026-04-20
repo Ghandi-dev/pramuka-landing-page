@@ -4,9 +4,11 @@ import useSupabaseCrud from '~/composables/useSupabaseCrud'
 export interface GalleryItem {
     id: string
     title: string
+    description: string
     image_url: string
     x: number
     y: number
+    rotation: number
     created_at: string
 }
 
@@ -16,21 +18,21 @@ export function useGalleryService() {
     const crud = useSupabaseCrud<GalleryItem>('galleries')
 
     const uploadImage = async (file: File): Promise<string> => {
-        const fileExt = file.name.split('.').pop()
-        const fileName = `${Date.now()}-${Math.random().toString(36).substring(2)}.${fileExt}`
-        const filePath = `${fileName}`
+        const formData = new FormData()
+        formData.append('file', file)
 
-        const { error: uploadError } = await supabase.storage
-            .from('gallery')
-            .upload(filePath, file)
+        const response = await fetch('/api/upload', {
+            method: 'POST',
+            body: formData,
+        })
 
-        if (uploadError) throw uploadError
+        const data = await response.json()
 
-        const { data } = supabase.storage
-            .from('gallery')
-            .getPublicUrl(filePath)
+        if (!response.ok) {
+            throw new Error(data.statusMessage || data.message || 'Failed to upload image')
+        }
 
-        return data.publicUrl
+        return data.url
     }
 
     const updatePosition = async (id: string, x: number, y: number) => {
@@ -43,11 +45,9 @@ export function useGalleryService() {
     }
 
     const deleteImage = async (imageUrl: string) => {
-        // Extract file path from URL
-        const parts = imageUrl.split('/gallery/')
-        if (parts.length > 1) {
-            await supabase.storage.from('gallery').remove([parts[1]!])
-        }
+        // Client-side deletion from Cloudinary is not supported via unsigned uploads.
+        // It requires an API secret, so we leave the image object orphaned in Cloudinary.
+        console.warn('Image deletion from Cloudinary is skipped because it requires a secure server endpoint.')
     }
 
     return {

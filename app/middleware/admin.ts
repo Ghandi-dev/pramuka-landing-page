@@ -1,6 +1,9 @@
 import type { SupabaseClient } from '@supabase/supabase-js'
 
 export default defineNuxtRouteMiddleware(async (to, from) => {
+    // Skip on server side to avoid redirecting unhydrated state since Supabase uses localStorage
+    if (import.meta.server) return
+
     // Allow access to login page without auth
     if (to.path === '/admin/login') return
 

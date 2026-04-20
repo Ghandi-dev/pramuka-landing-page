@@ -45,20 +45,21 @@ export function useMemberService() {
     }
 
     const uploadPhoto = async (file: File): Promise<string> => {
-        const fileExt = file.name.split('.').pop()
-        const fileName = `members/${Date.now()}-${Math.random().toString(36).substring(2)}.${fileExt}`
+        const formData = new FormData()
+        formData.append('file', file)
 
-        const { error: uploadError } = await supabase.storage
-            .from('gallery')
-            .upload(fileName, file)
+        const response = await fetch('/api/upload', {
+            method: 'POST',
+            body: formData,
+        })
 
-        if (uploadError) throw uploadError
+        const data = await response.json()
 
-        const { data } = supabase.storage
-            .from('gallery')
-            .getPublicUrl(fileName)
+        if (!response.ok) {
+            throw new Error(data.statusMessage || data.message || 'Failed to upload image')
+        }
 
-        return data.publicUrl
+        return data.url
     }
 
     return {

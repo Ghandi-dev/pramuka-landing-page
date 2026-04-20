@@ -1,17 +1,23 @@
 <script setup lang="ts">
 import Panzoom from "@panzoom/panzoom"
-import { pramukaImagesForPinBoard } from '~/lib/dummyData'
 import ImagePin from "./ImagePin.vue"
+import { useGalleryService } from "~/services/galleryService"
+import { useIntersectionObserver } from "@vueuse/core"
+
+const { data, loading, fetchAll } = useGalleryService()
 
 const canvas = ref()
 const wrapper = ref()
 const zoomIn = ref()
 const zoomOut = ref()
 const resetView = ref()
-const pramukaImages = ref(pramukaImagesForPinBoard)
 
 // State untuk Modal
 const selectedCard = ref<any>(null)
+
+// State untuk Edge Hit
+const edgeHit = ref({ top: false, right: false, bottom: false, left: false })
+let edgeHitTimeout: ReturnType<typeof setTimeout> | null = null
 
 const openModal = (data: any) => {
   selectedCard.value = data
@@ -22,33 +28,97 @@ const closeModal = () => {
 }
 
 onMounted(() => {
+  let hasFetched = false;
+  useIntersectionObserver(wrapper, (entries) => {
+    const isIntersecting = entries[0]?.isIntersecting;
+    if (isIntersecting && !hasFetched) {
+      hasFetched = true;
+      fetchAll();
+    }
+  });
+
+  const wrapperRect = wrapper.value.getBoundingClientRect();
+  const startScale = 0.5;
+
+  // Visual delta to center the 8000x4500 canvas
+  const dx = (wrapperRect.width - 8000) / 2;
+  const dy = (wrapperRect.height - 4500) / 2;
+
+  // Divide by startScale to compensate for CSS transform-origin scale reductions
+  const startX = dx / startScale;
+  const startY = dy / startScale;
 
   const panzoom = Panzoom(canvas.value, {
     maxScale: 3.5,
     minScale: 0.5,
-    startScale: 0.5,
-    startX: -400,
-    startY: -200,
+    startScale: startScale,
+    startX: startX,
+    startY: startY,
     contain: "outside",
     step: 0.1,
-    animate: true,
     cursor: "grab",
   })
   wrapper.value.addEventListener("wheel", panzoom.zoomWithWheel)
   zoomIn.value.addEventListener("click", () => panzoom.zoomIn())
   resetView.value.addEventListener("click", () => panzoom.reset())
   zoomOut.value.addEventListener("click", () => panzoom.zoomOut())
+
+  // Edge Hit Logic
+  canvas.value.addEventListener("panzoompan", () => {
+    if (!wrapper.value || !canvas.value) return;
+
+    const wrapperRect = wrapper.value.getBoundingClientRect();
+    const canvasRect = canvas.value.getBoundingClientRect();
+
+    const threshold = 3;
+    edgeHit.value = {
+      top: canvasRect.top >= wrapperRect.top - threshold,
+      right: canvasRect.right <= wrapperRect.right + threshold,
+      bottom: canvasRect.bottom <= wrapperRect.bottom + threshold,
+      left: canvasRect.left >= wrapperRect.left - threshold,
+    };
+
+    if (edgeHitTimeout) clearTimeout(edgeHitTimeout);
+  });
+
+  canvas.value.addEventListener("panzoomend", () => {
+    if (edgeHitTimeout) clearTimeout(edgeHitTimeout);
+    edgeHitTimeout = setTimeout(() => {
+      edgeHit.value = { top: false, right: false, bottom: false, left: false };
+    }, 500);
+  });
 })
 
 </script>
 
 <template>
   <div class="relative w-full h-full rounded-lg overflow-hidden shadow-lg bg-secondary">
+    <!-- Loading Animation -->
+    <div v-if="loading" class="absolute inset-0 z-50 flex items-center justify-center bg-secondary/80 backdrop-blur-sm">
+      <div class="flex flex-col items-center gap-4">
+        <div class="animate-spin rounded-full h-12 w-12 border-4 border-primary border-t-transparent shadow-md"></div>
+        <p class="text-sm font-medium text-foreground animate-pulse">Memuat foto...</p>
+      </div>
+    </div>
 
-    <div ref="wrapper" class="w-full h-125 overflow-hidden shadow-inner"
+    <!-- Edge hit visual indicators -->
+    <div
+      :class="['absolute top-0 left-0 right-0 h-8 bg-gradient-to-b from-primary/40 to-transparent pointer-events-none transition-opacity duration-300 z-10', edgeHit.top ? 'opacity-100' : 'opacity-0']">
+    </div>
+    <div
+      :class="['absolute bottom-0 left-0 right-0 h-8 bg-gradient-to-t from-primary/40 to-transparent pointer-events-none transition-opacity duration-300 z-10', edgeHit.bottom ? 'opacity-100' : 'opacity-0']">
+    </div>
+    <div
+      :class="['absolute top-0 bottom-0 left-0 w-8 bg-gradient-to-r from-primary/40 to-transparent pointer-events-none transition-opacity duration-300 z-10', edgeHit.left ? 'opacity-100' : 'opacity-0']">
+    </div>
+    <div
+      :class="['absolute top-0 bottom-0 right-0 w-8 bg-gradient-to-l from-primary/40 to-transparent pointer-events-none transition-opacity duration-300 z-10', edgeHit.right ? 'opacity-100' : 'opacity-0']">
+    </div>
+
+    <div ref="wrapper" class="w-full h-125 overflow-hidden shadow-inner relative"
       style="background-image: radial-gradient(circle, rgb(0,0,0) 1px, transparent 1px); background-size: 20px 20px;">
-      <div ref="canvas" class="w-2000 h-1125 relative">
-        <ImagePin v-for="pramuka in pramukaImages" :key="pramuka.id" v-bind="pramuka" @open-detail="openModal" />
+      <div ref="canvas" class="w-[8000px] h-[4500px] relative">
+        <ImagePin v-for="pramuka in data" :key="pramuka.id" v-bind="pramuka" @open-detail="openModal" />
       </div>
     </div>
 
@@ -107,7 +177,7 @@ onMounted(() => {
         <div class="bg-white rounded-2xl max-w-sm w-full overflow-hidden shadow-2xl animate-in zoom-in duration-300">
           <div class="relative p-4">
             <div class="w-full aspect-3/4 h-auto overflow-hidden rounded-lg shadow-inner bg-gray-100">
-              <img :src="selectedCard.image" :alt="selectedCard.title" class="w-full h-full object-cover" />
+              <img :src="selectedCard.image_url" :alt="selectedCard.title" class="w-full h-full object-cover" />
             </div>
             <button @click="closeModal"
               class="absolute top-6 right-6 bg-black/30 hover:bg-black/50 text-white p-2 rounded-full backdrop-blur-md h-10 w-10 flex items-center justify-center transition z-10">
