@@ -8,15 +8,21 @@ export const useGalleryPinboard = (data: Ref<GalleryItem[]>) => {
 
   const pinboardCanvas = ref<HTMLElement | null>(null);
   const pinboardWrapper = ref<HTMLElement | null>(null);
+  const edgeTop = ref<HTMLElement | null>(null);
+  const edgeBottom = ref<HTMLElement | null>(null);
+  const edgeLeft = ref<HTMLElement | null>(null);
+  const edgeRight = ref<HTMLElement | null>(null);
+
   let panzoomInstance: ReturnType<typeof Panzoom> | null = null;
 
   const dragTarget = ref<string | null>(null);
   const dragStart = ref({ x: 0, y: 0, origX: 0, origY: 0 });
-  const edgeHit = ref({ top: false, right: false, bottom: false, left: false });
+
   let edgeHitTimeout: ReturnType<typeof setTimeout> | null = null;
+  let rafId: number | null = null;
 
   const initPinboard = () => {
-    if (!import.meta.client) return
+    if (!import.meta.client) return;
     if (!pinboardCanvas.value || !pinboardWrapper.value) return;
     if (panzoomInstance) return;
 
@@ -50,16 +56,25 @@ export const useGalleryPinboard = (data: Ref<GalleryItem[]>) => {
     pinboardCanvas.value.addEventListener("panzoompan", () => {
       if (!pinboardWrapper.value || !pinboardCanvas.value) return;
 
-      const wrapperRect = pinboardWrapper.value.getBoundingClientRect();
-      const canvasRect = pinboardCanvas.value.getBoundingClientRect();
+      if (rafId) return;
 
-      const threshold = 3; // 3px margin of error due to subpixel rendering
-      edgeHit.value = {
-        top: canvasRect.top >= wrapperRect.top - threshold,
-        right: canvasRect.right <= wrapperRect.right + threshold,
-        bottom: canvasRect.bottom <= wrapperRect.bottom + threshold,
-        left: canvasRect.left >= wrapperRect.left - threshold,
-      };
+      rafId = requestAnimationFrame(() => {
+        rafId = null;
+
+        const wrapperRect = pinboardWrapper.value!.getBoundingClientRect();
+        const canvasRect = pinboardCanvas.value!.getBoundingClientRect();
+
+        const threshold = 10;
+        const tHit = canvasRect.top >= wrapperRect.top - threshold;
+        const rHit = canvasRect.right <= wrapperRect.right + threshold;
+        const bHit = canvasRect.bottom <= wrapperRect.bottom + threshold;
+        const lHit = canvasRect.left >= wrapperRect.left - threshold;
+
+        if (edgeTop.value) edgeTop.value.style.opacity = tHit ? "1" : "0";
+        if (edgeRight.value) edgeRight.value.style.opacity = rHit ? "1" : "0";
+        if (edgeBottom.value) edgeBottom.value.style.opacity = bHit ? "1" : "0";
+        if (edgeLeft.value) edgeLeft.value.style.opacity = lHit ? "1" : "0";
+      });
 
       if (edgeHitTimeout) clearTimeout(edgeHitTimeout);
     });
@@ -67,12 +82,10 @@ export const useGalleryPinboard = (data: Ref<GalleryItem[]>) => {
     pinboardCanvas.value.addEventListener("panzoomend", () => {
       if (edgeHitTimeout) clearTimeout(edgeHitTimeout);
       edgeHitTimeout = setTimeout(() => {
-        edgeHit.value = {
-          top: false,
-          right: false,
-          bottom: false,
-          left: false,
-        };
+        if (edgeTop.value) edgeTop.value.style.opacity = "0";
+        if (edgeRight.value) edgeRight.value.style.opacity = "0";
+        if (edgeBottom.value) edgeBottom.value.style.opacity = "0";
+        if (edgeLeft.value) edgeLeft.value.style.opacity = "0";
       }, 500);
     });
   };
@@ -140,7 +153,10 @@ export const useGalleryPinboard = (data: Ref<GalleryItem[]>) => {
   return {
     pinboardCanvas,
     pinboardWrapper,
-    edgeHit,
+    edgeTop,
+    edgeBottom,
+    edgeLeft,
+    edgeRight,
     initPinboard,
     onPinPointerDown,
   };

@@ -31,13 +31,26 @@ defineEmits<{
             <div v-for="item in data" :key="item.id"
                 class="group relative aspect-square rounded-lg overflow-hidden border border-border bg-muted">
                 <img :src="item.image_url" :alt="item.title" class="w-full h-full object-cover" loading="lazy" />
-                <div class="absolute inset-0 bg-black/60 opacity-0 group-hover:opacity-100 transition-opacity flex flex-col items-center justify-center gap-2 p-4">
+                <!-- Desktop: full overlay on hover -->
+                <div class="hidden md:flex absolute inset-0 bg-black/60 opacity-0 group-hover:opacity-100 transition-opacity flex-col items-center justify-center gap-2 p-4">
                     <p class="text-white text-sm font-medium text-center line-clamp-2">{{ item.title }}</p>
                     <div class="flex gap-2">
                         <Button size="sm" variant="secondary" @click="$emit('edit', item)">
                             <Pencil class="w-3 h-3 mr-1" /> Edit
                         </Button>
                         <Button size="sm" variant="destructive" @click="$emit('delete', item)">
+                            <Trash2 class="w-3 h-3 mr-1" /> Hapus
+                        </Button>
+                    </div>
+                </div>
+                <!-- Mobile: persistent bottom bar -->
+                <div class="md:hidden absolute inset-x-0 bottom-0 bg-gradient-to-t from-black/80 via-black/50 to-transparent p-3 pt-6">
+                    <p class="text-white text-xs font-medium line-clamp-1 mb-2">{{ item.title }}</p>
+                    <div class="flex gap-2">
+                        <Button size="sm" variant="secondary" class="h-7 text-xs px-2" @click="$emit('edit', item)">
+                            <Pencil class="w-3 h-3 mr-1" /> Edit
+                        </Button>
+                        <Button size="sm" variant="destructive" class="h-7 text-xs px-2" @click="$emit('delete', item)">
                             <Trash2 class="w-3 h-3 mr-1" /> Hapus
                         </Button>
                     </div>

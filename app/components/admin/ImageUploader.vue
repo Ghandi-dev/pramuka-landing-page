@@ -55,7 +55,7 @@ const clearImage = () => {
             class="relative rounded-lg overflow-hidden h-48 w-full border border-border bg-muted group">
             <img :src="preview || modelValue!" class="w-full h-full object-cover" />
             <button v-if="!loading" @click.prevent="clearImage"
-                class="absolute top-2 right-2 h-7 w-7 rounded-full bg-destructive text-destructive-foreground flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity shadow-lg hover:scale-110">
+                class="absolute top-2 right-2 h-7 w-7 rounded-full bg-destructive text-destructive-foreground flex items-center justify-center opacity-100 md:opacity-0 md:group-hover:opacity-100 transition-opacity shadow-lg hover:scale-110">
                 <X class="w-4 h-4" />
             </button>
             <div v-if="loading"

@@ -15,9 +15,14 @@ const resetView = ref()
 // State untuk Modal
 const selectedCard = ref<any>(null)
 
-// State untuk Edge Hit
-const edgeHit = ref({ top: false, right: false, bottom: false, left: false })
+// Refs untuk Edge Hit DOM Nodes bypassing Vue reactivity
+const edgeTop = ref<HTMLElement | null>(null)
+const edgeRight = ref<HTMLElement | null>(null)
+const edgeBottom = ref<HTMLElement | null>(null)
+const edgeLeft = ref<HTMLElement | null>(null)
+
 let edgeHitTimeout: ReturnType<typeof setTimeout> | null = null
+let rafId: number | null = null
 
 const openModal = (data: any) => {
   selectedCard.value = data
@@ -63,20 +68,29 @@ onMounted(() => {
   resetView.value.addEventListener("click", () => panzoom.reset())
   zoomOut.value.addEventListener("click", () => panzoom.zoomOut())
 
-  // Edge Hit Logic
+  // Edge Hit Logic Optimized (No Vue reactivity loop & RAF throttled)
   canvas.value.addEventListener("panzoompan", () => {
     if (!wrapper.value || !canvas.value) return;
 
-    const wrapperRect = wrapper.value.getBoundingClientRect();
-    const canvasRect = canvas.value.getBoundingClientRect();
+    if (rafId) return;
+    
+    rafId = requestAnimationFrame(() => {
+      rafId = null;
+      
+      const wrapperRect = wrapper.value.getBoundingClientRect();
+      const canvasRect = canvas.value.getBoundingClientRect();
 
-    const threshold = 3;
-    edgeHit.value = {
-      top: canvasRect.top >= wrapperRect.top - threshold,
-      right: canvasRect.right <= wrapperRect.right + threshold,
-      bottom: canvasRect.bottom <= wrapperRect.bottom + threshold,
-      left: canvasRect.left >= wrapperRect.left - threshold,
-    };
+      const threshold = 10;
+      const tHit = canvasRect.top >= wrapperRect.top - threshold;
+      const rHit = canvasRect.right <= wrapperRect.right + threshold;
+      const bHit = canvasRect.bottom <= wrapperRect.bottom + threshold;
+      const lHit = canvasRect.left >= wrapperRect.left - threshold;
+
+      if (edgeTop.value) edgeTop.value.style.opacity = tHit ? "1" : "0";
+      if (edgeRight.value) edgeRight.value.style.opacity = rHit ? "1" : "0";
+      if (edgeBottom.value) edgeBottom.value.style.opacity = bHit ? "1" : "0";
+      if (edgeLeft.value) edgeLeft.value.style.opacity = lHit ? "1" : "0";
+    });
 
     if (edgeHitTimeout) clearTimeout(edgeHitTimeout);
   });
@@ -84,7 +98,10 @@ onMounted(() => {
   canvas.value.addEventListener("panzoomend", () => {
     if (edgeHitTimeout) clearTimeout(edgeHitTimeout);
     edgeHitTimeout = setTimeout(() => {
-      edgeHit.value = { top: false, right: false, bottom: false, left: false };
+      if (edgeTop.value) edgeTop.value.style.opacity = "0";
+      if (edgeRight.value) edgeRight.value.style.opacity = "0";
+      if (edgeBottom.value) edgeBottom.value.style.opacity = "0";
+      if (edgeLeft.value) edgeLeft.value.style.opacity = "0";
     }, 500);
   });
 })
@@ -103,21 +120,25 @@ onMounted(() => {
 
     <!-- Edge hit visual indicators -->
     <div
-      :class="['absolute top-0 left-0 right-0 h-8 bg-gradient-to-b from-primary/40 to-transparent pointer-events-none transition-opacity duration-300 z-10', edgeHit.top ? 'opacity-100' : 'opacity-0']">
+      ref="edgeTop"
+      class="absolute top-0 left-0 right-0 h-8 bg-gradient-to-b from-primary/40 to-transparent pointer-events-none transition-opacity duration-300 z-10 opacity-0">
     </div>
     <div
-      :class="['absolute bottom-0 left-0 right-0 h-8 bg-gradient-to-t from-primary/40 to-transparent pointer-events-none transition-opacity duration-300 z-10', edgeHit.bottom ? 'opacity-100' : 'opacity-0']">
+      ref="edgeBottom"
+      class="absolute bottom-0 left-0 right-0 h-8 bg-gradient-to-t from-primary/40 to-transparent pointer-events-none transition-opacity duration-300 z-10 opacity-0">
     </div>
     <div
-      :class="['absolute top-0 bottom-0 left-0 w-8 bg-gradient-to-r from-primary/40 to-transparent pointer-events-none transition-opacity duration-300 z-10', edgeHit.left ? 'opacity-100' : 'opacity-0']">
+      ref="edgeLeft"
+      class="absolute top-0 bottom-0 left-0 w-8 bg-gradient-to-r from-primary/40 to-transparent pointer-events-none transition-opacity duration-300 z-10 opacity-0">
     </div>
     <div
-      :class="['absolute top-0 bottom-0 right-0 w-8 bg-gradient-to-l from-primary/40 to-transparent pointer-events-none transition-opacity duration-300 z-10', edgeHit.right ? 'opacity-100' : 'opacity-0']">
+      ref="edgeRight"
+      class="absolute top-0 bottom-0 right-0 w-8 bg-gradient-to-l from-primary/40 to-transparent pointer-events-none transition-opacity duration-300 z-10 opacity-0">
     </div>
 
-    <div ref="wrapper" class="w-full h-125 overflow-hidden shadow-inner relative"
+    <div ref="wrapper" class="w-full h-125 overflow-hidden shadow-inner relative will-change-transform"
       style="background-image: radial-gradient(circle, rgb(0,0,0) 1px, transparent 1px); background-size: 20px 20px;">
-      <div ref="canvas" class="w-[8000px] h-[4500px] relative">
+      <div ref="canvas" class="w-[8000px] h-[4500px] relative will-change-transform preserve-3d">
         <ImagePin v-for="pramuka in data" :key="pramuka.id" v-bind="pramuka" @open-detail="openModal" />
       </div>
     </div>

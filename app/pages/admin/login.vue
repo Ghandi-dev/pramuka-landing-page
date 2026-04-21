@@ -48,8 +48,9 @@ const handleLogin = async () => {
         <div class="w-full max-w-md">
             <Card class="border-border/50 shadow-xl">
                 <CardHeader class="text-center pb-2">
-                    <div class="mx-auto h-14 w-14 rounded-xl bg-primary flex items-center justify-center text-primary-foreground font-bold text-xl mb-4">
-                        P
+                    <div class="flex items-center justify-center gap-3 mb-4">
+                        <img src="/images/logo_pa.webp" alt="Logo Ambalan Putra" class="h-14 w-14 object-contain" />
+                        <img src="/images/logo_pi.webp" alt="Logo Ambalan Putri" class="h-14 w-14 object-contain" />
                     </div>
                     <CardTitle class="text-2xl font-display font-bold">Login Admin</CardTitle>
                     <CardDescription>Masukkan kredensial untuk mengakses dashboard</CardDescription>

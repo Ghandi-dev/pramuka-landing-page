@@ -5,10 +5,10 @@ import type { ColumnDef } from '@tanstack/vue-table'
 import { useContactMessageService, type ContactMessage } from '~/services/contactMessageService'
 import Button from '~/components/ui/button/Button.vue'
 import {
-  Dialog,
-  DialogContent,
-  DialogHeader,
-  DialogTitle,
+    Dialog,
+    DialogContent,
+    DialogHeader,
+    DialogTitle,
 } from '@/components/ui/dialog'
 import { Label } from '@/components/ui/label'
 import ConfirmDialog from '~/components/admin/ConfirmDialog.vue'
@@ -77,7 +77,7 @@ const columns: ColumnDef<ContactMessage, any>[] = [
 const openView = async (item: ContactMessage) => {
     viewTarget.value = item
     dialogOpen.value = true
-    
+
     // Auto status ke 'read' kalau belum
     if (item.status === 'new') {
         try {
@@ -135,7 +135,8 @@ onMounted(() => {
         </div>
 
         <!-- Table -->
-        <AdminDataTable :columns="columns" :data="data" :loading="loading" search-placeholder="Cari pesan atau nama pengirim..." />
+        <AdminDataTable :columns="columns" :data="data" :loading="loading"
+            search-placeholder="Cari pesan atau nama pengirim..." />
 
         <!-- View Dialog -->
         <Dialog v-model:open="dialogOpen">
@@ -151,8 +152,9 @@ onMounted(() => {
                         </div>
                         <div>
                             <Label class="text-muted-foreground text-xs">Email Pengirim</Label>
-                            <p class="font-medium mt-1">
-                                <a :href="`mailto:${viewTarget.email}`" class="text-primary hover:underline">{{ viewTarget.email }}</a>
+                            <p class="font-medium mt-1 break-all">
+                                <a :href="`mailto:${viewTarget.email}`" class="text-primary hover:underline">{{
+                                    viewTarget.email }}</a>
                             </p>
                         </div>
                     </div>
@@ -162,12 +164,14 @@ onMounted(() => {
                     </div>
                     <div class="pt-2">
                         <Label class="text-muted-foreground text-xs">Komentar / Pesan</Label>
-                        <div class="p-4 bg-muted/50 rounded-lg whitespace-pre-line text-sm text-foreground mt-2 leading-relaxed">
+                        <div
+                            class="p-4 bg-muted/50 rounded-lg whitespace-pre-line text-sm text-foreground mt-2 leading-relaxed">
                             {{ viewTarget.message }}
                         </div>
                     </div>
                     <div class="flex justify-between items-center pt-4 border-t border-border">
-                        <span class="text-xs text-muted-foreground">Dikirim: {{ new Date(viewTarget.created_at).toLocaleString('id-ID') }}</span>
+                        <span class="text-xs text-muted-foreground">Dikirim: {{ new
+                            Date(viewTarget.created_at).toLocaleString('id-ID') }}</span>
                         <Button type="button" @click="dialogOpen = false">Tutup</Button>
                     </div>
                 </div>
@@ -180,7 +184,23 @@ onMounted(() => {
 </template>
 
 <style scoped>
-.notification-enter-active { animation: slideIn 0.3s ease; }
-.notification-leave-active { animation: slideIn 0.3s ease reverse; }
-@keyframes slideIn { from { transform: translateX(100%); opacity: 0; } to { transform: translateX(0); opacity: 1; } }
+.notification-enter-active {
+    animation: slideIn 0.3s ease;
+}
+
+.notification-leave-active {
+    animation: slideIn 0.3s ease reverse;
+}
+
+@keyframes slideIn {
+    from {
+        transform: translateX(100%);
+        opacity: 0;
+    }
+
+    to {
+        transform: translateX(0);
+        opacity: 1;
+    }
+}
 </style>

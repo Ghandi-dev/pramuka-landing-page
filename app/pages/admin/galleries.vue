@@ -28,7 +28,7 @@ const {
 } = useGalleryDialog()
 
 const {
-    pinboardCanvas, pinboardWrapper, edgeHit, initPinboard, onPinPointerDown
+    pinboardCanvas, pinboardWrapper, edgeTop, edgeBottom, edgeLeft, edgeRight, initPinboard, onPinPointerDown
 } = useGalleryPinboard(data)
 
 // Local state for actions
@@ -36,7 +36,14 @@ const saving = ref(false)
 const deleting = ref(false)
 const uploading = ref(false)
 
-const galleryPinboardRef = ref<{ pinboardCanvas: HTMLElement, pinboardWrapper: HTMLElement } | null>(null)
+const galleryPinboardRef = ref<{ 
+    pinboardCanvas: HTMLElement, 
+    pinboardWrapper: HTMLElement,
+    edgeTop: HTMLElement,
+    edgeBottom: HTMLElement,
+    edgeLeft: HTMLElement,
+    edgeRight: HTMLElement
+} | null>(null)
 
 const handlePointerDown = (e: PointerEvent, item: GalleryItem) => {
     onPinPointerDown(e, item)
@@ -48,6 +55,10 @@ watch(activeTab, (tab) => {
             if (galleryPinboardRef.value) {
                 pinboardCanvas.value = galleryPinboardRef.value.pinboardCanvas
                 pinboardWrapper.value = galleryPinboardRef.value.pinboardWrapper
+                edgeTop.value = galleryPinboardRef.value.edgeTop
+                edgeBottom.value = galleryPinboardRef.value.edgeBottom
+                edgeLeft.value = galleryPinboardRef.value.edgeLeft
+                edgeRight.value = galleryPinboardRef.value.edgeRight
             }
             initPinboard()
         })
@@ -186,7 +197,7 @@ onMounted(() => {
         <GalleryGrid v-if="activeTab === 'grid'" :data="data" :loading="loading" @edit="openEdit"
             @delete="openDelete" />
 
-        <GalleryPinboard v-show="activeTab === 'pinboard'" ref="galleryPinboardRef" :data="data" :edge-hit="edgeHit"
+        <GalleryPinboard v-show="activeTab === 'pinboard'" ref="galleryPinboardRef" :data="data"
             @pointerdown="handlePointerDown" />
 
         <GalleryFormDialog v-model="dialogOpen" :is-editing="isEditing" :saving="saving" :uploading="uploading"
