@@ -16,6 +16,7 @@ export const useGalleryPinboard = (data: Ref<GalleryItem[]>) => {
   let edgeHitTimeout: ReturnType<typeof setTimeout> | null = null;
 
   const initPinboard = () => {
+    if (!import.meta.client) return
     if (!pinboardCanvas.value || !pinboardWrapper.value) return;
     if (panzoomInstance) return;
 

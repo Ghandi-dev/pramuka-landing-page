@@ -2,6 +2,9 @@
 import { useHead } from '#imports'
 import PinBoard from '~/components/pinboard/PinBoard.vue';
 import { activities } from '~/lib/dummyData'
+import { useLocalePath } from "#imports"
+
+const localePath = useLocalePath()
 
 useHead({
   title: 'Home',
@@ -44,12 +47,12 @@ const recentActivities = activities.slice(0, 3)
           </p>
 
           <div class="flex flex-col sm:flex-row gap-4">
-            <NuxtLink to="/contact"
+            <NuxtLink :to="localePath('/contact')"
               class="inline-flex h-12 items-center justify-center rounded-sm bg-primary px-8 text-sm font-medium text-primary-foreground transition-all hover:bg-primary/90 hover:scale-[1.02] hover:shadow-xl hover:shadow-primary/20">
               {{ $t('home.hero.cta_join') }}
             </NuxtLink>
 
-            <NuxtLink to="/about"
+            <NuxtLink :to="localePath('/about')"
               class="inline-flex h-12 items-center justify-center rounded-sm border-2 border-border bg-transparent px-8 text-sm font-medium text-foreground transition-colors hover:border-primary hover:text-primary">
               {{ $t('home.hero.cta_history') }}
             </NuxtLink>
