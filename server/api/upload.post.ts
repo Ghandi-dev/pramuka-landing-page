@@ -20,13 +20,22 @@ export default defineEventHandler(async (event) => {
 
   try {
     const upload: any = await new Promise((resolve, reject) => {
-      cloudinary.uploader.upload_stream(
+      const stream = cloudinary.uploader.upload_stream(
         { folder: "pramuka" },
         (error, result) => {
           if (error) reject(error)
           else resolve(result)
         }
-      ).end(file.data)
+      )
+      
+      // Mencegah aplikasi crash akibat stream emitting Unhandled Error
+      stream.on('error', (err) => reject(err))
+      
+      try {
+        stream.end(file.data)
+      } catch (err) {
+        reject(err)
+      }
     })
 
     return {

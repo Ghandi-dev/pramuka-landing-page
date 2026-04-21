@@ -8,7 +8,7 @@ const emit = defineEmits<{
 
 <template>
     <header
-        class="h-14 border-b border-border bg-background/80 backdrop-blur-sm flex items-center justify-between px-4 lg:px-6 sticky top-0 z-30">
+        class="h-16 border-b border-border bg-background/80 backdrop-blur-sm flex items-center justify-between px-4 lg:px-6 sticky top-0 z-30">
         <!-- Mobile menu button -->
         <button @click="emit('toggle-sidebar')"
             class="lg:hidden p-2 -ml-2 rounded-lg hover:bg-muted text-foreground/70 hover:text-foreground transition-colors">
