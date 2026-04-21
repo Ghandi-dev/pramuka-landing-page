@@ -31,7 +31,7 @@ const handleClick = () => {
 
 <template>
   <div
-    class="group absolute w-40 p-4 bg-white shadow-lg transition-all duration-200 ease-in-out z-10 hover:scale-105 hover:shadow-2xl hover:z-20 cursor-pointer select-none"
+    class="group absolute w-40 p-4 bg-white shadow-lg transition-all duration-200 ease-in-out z-10 hover:scale-105 hover:shadow-2xl hover:z-20 cursor-pointer select-none border border-black"
     :style="{ left: `${x}px`, top: `${y}px`, rotate: `${rotation}deg` }" @dblclick="handleDoubleClick"
     @click="handleClick">
 
@@ -41,7 +41,7 @@ const handleClick = () => {
     </div>
 
     <div class="w-full h-50 overflow-hidden relative">
-      <img :src="image_url" :alt="title" class="w-full h-full object-cover" loading="lazy" />
+      <img :src="image_url" :alt="title" class="w-full h-full object-cover border-2 border-black" loading="lazy" />
 
       <!-- ✅ Overlay muncul saat hover -->
       <div

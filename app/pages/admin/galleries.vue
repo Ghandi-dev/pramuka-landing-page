@@ -99,6 +99,12 @@ const handleSave = async () => {
     try {
         saving.value = true
         let imageUrl = form.value.image_url
+        let oldImageUrl: string | null = null
+
+        if (isEditing.value && editId.value) {
+            const originalItem = data.value.find(item => item.id === editId.value)
+            oldImageUrl = originalItem?.image_url || null
+        }
 
         if (selectedFile.value) {
             uploading.value = true
@@ -115,6 +121,9 @@ const handleSave = async () => {
         if (isEditing.value && editId.value) {
             await update(editId.value, { title: form.value.title, description: form.value.description, image_url: imageUrl })
             showNotification('success', 'Foto berhasil diperbarui')
+            if (oldImageUrl && oldImageUrl !== imageUrl) {
+                await deleteImage(oldImageUrl)
+            }
         } else {
             const pos = generateInitialPosition(data.value)
             await insert({

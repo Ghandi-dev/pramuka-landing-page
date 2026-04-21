@@ -12,6 +12,13 @@ export default defineNuxtConfig({
             include: [
                 '@panzoom/panzoom',
                 '@supabase/supabase-js',
+                '@vueuse/core',
+                'lucide-vue-next',
+                'class-variance-authority',
+                'reka-ui',
+                'clsx',
+                'tailwind-merge',
+                '@tanstack/vue-table',
             ]
         },
         plugins: [

@@ -45,20 +45,26 @@ useHead({
 
             <div>
               <p class="text-sm font-semibold uppercase tracking-wider text-muted-foreground mb-4">Digital Frequency</p>
-              <div class="flex gap-4">
-                <a href="#"
-                  class="w-12 h-12 rounded-full border border-border flex items-center justify-center text-foreground hover:bg-primary hover:text-primary-foreground hover:border-primary transition-all">
-                  IG
-                </a>
-                <a href="#"
-                  class="w-12 h-12 rounded-full border border-border flex items-center justify-center text-foreground hover:bg-accent hover:text-accent-foreground hover:border-accent transition-all">
-                  YT
-                </a>
-                <a href="#"
-                  class="w-12 h-12 rounded-full border border-border flex items-center justify-center text-foreground hover:bg-foreground hover:text-background hover:border-foreground transition-all">
-                  TK
-                </a>
-              </div>
+              <div class="flex gap-4 pt-4">
+              <a href="https://www.instagram.com/pramukasmanpas" target="_blank" aria-label="Instagram"
+                class="text-muted-foreground hover:text-accent transition-colors">
+                <img src="/social/instagram.svg" alt="Instagram" class="w-5 h-5">
+              </a>
+              <a href="https://www.facebook.com/share/g/14aXL3TXarD/" aria-label="Facebook" target="_blank"
+                class="text-muted-foreground hover:text-accent transition-colors">
+                <img src="/social/facebook.svg" alt="Facebook" class="w-5 h-5">
+              </a>
+
+              <a href="https://youtube.com/@sman1pasawahan?si=0F5FrQRrsHbuGmhQ" target="_blank" aria-label="YouTube"
+                class="text-muted-foreground hover:text-accent transition-colors">
+                <img src="/social/youtube.svg" alt="YouTube" class="w-5 h-5">
+              </a>
+
+              <a href="https://www.tiktok.com/@sman1pasawahanpwk?_r=1&_t=ZS-95cHcPuMxEK" target="_blank"
+                aria-label="TikTok" class="text-muted-foreground hover:text-accent transition-colors">
+                <img src="/social/tiktok.svg" alt="TikTok" class="w-5 h-5">
+              </a>
+            </div>
             </div>
           </div>
         </div>

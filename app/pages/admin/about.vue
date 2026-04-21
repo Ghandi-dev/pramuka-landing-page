@@ -2,7 +2,7 @@
 import { h } from 'vue'
 import { Plus, Pencil, Trash2 } from 'lucide-vue-next'
 import type { ColumnDef } from '@tanstack/vue-table'
-import { useAnnouncementService, type Announcement } from '~/services/announcementService'
+import { useAboutService, type About } from '~/services/aboutService'
 import Button from '~/components/ui/button/Button.vue'
 import {
   Dialog,
@@ -18,24 +18,24 @@ import ConfirmDialog from '~/components/admin/ConfirmDialog.vue'
 
 
 definePageMeta({ layout: 'admin',middleware:'admin' })
-useHead({ title: 'Kelola Pengumuman' })
+useHead({ title: 'Kelola Tentang Kami' })
 
-const { data, loading, fetchAll, insert, update, remove } = useAnnouncementService()
+const { data, loading, fetchAll, insert, update, remove } = useAboutService()
 
 // Dialog state
 const dialogOpen = ref(false)
 const isEditing = ref(false)
 const confirmOpen = ref(false)
-const deleteTarget = ref<Announcement | null>(null)
+const deleteTarget = ref<About | null>(null)
 const saving = ref(false)
 const deleting = ref(false)
 const notification = ref<{ type: 'success' | 'error'; message: string } | null>(null)
 
 const form = ref({
-    title: '',
-    content: '',
-    date: new Date().toISOString().split('T')[0]!,
-    status: 'Aktif',
+    vision: '',
+    mission: '',
+    history: '',
+    quote: '',
 })
 const editId = ref<string | null>(null)
 
@@ -44,24 +44,9 @@ const showNotification = (type: 'success' | 'error', message: string) => {
     setTimeout(() => { notification.value = null }, 3000)
 }
 
-const columns: ColumnDef<Announcement, any>[] = [
-    { accessorKey: 'title', header: 'Judul', cell: ({ row }) => h('span', { class: 'font-medium' }, row.getValue('title')) },
-    { accessorKey: 'date', header: 'Tanggal' },
-    {
-        accessorKey: 'status',
-        header: 'Status',
-        cell: ({ row }) => {
-            const status = row.getValue('status') as string
-            return h('span', {
-                class: [
-                    'inline-flex items-center px-2 py-0.5 rounded-full text-xs font-semibold',
-                    status === 'Aktif'
-                        ? 'bg-emerald-100 text-emerald-700 dark:bg-emerald-900/30 dark:text-emerald-400'
-                        : 'bg-gray-100 text-gray-600 dark:bg-gray-800 dark:text-gray-400'
-                ].join(' ')
-            }, status)
-        }
-    },
+const columns: ColumnDef<About, any>[] = [
+    { accessorKey: 'vision', header: 'Visi', cell: ({ row }) => h('span', { class: 'font-medium line-clamp-2' }, row.getValue('vision')) },
+    { accessorKey: 'quote', header: 'Kutipan', cell: ({ row }) => h('span', { class: 'text-muted-foreground' }, row.getValue('quote') || '-') },
     {
         id: 'actions',
         header: 'Aksi',
@@ -83,18 +68,18 @@ const columns: ColumnDef<Announcement, any>[] = [
 const openCreate = () => {
     isEditing.value = false
     editId.value = null
-    form.value = { title: '', content: '', date: new Date().toISOString().split('T')[0]!, status: 'Aktif' }
+    form.value = { vision: '', mission: '', history: '', quote: '' }
     dialogOpen.value = true
 }
 
-const openEdit = (item: Announcement) => {
+const openEdit = (item: About) => {
     isEditing.value = true
     editId.value = item.id
-    form.value = { title: item.title, content: item.content || '', date: item.date, status: item.status }
+    form.value = { vision: item.vision, mission: item.mission || '', history: item.history || '', quote: item.quote || '' }
     dialogOpen.value = true
 }
 
-const openDelete = (item: Announcement) => {
+const openDelete = (item: About) => {
     deleteTarget.value = item
     confirmOpen.value = true
 }
@@ -104,10 +89,10 @@ const handleSave = async () => {
     try {
         if (isEditing.value && editId.value) {
             await update(editId.value, form.value)
-            showNotification('success', 'Pengumuman berhasil diperbarui')
+            showNotification('success', 'Data Tentang Kami berhasil diperbarui')
         } else {
             await insert(form.value)
-            showNotification('success', 'Pengumuman berhasil ditambahkan')
+            showNotification('success', 'Data Tentang Kami berhasil ditambahkan')
         }
         dialogOpen.value = false
         await fetchAll()
@@ -123,7 +108,7 @@ const handleDelete = async () => {
     deleting.value = true
     try {
         await remove(deleteTarget.value.id)
-        showNotification('success', 'Pengumuman berhasil dihapus')
+        showNotification('success', 'Data berhasil dihapus')
         confirmOpen.value = false
         await fetchAll()
     } catch (e: any) {
@@ -151,46 +136,40 @@ onMounted(() => fetchAll())
         <!-- Header -->
         <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
             <div>
-                <h1 class="text-2xl lg:text-3xl font-display font-bold text-foreground tracking-tight">Pengumuman</h1>
-                <p class="text-muted-foreground mt-1">Kelola pengumuman pramuka</p>
+                <h1 class="text-2xl lg:text-3xl font-display font-bold text-foreground tracking-tight">Tentang Kami</h1>
+                <p class="text-muted-foreground mt-1">Kelola data informasi Ambalan</p>
             </div>
             <Button @click="openCreate">
                 <Plus class="w-4 h-4 mr-2" />
-                Tambah Pengumuman
+                Tambah Data
             </Button>
         </div>
 
         <!-- Table -->
-        <AdminDataTable :columns="columns" :data="data" :loading="loading" search-placeholder="Cari pengumuman..." />
+        <AdminDataTable :columns="columns" :data="data" :loading="loading" search-placeholder="Cari data..." />
 
         <!-- Create/Edit Dialog -->
         <Dialog v-model:open="dialogOpen">
             <DialogContent class="sm:max-w-lg">
                 <DialogHeader>
-                    <DialogTitle>{{ isEditing ? 'Edit Pengumuman' : 'Tambah Pengumuman' }}</DialogTitle>
+                    <DialogTitle>{{ isEditing ? 'Edit Data' : 'Tambah Data' }}</DialogTitle>
                 </DialogHeader>
                 <form @submit.prevent="handleSave" class="space-y-4 pt-2">
                     <div class="space-y-2">
-                        <Label for="title">Judul</Label>
-                        <Input id="title" v-model="form.title" placeholder="Judul pengumuman" required />
+                        <Label for="vision">Visi</Label>
+                        <Textarea id="vision" v-model="form.vision" placeholder="Visi Ambalan" required class="min-h-[80px]" />
                     </div>
                     <div class="space-y-2">
-                        <Label for="content">Konten</Label>
-                        <Textarea id="content" v-model="form.content" placeholder="Isi pengumuman..." class="min-h-[120px]" />
+                        <Label for="mission">Misi</Label>
+                        <Textarea id="mission" v-model="form.mission" placeholder="Misi Ambalan" class="min-h-[120px]" />
                     </div>
-                    <div class="grid grid-cols-2 gap-4">
-                        <div class="space-y-2">
-                            <Label for="date">Tanggal</Label>
-                            <Input id="date" type="date" v-model="form.date" required />
-                        </div>
-                        <div class="space-y-2">
-                            <Label for="status">Status</Label>
-                            <select id="status" v-model="form.status"
-                                class="flex h-10 w-full rounded-md border border-input bg-background px-3 py-2 text-sm ring-offset-background focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2">
-                                <option value="Aktif">Aktif</option>
-                                <option value="Tidak Aktif">Tidak Aktif</option>
-                            </select>
-                        </div>
+                    <div class="space-y-2">
+                        <Label for="history">Sejarah</Label>
+                        <Textarea id="history" v-model="form.history" placeholder="Sejarah singkat" class="min-h-[120px]" />
+                    </div>
+                    <div class="space-y-2">
+                        <Label for="quote">Kutipan Pelantikan/Slogan</Label>
+                        <Input id="quote" v-model="form.quote" placeholder="Contoh: Satyaku Kudarmakan, Darmaku Kubaktikan" />
                     </div>
                     <div class="flex justify-end gap-3 pt-2">
                         <Button type="button" variant="outline" @click="dialogOpen = false">Batal</Button>

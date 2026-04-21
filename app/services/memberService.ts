@@ -62,10 +62,27 @@ export function useMemberService() {
         return data.url
     }
 
+    const deleteImage = async (imageUrl: string) => {
+        if (!imageUrl || !imageUrl.includes('res.cloudinary.com')) return;
+
+        try {
+            await fetch('/api/upload', {
+                method: 'DELETE',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({ imageUrl })
+            })
+        } catch (error) {
+            console.error('Failed to delete old image', error)
+        }
+    }
+
     return {
         ...crud,
         fetchAllOrdered,
         reorder,
         uploadPhoto,
+        deleteImage,
     }
 }

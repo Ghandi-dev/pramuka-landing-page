@@ -6,6 +6,7 @@ import { useActivityService, type Activity } from '~/services/activityService'
 import Button from '~/components/ui/button/Button.vue'
 import DataTable from '~/components/admin/DataTable.vue'
 import ConfirmDialog from '~/components/admin/ConfirmDialog.vue'
+import ImageUploader from '~/components/admin/ImageUploader.vue'
 import {
   Dialog,
   DialogContent,
@@ -19,7 +20,7 @@ import { Label } from '@/components/ui/label'
 definePageMeta({ layout: 'admin' })
 useHead({ title: 'Kelola Kegiatan' })
 
-const { data, loading, fetchAll, insert, update, remove } = useActivityService()
+const { data, loading, fetchAll, insert, update, remove, uploadImage, deleteImage } = useActivityService()
 
 const dialogOpen = ref(false)
 const isEditing = ref(false)
@@ -29,11 +30,15 @@ const saving = ref(false)
 const deleting = ref(false)
 const notification = ref<{ type: 'success' | 'error'; message: string } | null>(null)
 
+const selectedFile = ref<File | null>(null)
+const uploading = ref(false)
+
 const form = ref({
     title: '',
     description: '',
-    date: '',
+    activity_date: '',
     location: '',
+    cover_image: '',
 })
 const editId = ref<string | null>(null)
 
@@ -67,14 +72,16 @@ const columns: ColumnDef<Activity, any>[] = [
 const openCreate = () => {
     isEditing.value = false
     editId.value = null
-    form.value = { title: '', description: '', date: new Date().toISOString().split('T')[0]!, location: '' }
+    selectedFile.value = null
+    form.value = { title: '', description: '', activity_date: new Date().toISOString().split('T')[0]!, location: '', cover_image: '' }
     dialogOpen.value = true
 }
 
 const openEdit = (item: Activity) => {
     isEditing.value = true
     editId.value = item.id
-    form.value = { title: item.title, description: item.description || '', date: item.activity_date, location: item.location || '' }
+    selectedFile.value = null
+    form.value = { title: item.title, description: item.description || '', activity_date: item.activity_date, location: item.location || '', cover_image: item.cover_image || '' }
     dialogOpen.value = true
 }
 
@@ -86,9 +93,27 @@ const openDelete = (item: Activity) => {
 const handleSave = async () => {
     saving.value = true
     try {
+        let imageUrl = form.value.cover_image
+        let oldImageUrl: string | null = null
+
+        if (isEditing.value && editId.value) {
+           const originalActivity = data.value.find(a => a.id === editId.value)
+           oldImageUrl = originalActivity?.cover_image || null
+        }
+
+        if (selectedFile.value) {
+            uploading.value = true
+            imageUrl = await uploadImage(selectedFile.value)
+            form.value.cover_image = imageUrl
+            uploading.value = false
+        }
+
         if (isEditing.value && editId.value) {
             await update(editId.value, form.value)
             showNotification('success', 'Kegiatan berhasil diperbarui')
+            if (oldImageUrl && oldImageUrl !== imageUrl) {
+                await deleteImage(oldImageUrl)
+            }
         } else {
             await insert(form.value)
             showNotification('success', 'Kegiatan berhasil ditambahkan')
@@ -96,9 +121,11 @@ const handleSave = async () => {
         dialogOpen.value = false
         await fetchAll()
     } catch (e: any) {
+        console.log(e);
         showNotification('error', e.message || 'Gagal menyimpan')
     } finally {
         saving.value = false
+        uploading.value = false
     }
 }
 
@@ -106,6 +133,9 @@ const handleDelete = async () => {
     if (!deleteTarget.value) return
     deleting.value = true
     try {
+        if (deleteTarget.value.cover_image) {
+            await deleteImage(deleteTarget.value.cover_image)
+        }
         await remove(deleteTarget.value.id)
         showNotification('success', 'Kegiatan berhasil dihapus')
         confirmOpen.value = false
@@ -165,18 +195,27 @@ onMounted(() => fetchAll())
                     </div>
                     <div class="grid grid-cols-2 gap-4">
                         <div class="space-y-2">
-                            <Label for="date">Tanggal</Label>
-                            <Input id="date" type="date" v-model="form.date" required />
+                            <Label for="activity_date">Tanggal</Label>
+                            <Input id="activity_date" type="date" v-model="form.activity_date" required />
                         </div>
                         <div class="space-y-2">
                             <Label for="location">Lokasi</Label>
                             <Input id="location" v-model="form.location" placeholder="Contoh: Lapangan Sekolah" />
                         </div>
                     </div>
+                    <div class="space-y-2">
+                        <Label>Cover Image</Label>
+                        <ImageUploader 
+                            v-model="form.cover_image" 
+                            :loading="uploading" 
+                            @file-selected="f => selectedFile = f"
+                            @update:modelValue="val => { if (!val) selectedFile = null }"
+                        />
+                    </div>
                     <div class="flex justify-end gap-3 pt-2">
                         <Button type="button" variant="outline" @click="dialogOpen = false">Batal</Button>
-                        <Button type="submit" :disabled="saving">
-                            {{ saving ? 'Menyimpan...' : 'Simpan' }}
+                        <Button type="submit" :disabled="saving || uploading">
+                            {{ saving || uploading ? 'Menyimpan...' : 'Simpan' }}
                         </Button>
                     </div>
                 </form>

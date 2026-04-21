@@ -57,7 +57,7 @@ defineExpose({
             </div>
         </div>
         <div
-            class="absolute bottom-3 left-1/2 -translate-x-1/2 bg-background/80 backdrop-blur-sm text-muted-foreground text-xs px-3 py-1.5 rounded-full border border-border">
+            class="absolute bottom-3 left-1/2 -translate-x-1/2 bg-background/80 backdrop-blur-sm text-muted-foreground text-xs px-3 py-1.5 rounded-full border border-border text-center">
             Seret gambar untuk mengubah posisi • Scroll untuk zoom
         </div>
     </div>

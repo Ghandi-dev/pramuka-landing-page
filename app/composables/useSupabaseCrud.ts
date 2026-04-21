@@ -8,14 +8,25 @@ export default function useSupabaseCrud<T extends Record<string, any>>(tableName
     const loading = ref(false)
     const error = ref<string | null>(null)
 
-    const fetchAll = async (orderBy: string = 'created_at', ascending: boolean = false) => {
+    const fetchAll = async (
+        orderBy: string = 'created_at',
+        ascending: boolean = false,
+        limit?: number
+    ) => {
         loading.value = true
         error.value = null
+
         try {
-            const { data: result, error: err } = await supabase
+            let query = supabase
                 .from(tableName)
                 .select('*')
                 .order(orderBy, { ascending })
+
+            if (limit) {
+                query = query.limit(limit)
+            }
+
+            const { data: result, error: err } = await query
 
             if (err) throw err
 

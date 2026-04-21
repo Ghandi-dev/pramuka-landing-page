@@ -1,10 +1,11 @@
 <script setup lang="ts">
 import {
     LayoutDashboard,
-    Megaphone,
+    Info,
     CalendarDays,
     Images,
     Users,
+    Mail,
     LogOut,
     X,
     Sun,
@@ -45,10 +46,11 @@ onMounted(() => {
 
 const menuItems = [
     { label: 'Dashboard', icon: LayoutDashboard, to: '/admin' },
-    { label: 'Pengumuman', icon: Megaphone, to: '/admin/announcements' },
+    { label: 'Tentang Kami', icon: Info, to: '/admin/about' },
     { label: 'Kegiatan', icon: CalendarDays, to: '/admin/activities' },
     { label: 'Galeri', icon: Images, to: '/admin/galleries' },
     { label: 'Organisasi', icon: Users, to: '/admin/members' },
+    { label: 'Pesan Masuk', icon: Mail, to: '/admin/messages' },
 ]
 
 const isActive = (path: string) => {
@@ -72,10 +74,9 @@ const closeMobile = () => emit('update:open', false)
         class="hidden lg:flex w-64 flex-col border-r border-sidebar-border bg-sidebar min-h-screen sticky top-0 h-screen">
         <!-- Brand -->
         <div class="flex items-center gap-3 px-6 h-16 border-b border-sidebar-border shrink-0">
-            <div
-                class="h-8 w-8 rounded-lg bg-sidebar-primary flex items-center justify-center text-sidebar-primary-foreground font-bold text-sm">
-                P
-            </div>
+            <div class="w-10 h-10 shrink-0 overflow-hidden">
+            <img src="/images/logo.webp" alt="Pramuka Logo" class="w-full h-full object-contain" />
+          </div>
             <span class="font-display font-bold text-lg text-sidebar-foreground tracking-tight">Admin Panel</span>
         </div>
 
@@ -117,10 +118,9 @@ const closeMobile = () => emit('update:open', false)
                 class="fixed inset-y-0 left-0 z-50 w-72 flex flex-col bg-sidebar border-r border-sidebar-border shadow-2xl lg:hidden">
                 <div class="flex items-center justify-between px-6 h-16 border-b border-sidebar-border shrink-0">
                     <div class="flex items-center gap-3">
-                        <div
-                            class="h-8 w-8 rounded-lg bg-sidebar-primary flex items-center justify-center text-sidebar-primary-foreground font-bold text-sm">
-                            P
-                        </div>
+                        <div class="w-10 h-10 shrink-0 overflow-hidden">
+            <img src="/images/logo.webp" alt="Pramuka Logo" class="w-full h-full object-contain" />
+          </div>
                         <span class="font-display font-bold text-lg text-sidebar-foreground">Admin</span>
                     </div>
                     <button @click="closeMobile"

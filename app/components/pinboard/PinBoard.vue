@@ -172,12 +172,12 @@ onMounted(() => {
 
     <Transition name="fade">
       <div v-if="selectedCard"
-        class="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/60 backdrop-blur-sm"
+        class="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/60 backdrop-blur-sm "
         @click.self="closeModal">
-        <div class="bg-white rounded-2xl max-w-sm w-full overflow-hidden shadow-2xl animate-in zoom-in duration-300">
+        <div class="bg-white max-w-sm w-full overflow-hidden shadow-2xl animate-in zoom-in duration-300 border-2 border-black">
           <div class="relative p-4">
-            <div class="w-full aspect-3/4 h-auto overflow-hidden rounded-lg shadow-inner bg-gray-100">
-              <img :src="selectedCard.image_url" :alt="selectedCard.title" class="w-full h-full object-cover" />
+            <div class="w-full aspect-3/4 h-auto overflow-hidden  shadow-inner bg-gray-100 border-2 border-black">
+              <img :src="selectedCard.image_url" :alt="selectedCard.title" class="w-full h-full object-cover " />
             </div>
             <button @click="closeModal"
               class="absolute top-6 right-6 bg-black/30 hover:bg-black/50 text-white p-2 rounded-full backdrop-blur-md h-10 w-10 flex items-center justify-center transition z-10">

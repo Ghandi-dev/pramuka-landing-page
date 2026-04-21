@@ -6,7 +6,7 @@ import { useMemberService, type OrganizationMember } from '~/services/memberServ
 definePageMeta({ layout: 'admin',middleware:'admin' })
 useHead({ title: 'Kelola Organisasi' })
 
-const { data, loading, fetchAllOrdered, insert, update, remove, reorder, uploadPhoto } = useMemberService()
+const { data, loading, fetchAllOrdered, insert, update, remove, reorder, uploadPhoto, deleteImage } = useMemberService()
 
 const dialogOpen = ref(false)
 const isEditing = ref(false)
@@ -55,6 +55,12 @@ const handleSave = async () => {
     saving.value = true
     try {
         let photoUrl = form.value.photo
+        let oldPhotoUrl: string | null = null
+
+        if (isEditing.value && editId.value) {
+           const originalMember = data.value.find(m => m.id === editId.value)
+           oldPhotoUrl = originalMember?.photo || null
+        }
 
         if (selectedFile.value) {
             uploading.value = true
@@ -72,6 +78,9 @@ const handleSave = async () => {
         if (isEditing.value && editId.value) {
             await update(editId.value, payload)
             showNotification('success', 'Anggota berhasil diperbarui')
+            if (oldPhotoUrl && oldPhotoUrl !== photoUrl) {
+                await deleteImage(oldPhotoUrl)
+            }
         } else {
             await insert(payload)
             showNotification('success', 'Anggota berhasil ditambahkan')
@@ -90,6 +99,9 @@ const handleDelete = async () => {
     if (!deleteTarget.value) return
     deleting.value = true
     try {
+        if (deleteTarget.value.photo) {
+            await deleteImage(deleteTarget.value.photo)
+        }
         await remove(deleteTarget.value.id)
         showNotification('success', 'Anggota berhasil dihapus')
         confirmOpen.value = false
@@ -181,8 +193,19 @@ onMounted(() => fetchAllOrdered())
         </p>
 
         <!-- Loading skeleton -->
-        <div v-if="loading" class="space-y-3">
-            <div v-for="i in 4" :key="i" class="h-20 bg-muted animate-pulse rounded-lg" />
+        <div v-if="loading" class="space-y-2">
+            <div v-for="i in 4" :key="i" class="flex items-center gap-4 p-4 rounded-lg border bg-card/50">
+                <div class="w-5 h-5 rounded bg-muted animate-pulse shrink-0" />
+                <div class="h-12 w-12 rounded-full overflow-hidden bg-muted animate-pulse shrink-0" />
+                <div class="flex-1 min-w-0 space-y-2">
+                    <div class="h-4 bg-muted animate-pulse rounded w-1/3" />
+                    <div class="h-3 bg-muted animate-pulse rounded w-1/4" />
+                </div>
+                <div class="flex gap-2">
+                    <div class="h-8 w-8 rounded bg-muted animate-pulse" />
+                    <div class="h-8 w-8 rounded bg-muted animate-pulse" />
+                </div>
+            </div>
         </div>
 
         <!-- Empty state -->

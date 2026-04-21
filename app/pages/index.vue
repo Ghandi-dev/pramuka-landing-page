@@ -1,10 +1,11 @@
 <script setup lang="ts">
 import { useHead } from '#imports'
 import PinBoard from '~/components/pinboard/PinBoard.vue';
-import { activities } from '~/lib/dummyData'
 import { useLocalePath } from "#imports"
+import { useActivityService } from '~/services/activityService';
 
 const localePath = useLocalePath()
+const { data, loading, fetchAll } = useActivityService()
 
 useHead({
   title: 'Home',
@@ -13,7 +14,9 @@ useHead({
   ]
 })
 
-const recentActivities = activities.slice(0, 3)
+onMounted(() => {
+  fetchAll('created_at', false, 3)
+})
 </script>
 
 <template>
@@ -106,19 +109,19 @@ const recentActivities = activities.slice(0, 3)
         </div>
 
         <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-          <article v-for="activity in recentActivities" :key="activity.id"
+          <article v-for="activity in data" :key="activity.id"
             class="group group/card relative h-112.5 overflow-hidden rounded-sm bg-muted">
-            <img :src="activity.image" :alt="activity.title"
+            <img :src="activity.cover_image" :alt="activity.title"
               class="absolute inset-0 w-full h-full object-cover transition-transform duration-700 group-hover/card:scale-110" />
             <div class="absolute inset-0 bg-linear-to-t from-black/80 via-black/40 to-transparent"></div>
 
             <div class="absolute inset-0 p-8 flex flex-col justify-end">
               <span
                 class="inline-block px-3 py-1 mb-4 text-xs font-semibold uppercase tracking-wider text-primary-foreground bg-primary/90 rounded-sm w-fit">
-                {{ activity.category }}
+                KEGIATAN
               </span>
               <h3 class="font-display text-2xl font-bold text-white mb-2">{{ activity.title }}</h3>
-              <p class="text-white/80 text-sm mb-4">{{ activity.date }} &bull; {{ activity.location }}</p>
+              <p class="text-white/80 text-sm mb-4">{{ activity.activity_date }} &bull; {{ activity.location }}</p>
 
               <div
                 class="grid grid-rows-[0fr] group-hover/card:grid-rows-[1fr] transition-[grid-template-rows] duration-500 ease-in-out">

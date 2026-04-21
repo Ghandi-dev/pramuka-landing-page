@@ -45,9 +45,19 @@ export function useGalleryService() {
     }
 
     const deleteImage = async (imageUrl: string) => {
-        // Client-side deletion from Cloudinary is not supported via unsigned uploads.
-        // It requires an API secret, so we leave the image object orphaned in Cloudinary.
-        console.warn('Image deletion from Cloudinary is skipped because it requires a secure server endpoint.')
+        if (!imageUrl || !imageUrl.includes('res.cloudinary.com')) return;
+
+        try {
+            await fetch('/api/upload', {
+                method: 'DELETE',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({ imageUrl })
+            })
+        } catch (error) {
+            console.error('Failed to delete old image', error)
+        }
     }
 
     return {
