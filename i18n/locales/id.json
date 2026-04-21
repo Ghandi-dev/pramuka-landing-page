@@ -4,7 +4,8 @@
     "about": "Tentang Kami",
     "activities": "Kegiatan",
     "members": "Anggota",
-    "contact": "Kontak"
+    "contact": "Kontak",
+    "cta": "Daftar Sekarang"
   },
   "footer": {
     "description": "Gerakan Pramuka Gugus Depan SMAN 1 Pasawahan. Membangun karakter, kemandirian, dan kepemimpinan generasi muda.",
@@ -26,9 +27,9 @@
     "description": "Membangun karakter bangsa melalui gerakan kepramukaan.",
     "hero": {
       "badge": "Pangkalan SMA Negeri 1 Pasawahan",
-      "title_1": "Berani.",
-      "title_2": "Disiplin.",
-      "title_3": "Siap.",
+      "title_1": "Disiplin.",
+      "title_2": "Berani.",
+      "title_3": "Setia.",
       "description": "Membangun karakter mulia dengan semangat kepramukaan di alam raya. Menjadi teladan tangguh untuk masa depan.",
       "cta_join": "Daftar Sekarang",
       "cta_history": "Pelajari Sejarah Kami"
@@ -38,9 +39,13 @@
       "title_2": "Darmaku Kubaktikan.",
       "description": "Lebih dari sekadar ekstrakurikuler, Pramuka SMA Negeri 1 Pasawahan adalah keluarga besar yang menempa kepemimpinan, persaudaraan tanpa batas, dan keterampilan bertahan di setiap kondisi."
     },
+    "pinboard": {
+      "title": "Jejak Langkah & Kebersamaan",
+      "description": "Mengabadikan momen berharga, wajah-wajah di balik layar, dan ikatan abadi antara anggota serta alumni."
+    },
     "activities": {
       "latest_expedition": "Ekspedisi Terbaru",
-      "description": "Jejak langkah kami di berbagai medan, dari lapangan sekolah hingga puncak gunung.",
+      "description": "Dokumentasi kami di berbagai medan, dari lapangan sekolah hingga puncak gunung.",
       "view_all": "Lihat Semua Dokumentasi"
     }
   },
@@ -79,21 +84,21 @@
     }
   },
   "contact": {
-    "title": "Reach Out",
+    "title": "Hubungi Kami",
     "description": "Baik untuk menjalin silaturahmi, pertanyaan mengenai kolaborasi, atau mendaftar menjadi anggota baru. Kami siap menyambut Anda.",
     "basecamp": "Base Camp",
-    "location": "Location",
-    "email": "Electronic Mail",
-    "social": "Digital Frequency",
+    "location": "Lokasi",
+    "email": "Email",
+    "social": "Media Sosial",
     "form": {
-      "title": "Send a Dispatch",
+      "title": "Kirimkan Pesan",
       "success_title": "Pesan Terkirim!",
       "success_description": "Terima kasih telah menghubungi kami. Kami akan segera merespons pesan Anda.",
       "send_again": "Kirim Pesan Lagi",
-      "name": "Full Name",
-      "email": "Email Address",
-      "subject": "Subject of Inquiry",
-      "message": "Message",
+      "name": "Nama Lengkap",
+      "email": "Email",
+      "subject": "Subjek",
+      "message": "Pesan",
       "placeholder_name": "e.g. John Doe",
       "placeholder_email": "your{'@'}email.com",
       "placeholder_message": "State your purpose here...",
@@ -103,7 +108,7 @@
         "general": "Pertanyaan Umum"
       },
       "sending": "Mengirim...",
-      "submit": "Transmit Message"
+      "submit": "Kirim Pesan"
     }
   }
 }

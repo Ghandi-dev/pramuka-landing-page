@@ -86,8 +86,12 @@ onMounted(() => {
     </section>
 
     <!-- Pinboard -->
-    <section class="py-24 bg-background">
-      <div class="container px-4 mx-auto">
+    <section class=" py-24 bg-background">
+      <div class="container mx-auto px-4 sm:px-6 lg:px-8 max-w-7xl">
+        <div class="max-w-xl mb-4">
+          <h2 class="font-display text-4xl font-bold text-foreground mb-4">{{ $t('home.pinboard.title') }}</h2>
+          <p class="text-muted-foreground text-lg">{{ $t('home.pinboard.description') }}</p>
+        </div>
         <PinBoard />
       </div>
     </section>
@@ -98,7 +102,7 @@ onMounted(() => {
         <div class="flex flex-col md:flex-row justify-between items-end mb-16 gap-6">
           <div class="max-w-xl">
             <h2 class="font-display text-4xl font-bold text-foreground mb-4">{{ $t('home.activities.latest_expedition')
-              }}</h2>
+            }}</h2>
             <p class="text-muted-foreground text-lg">{{ $t('home.activities.description') }}</p>
           </div>
           <NuxtLink to="/activities"

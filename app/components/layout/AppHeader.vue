@@ -56,9 +56,9 @@ function toggleMenu() {
         <div class="flex items-center gap-4">
           <LanguageSwitcher />
 
-          <NuxtLink to="/contact"
+          <NuxtLink :to="localePath('/contact')"
             class="hidden md:inline-flex h-10 items-center justify-center rounded-sm bg-primary px-6 text-sm font-medium text-primary-foreground transition-all hover:bg-primary/90 hover:shadow-lg hover:shadow-primary/20 hover:-translate-y-0.5">
-            Join Us
+            {{ t('nav.cta') }}
           </NuxtLink>
 
           <button @click="toggleMenu" class="md:hidden flex flex-col justify-center gap-1.5 w-8 h-8 rounded-full"
@@ -85,10 +85,10 @@ function toggleMenu() {
         </NuxtLink>
 
         <div class="pt-8 mt-8 border-t border-border">
-          <NuxtLink to="/contact"
+          <NuxtLink :to="localePath('/contact')"
             class="inline-flex h-12 w-full items-center justify-center rounded-sm bg-primary px-8 text-base font-medium text-primary-foreground"
             @click="isMobileMenuOpen = false">
-            Join Us
+            {{ t('nav.cta') }}
           </NuxtLink>
         </div>
       </nav>

@@ -18,18 +18,27 @@ export default defineEventHandler(async (event) => {
     api_secret: process.env.CLOUDINARY_API_SECRET
   })
 
-  const upload: any = await new Promise((resolve, reject) => {
-    cloudinary.uploader.upload_stream(
-      { folder: "pramuka" },
-      (error, result) => {
-        if (error) reject(error)
-        else resolve(result)
-      }
-    ).end(file.data)
-  })
+  try {
+    const upload: any = await new Promise((resolve, reject) => {
+      cloudinary.uploader.upload_stream(
+        { folder: "pramuka" },
+        (error, result) => {
+          if (error) reject(error)
+          else resolve(result)
+        }
+      ).end(file.data)
+    })
 
-  return {
-    url: upload.secure_url,
-    public_id: upload.public_id
+    return {
+      url: upload.secure_url,
+      public_id: upload.public_id
+    }
+  } catch (error: any) {
+    console.error('Cloudinary upload error:', error)
+    throw createError({
+      statusCode: 500,
+      statusMessage: 'Gagal mengunggah file (koneksi timeout). Silakan coba lagi.',
+      fatal: false
+    })
   }
 })

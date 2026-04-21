@@ -4,7 +4,8 @@
     "about": "About Us",
     "activities": "Activities",
     "members": "Members",
-    "contact": "Contact"
+    "contact": "Contact",
+    "cta": "Join Us"
   },
   "footer": {
     "description": "Scout Movement of SMAN 1 Pasawahan. Building character, independence, and leadership for the young generation.",
@@ -26,9 +27,9 @@
     "description": "Building national character through the scouting movement.",
     "hero": {
       "badge": "Pangkalan SMA Negeri 1 Pasawahan",
-      "title_1": "Brave.",
-      "title_2": "Disciplined.",
-      "title_3": "Prepared.",
+      "title_1": "Disciplined.",
+      "title_2": "Brave.",
+      "title_3": "Loyal.",
       "description": "Building noble character through the spirit of scouting in nature. Becoming resilient role models for the future.",
       "cta_join": "Join Application",
       "cta_history": "Learn Our History"
@@ -38,9 +39,13 @@
       "title_2": "Darmaku Kubaktikan.",
       "description": "More than just an extracurricular activity, the SMA Negeri 1 Pasawahan Scout organization is a big family that builds leadership, strong brotherhood, and survival skills in every situation."
     },
+    "pinboard": {
+      "title": "Memories & Milestones",
+      "description": "Preserving cherished moments, our dedicated team, and the enduring connection of our members and alumni."
+    },
     "activities": {
       "latest_expedition": "Latest Expedition",
-      "description": "Our footsteps across many terrains, from the school field to mountain peaks.",
+      "description": "Documentation of our activities in various fields, from the school field to mountain peaks.",
       "view_all": "View All Documentation"
     }
   },
