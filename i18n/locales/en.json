@@ -4,7 +4,8 @@
     "about": "About Us",
     "activities": "Activities",
     "members": "Members",
-    "contact": "Contact"
+    "contact": "Contact",
+    "cta": "Join Us"
   },
   "footer": {
     "description": "Scout Movement of SMAN 1 Pasawahan. Building character, independence, and leadership for the young generation.",
@@ -26,9 +27,9 @@
     "description": "Building national character through the scouting movement.",
     "hero": {
       "badge": "Pangkalan SMA Negeri 1 Pasawahan",
-      "title_1": "Brave.",
-      "title_2": "Disciplined.",
-      "title_3": "Prepared.",
+      "title_1": "Disciplined.",
+      "title_2": "Brave.",
+      "title_3": "Loyal.",
       "description": "Building noble character through the spirit of scouting in nature. Becoming resilient role models for the future.",
       "cta_join": "Join Application",
       "cta_history": "Learn Our History"
@@ -37,6 +38,77 @@
       "title": "Satyaku Kudarmakan,",
       "title_2": "Darmaku Kubaktikan.",
       "description": "More than just an extracurricular activity, the SMA Negeri 1 Pasawahan Scout organization is a big family that builds leadership, strong brotherhood, and survival skills in every situation."
+    },
+    "pinboard": {
+      "title": "Memories & Milestones",
+      "description": "Preserving cherished moments, our dedicated team, and the enduring connection of our members and alumni."
+    },
+    "activities": {
+      "latest_expedition": "Latest Expedition",
+      "description": "Documentation of our activities in various fields, from the school field to mountain peaks.",
+      "view_all": "View All Documentation"
+    }
+  },
+  "about": {
+    "header": {
+      "title": "Our Heritage",
+      "description": "Standing strong as a pillar for shaping youth character, the Scout Movement of SMA Negeri 1 Pasawahan has united creativity, feeling, and initiative"
+    },
+    "history": {
+      "title": "A Brief History",
+      "paragraph1": "The beginning of the SMA Negeri 1 Pasawahan scout base cannot be separated from the spirit of its predecessors who wished to create a positive place to shape discipline and mental strength.",
+      "paragraph2": "Year after year, this scout unit has continued to grow, both in the quality of its members and in the number of participations in competitions at branch and regional levels. Guided by the Tri Satya and Dasa Darma, we actively dedicate ourselves to serving the community.",
+      "quote": "We were not only taught how to tie knots, but how to tie bonds of brotherhood that will never break."
+    },
+    "cta": {
+      "text": "Be part of our ongoing story.",
+      "button": "Join Application"
+    }
+  },
+  "activities": {
+    "header": {
+      "title": "Field & Formations",
+      "description": "Meaningful moments in the brown uniform. From camping adventures to social service activities within the community."
+    }
+  },
+  "members": {
+    "header": {
+      "title": "The Vanguard",
+      "description": "Meet the figures behind the helm of the Ambalan. Leaders, trainers, and mentors who breathe life into the Scout Movement at SMAN 1 Pasawahan."
+    },
+    "empty": "Organization Structure Chart Not Available.",
+    "cta": {
+      "title": "Ready to Serve?",
+      "description": "The wheel of regeneration keeps turning. Forge yourself with us to become part of the next Ambalan Council.",
+      "button": "Start Your Journey"
+    }
+  },
+  "contact": {
+    "title": "Reach Out",
+    "description": "Whether for building connections, asking about collaborations, or applying for membership, we are ready to welcome you.",
+    "basecamp": "Base Camp",
+    "location": "Location",
+    "email": "Electronic Mail",
+    "social": "Digital Frequency",
+    "form": {
+      "title": "Send a Dispatch",
+      "success_title": "Message Sent!",
+      "success_description": "Thank you for reaching out to us. We will respond to your message shortly.",
+      "send_again": "Send Another Message",
+      "name": "Full Name",
+      "email": "Email Address",
+      "subject": "Subject of Inquiry",
+      "message": "Message",
+      "placeholder_name": "e.g. John Doe",
+      "placeholder_email": "your{'@'}email.com",
+      "placeholder_message": "State your purpose here...",
+      "subjects": {
+        "join": "Join Membership",
+        "collab": "Event Collaboration",
+        "general": "General Question"
+      },
+      "sending": "Sending...",
+      "submit": "Transmit Message"
     }
   }
 }

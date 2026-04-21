@@ -1,7 +1,11 @@
 <script setup lang="ts">
 import { useHead } from '#imports'
 import PinBoard from '~/components/pinboard/PinBoard.vue';
-import { activities } from '~/lib/dummyData'
+import { useLocalePath } from "#imports"
+import { useActivityService } from '~/services/activityService';
+
+const localePath = useLocalePath()
+const { data, loading, fetchAll } = useActivityService()
 
 useHead({
   title: 'Home',
@@ -10,7 +14,9 @@ useHead({
   ]
 })
 
-const recentActivities = activities.slice(0, 3)
+onMounted(() => {
+  fetchAll('created_at', false, 3)
+})
 </script>
 
 <template>
@@ -44,12 +50,12 @@ const recentActivities = activities.slice(0, 3)
           </p>
 
           <div class="flex flex-col sm:flex-row gap-4">
-            <NuxtLink to="/contact"
+            <NuxtLink :to="localePath('/contact')"
               class="inline-flex h-12 items-center justify-center rounded-sm bg-primary px-8 text-sm font-medium text-primary-foreground transition-all hover:bg-primary/90 hover:scale-[1.02] hover:shadow-xl hover:shadow-primary/20">
               {{ $t('home.hero.cta_join') }}
             </NuxtLink>
 
-            <NuxtLink to="/about"
+            <NuxtLink :to="localePath('/about')"
               class="inline-flex h-12 items-center justify-center rounded-sm border-2 border-border bg-transparent px-8 text-sm font-medium text-foreground transition-colors hover:border-primary hover:text-primary">
               {{ $t('home.hero.cta_history') }}
             </NuxtLink>
@@ -80,8 +86,12 @@ const recentActivities = activities.slice(0, 3)
     </section>
 
     <!-- Pinboard -->
-    <section class="py-24 bg-background">
-      <div class="container px-4 mx-auto">
+    <section class=" py-24 bg-background">
+      <div class="container mx-auto px-4 sm:px-6 lg:px-8 max-w-7xl">
+        <div class="max-w-xl mb-4">
+          <h2 class="font-display text-4xl font-bold text-foreground mb-4">{{ $t('home.pinboard.title') }}</h2>
+          <p class="text-muted-foreground text-lg">{{ $t('home.pinboard.description') }}</p>
+        </div>
         <PinBoard />
       </div>
     </section>
@@ -91,31 +101,31 @@ const recentActivities = activities.slice(0, 3)
       <div class="container mx-auto px-4 sm:px-6 lg:px-8 max-w-7xl">
         <div class="flex flex-col md:flex-row justify-between items-end mb-16 gap-6">
           <div class="max-w-xl">
-            <h2 class="font-display text-4xl font-bold text-foreground mb-4">Latest Expedition</h2>
-            <p class="text-muted-foreground text-lg">Jejak langkah kami di berbagai medan, dari lapangan sekolah hingga
-              puncak gunung.</p>
+            <h2 class="font-display text-4xl font-bold text-foreground mb-4">{{ $t('home.activities.latest_expedition')
+            }}</h2>
+            <p class="text-muted-foreground text-lg">{{ $t('home.activities.description') }}</p>
           </div>
           <NuxtLink to="/activities"
             class="group inline-flex items-center gap-2 text-primary font-semibold hover:text-primary/80 transition-colors">
-            View All Documentation
+            {{ $t('home.activities.view_all') }}
             <span class="transform transition-transform group-hover:translate-x-1">→</span>
           </NuxtLink>
         </div>
 
         <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-          <article v-for="activity in recentActivities" :key="activity.id"
+          <article v-for="activity in data" :key="activity.id"
             class="group group/card relative h-112.5 overflow-hidden rounded-sm bg-muted">
-            <img :src="activity.image" :alt="activity.title"
+            <img :src="activity.cover_image" :alt="activity.title"
               class="absolute inset-0 w-full h-full object-cover transition-transform duration-700 group-hover/card:scale-110" />
             <div class="absolute inset-0 bg-linear-to-t from-black/80 via-black/40 to-transparent"></div>
 
             <div class="absolute inset-0 p-8 flex flex-col justify-end">
               <span
                 class="inline-block px-3 py-1 mb-4 text-xs font-semibold uppercase tracking-wider text-primary-foreground bg-primary/90 rounded-sm w-fit">
-                {{ activity.category }}
+                KEGIATAN
               </span>
               <h3 class="font-display text-2xl font-bold text-white mb-2">{{ activity.title }}</h3>
-              <p class="text-white/80 text-sm mb-4">{{ activity.date }} &bull; {{ activity.location }}</p>
+              <p class="text-white/80 text-sm mb-4">{{ activity.activity_date }} &bull; {{ activity.location }}</p>
 
               <div
                 class="grid grid-rows-[0fr] group-hover/card:grid-rows-[1fr] transition-[grid-template-rows] duration-500 ease-in-out">
