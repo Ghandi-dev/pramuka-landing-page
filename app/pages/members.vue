@@ -22,9 +22,9 @@ onMounted(() => {
     <div class="container mx-auto px-4 sm:px-6 lg:px-8 max-w-7xl">
       <!-- Header -->
       <div class="pt-12 pb-20 text-center">
-        <h1 class="font-display text-5xl md:text-6xl font-bold text-foreground mb-6">The Vanguard</h1>
+        <h1 class="font-display text-5xl md:text-6xl font-bold text-foreground mb-6">{{ $t('members.header.title') }}</h1>
         <p class="text-xl text-muted-foreground leading-relaxed max-w-2xl mx-auto">
-          Mengenal sosok-sosok di balik kemudi Ambalan. Pemimpin, pelatih, dan pembina yang menjadi nafas Gerakan Pramuka di SMAN 1 Pasawahan.
+          {{ $t('members.header.description') }}
         </p>
       </div>
 
@@ -67,13 +67,13 @@ onMounted(() => {
       <!-- Call to Action Banner -->
       <div class="my-24 p-12 bg-primary text-primary-foreground rounded-sm flex flex-col md:flex-row items-center justify-between gap-8">
         <div class="max-w-xl">
-          <h3 class="font-display text-3xl font-bold mb-4">Siap Mengabdi?</h3>
+          <h3 class="font-display text-3xl font-bold mb-4">{{ $t('members.cta.title') }}</h3>
           <p class="text-primary-foreground/80 text-lg">
-            Roda regenerasi terus berjalan. Tempa diri Anda bersama kami menjadi bagian dari Dewan Ambalan selanjutnya.
+            {{ $t('members.cta.description') }}
           </p>
         </div>
         <NuxtLink to="/contact" class="inline-flex h-14 items-center justify-center rounded-sm bg-background px-10 text-base font-semibold text-primary transition-all hover:scale-105 shrink-0 shadow-xl">
-          Start Your Journey
+          {{ $t('members.cta.button') }}
         </NuxtLink>
       </div>
     </div>

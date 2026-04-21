@@ -65,5 +65,45 @@
       "title": "Field & Formations",
       "description": "Meaningful moments in the brown uniform. From camping adventures to social service activities within the community."
     }
+  },
+  "members": {
+    "header": {
+      "title": "The Vanguard",
+      "description": "Meet the figures behind the helm of the Ambalan. Leaders, trainers, and mentors who breathe life into the Scout Movement at SMAN 1 Pasawahan."
+    },
+    "empty": "Organization Structure Chart Not Available.",
+    "cta": {
+      "title": "Ready to Serve?",
+      "description": "The wheel of regeneration keeps turning. Forge yourself with us to become part of the next Ambalan Council.",
+      "button": "Start Your Journey"
+    }
+  },
+  "contact": {
+    "title": "Reach Out",
+    "description": "Whether for building connections, asking about collaborations, or applying for membership, we are ready to welcome you.",
+    "basecamp": "Base Camp",
+    "location": "Location",
+    "email": "Electronic Mail",
+    "social": "Digital Frequency",
+    "form": {
+      "title": "Send a Dispatch",
+      "success_title": "Message Sent!",
+      "success_description": "Thank you for reaching out to us. We will respond to your message shortly.",
+      "send_again": "Send Another Message",
+      "name": "Full Name",
+      "email": "Email Address",
+      "subject": "Subject of Inquiry",
+      "message": "Message",
+      "placeholder_name": "e.g. John Doe",
+      "placeholder_email": "your{'@'}email.com",
+      "placeholder_message": "State your purpose here...",
+      "subjects": {
+        "join": "Join Membership",
+        "collab": "Event Collaboration",
+        "general": "General Question"
+      },
+      "sending": "Sending...",
+      "submit": "Transmit Message"
+    }
   }
 }

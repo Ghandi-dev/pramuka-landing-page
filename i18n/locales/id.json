@@ -65,5 +65,45 @@
       "title": "Kegiatan & Formasi",
       "description": "Momen berharga dalam balutan seragam coklat. Mulai dari perkemahan hingga bakti aksi sosial di tengah masyarakat."
     }
+  },
+  "members": {
+    "header": {
+      "title": "The Vanguard",
+      "description": "Mengenal sosok-sosok di balik kemudi Ambalan. Pemimpin, pelatih, dan pembina yang menjadi nafas Gerakan Pramuka di SMAN 1 Pasawahan."
+    },
+    "empty": "Bagan Struktur Organisasi Belum Tersedia.",
+    "cta": {
+      "title": "Siap Mengabdi?",
+      "description": "Roda regenerasi terus berjalan. Tempa diri Anda bersama kami menjadi bagian dari Dewan Ambalan selanjutnya.",
+      "button": "Mulai Perjalananmu"
+    }
+  },
+  "contact": {
+    "title": "Reach Out",
+    "description": "Baik untuk menjalin silaturahmi, pertanyaan mengenai kolaborasi, atau mendaftar menjadi anggota baru. Kami siap menyambut Anda.",
+    "basecamp": "Base Camp",
+    "location": "Location",
+    "email": "Electronic Mail",
+    "social": "Digital Frequency",
+    "form": {
+      "title": "Send a Dispatch",
+      "success_title": "Pesan Terkirim!",
+      "success_description": "Terima kasih telah menghubungi kami. Kami akan segera merespons pesan Anda.",
+      "send_again": "Kirim Pesan Lagi",
+      "name": "Full Name",
+      "email": "Email Address",
+      "subject": "Subject of Inquiry",
+      "message": "Message",
+      "placeholder_name": "e.g. John Doe",
+      "placeholder_email": "your{'@'}email.com",
+      "placeholder_message": "State your purpose here...",
+      "subjects": {
+        "join": "Pendaftaran Anggota Baru",
+        "collab": "Kolaborasi Kegiatan",
+        "general": "Pertanyaan Umum"
+      },
+      "sending": "Mengirim...",
+      "submit": "Transmit Message"
+    }
   }
 }
