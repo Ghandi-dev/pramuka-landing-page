@@ -35,25 +35,32 @@ const handleClick = () => {
     :style="{ left: `${x}px`, top: `${y}px`, rotate: `${rotation}deg` }" @dblclick="handleDoubleClick"
     @click="handleClick">
 
+    <!-- pin -->
     <div
       class="absolute -top-3 left-1/2 -translate-x-1/2 w-6 h-6 bg-red-600 rounded-full border-[3px] border-white shadow-md z-30 flex items-center justify-center">
       <div class="w-1.5 h-1.5 bg-white/40 rounded-full mb-1 ml-1"></div>
     </div>
 
-    <div class="w-full h-50 overflow-hidden relative">
-      <img :src="image_url" :alt="title" class="w-full h-full object-cover border-2 border-black" loading="lazy" />
+    <!-- image container -->
+    <div class="w-full flex items-center justify-center overflow-hidden relative bg-gray-100 border-2 border-black">
 
-      <!-- ✅ Overlay muncul saat hover -->
+      <img :src="image_url" :alt="title" class="w-full h-auto object-contain" loading="lazy" />
+
+      <!-- overlay -->
       <div
         class="absolute inset-0 bg-gray-800/70 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity duration-200">
         <p class="text-white text-xs font-medium text-center px-2 leading-snug">
           Double click<br />for detail
         </p>
       </div>
+
     </div>
 
-    <div class="p-3 text-center">
-      <h3 class="m-0 text-base font-bold text-gray-800 leading-tight">{{ title }}</h3>
+    <div class="text-center">
+      <h3 class="m-0 text-base font-bold text-gray-800 leading-tight">
+        {{ title }}
+      </h3>
     </div>
+
   </div>
 </template>

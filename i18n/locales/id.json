@@ -41,7 +41,18 @@
     },
     "pinboard": {
       "title": "Jejak Langkah & Kebersamaan",
-      "description": "Mengabadikan momen berharga, wajah-wajah di balik layar, dan ikatan abadi antara anggota serta alumni."
+      "description": "Mengabadikan momen berharga, wajah-wajah di balik layar, dan ikatan abadi antara anggota serta alumni.",
+      "instructions_desktop": "Klik dua kali untuk melihat detail • Seret untuk menggeser • Gulir untuk memperbesar",
+      "instructions_mobile": "Ketuk untuk melihat detail • Seret untuk menggeser • Cubit untuk memperbesar",
+      "loading": "Memuat foto...",
+      "zoom_in": "Perbesar",
+      "zoom_out": "Perkecil",
+      "reset_view": "Setel Ulang Tampilan"
+    },
+    "motto": {
+      "title": "Praja Aditya",
+      "title_2": "Mahatva Yoddha",
+      "description": "\"Pejuang agung yang bersinar seperti matahari bagi rakyat\"—itulah semangat yang kami hidupkan di setiap langkah Gerakan Pramuka. Kami membentuk generasi yang tangguh, berkarakter, dan siap mengabdi, dengan jiwa kepemimpinan, kebersamaan, serta kepedulian terhadap sesama dan lingkungan. Bersama, kita tumbuh menjadi pribadi yang memberi cahaya dan manfaat bagi masyarakat."
     },
     "activities": {
       "latest_expedition": "Ekspedisi Terbaru",
@@ -73,7 +84,7 @@
   },
   "members": {
     "header": {
-      "title": "The Vanguard",
+      "title": "Garda Terdepan",
       "description": "Mengenal sosok-sosok di balik kemudi Ambalan. Pemimpin, pelatih, dan pembina yang menjadi nafas Gerakan Pramuka di SMAN 1 Pasawahan."
     },
     "empty": "Bagan Struktur Organisasi Belum Tersedia.",

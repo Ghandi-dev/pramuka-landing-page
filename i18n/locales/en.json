@@ -41,7 +41,18 @@
     },
     "pinboard": {
       "title": "Memories & Milestones",
-      "description": "Preserving cherished moments, our dedicated team, and the enduring connection of our members and alumni."
+      "description": "Preserving cherished moments, our dedicated team, and the enduring connection of our members and alumni.",
+      "instructions_desktop": "Double-click to view details • Drag to pan • Scroll to zoom",
+      "instructions_mobile": "Tap to view details • Drag to pan • Pinch to zoom",
+      "loading": "Loading photos...",
+      "zoom_in": "Zoom In",
+      "zoom_out": "Zoom Out",
+      "reset_view": "Reset View"
+    },
+    "motto": {
+      "title": "Praja Aditya",
+      "title_2": "Mahatva Yoddha",
+      "description": "“Great warriors who shine like the sun for the people”—this is the spirit we bring to life in every step of the Scout Movement. We shape a resilient and principled generation, ready to serve, with strong leadership, unity, and care for others and the environment. Together, we grow into individuals who bring light and meaningful impact to society."
     },
     "activities": {
       "latest_expedition": "Latest Expedition",

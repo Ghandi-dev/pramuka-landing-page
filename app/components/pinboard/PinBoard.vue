@@ -64,19 +64,18 @@ onMounted(() => {
     cursor: "grab",
   })
   wrapper.value.addEventListener("wheel", panzoom.zoomWithWheel)
-  zoomIn.value.addEventListener("click", () => panzoom.zoomIn())
+
   resetView.value.addEventListener("click", () => panzoom.reset())
-  zoomOut.value.addEventListener("click", () => panzoom.zoomOut())
 
   // Edge Hit Logic Optimized (No Vue reactivity loop & RAF throttled)
   canvas.value.addEventListener("panzoompan", () => {
     if (!wrapper.value || !canvas.value) return;
 
     if (rafId) return;
-    
+
     rafId = requestAnimationFrame(() => {
       rafId = null;
-      
+
       const wrapperRect = wrapper.value.getBoundingClientRect();
       const canvasRect = canvas.value.getBoundingClientRect();
 
@@ -114,25 +113,21 @@ onMounted(() => {
     <div v-if="loading" class="absolute inset-0 z-50 flex items-center justify-center bg-secondary/80 backdrop-blur-sm">
       <div class="flex flex-col items-center gap-4">
         <div class="animate-spin rounded-full h-12 w-12 border-4 border-primary border-t-transparent shadow-md"></div>
-        <p class="text-sm font-medium text-foreground animate-pulse">Memuat foto...</p>
+        <p class="text-sm font-medium text-foreground animate-pulse">{{ $t('home.pinboard.loading') }}</p>
       </div>
     </div>
 
     <!-- Edge hit visual indicators -->
-    <div
-      ref="edgeTop"
+    <div ref="edgeTop"
       class="absolute top-0 left-0 right-0 h-8 bg-gradient-to-b from-primary/40 to-transparent pointer-events-none transition-opacity duration-300 z-10 opacity-0">
     </div>
-    <div
-      ref="edgeBottom"
+    <div ref="edgeBottom"
       class="absolute bottom-0 left-0 right-0 h-8 bg-gradient-to-t from-primary/40 to-transparent pointer-events-none transition-opacity duration-300 z-10 opacity-0">
     </div>
-    <div
-      ref="edgeLeft"
+    <div ref="edgeLeft"
       class="absolute top-0 bottom-0 left-0 w-8 bg-gradient-to-r from-primary/40 to-transparent pointer-events-none transition-opacity duration-300 z-10 opacity-0">
     </div>
-    <div
-      ref="edgeRight"
+    <div ref="edgeRight"
       class="absolute top-0 bottom-0 right-0 w-8 bg-gradient-to-l from-primary/40 to-transparent pointer-events-none transition-opacity duration-300 z-10 opacity-0">
     </div>
 
@@ -148,20 +143,20 @@ onMounted(() => {
       class="absolute bottom-4 left-1/2 -translate-x-1/2 z-40 bg-black/50 text-white p-3 rounded-lg text-sm text-center">
       <!-- Desktop -->
       <p class="hidden sm:block">
-        Double-click to view details • Drag to pan • Scroll to zoom
+        {{ $t('home.pinboard.instructions_desktop') }}
       </p>
 
       <!-- Mobile -->
       <p class="sm:hidden">
-        Tap to view details • Drag to pan • Pinch to zoom
+        {{ $t('home.pinboard.instructions_mobile') }}
       </p>
     </div>
 
     <!-- ✅ Tombol kontrol zoom -->
-    <div class="absolute bottom-4 right-4 z-40 flex flex-col gap-2">
-      <button ref="zoomIn"
+    <div class="absolute top-4 right-4 z-40 flex flex-col gap-2">
+      <!-- <button ref="zoomIn"
         class="w-9 h-9 rounded-full bg-white/90 hover:bg-white shadow-md flex items-center justify-center text-gray-700 hover:text-gray-900 transition backdrop-blur-sm border border-gray-200"
-        title="Zoom In">
+        :title="$t('home.pinboard.zoom_in')">
         <svg xmlns="http://www.w3.org/2000/svg" class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor"
           stroke-width="2.5">
           <path stroke-linecap="round" stroke-linejoin="round" d="M12 4v16m8-8H4" />
@@ -170,42 +165,50 @@ onMounted(() => {
 
       <button ref="zoomOut"
         class="w-9 h-9 rounded-full bg-white/90 hover:bg-white shadow-md flex items-center justify-center text-gray-700 hover:text-gray-900 transition backdrop-blur-sm border border-gray-200"
-        title="Zoom Out">
+        :title="$t('home.pinboard.zoom_out')">
         <svg xmlns="http://www.w3.org/2000/svg" class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor"
           stroke-width="2.5">
           <path stroke-linecap="round" stroke-linejoin="round" d="M4 12h16" />
         </svg>
-      </button>
+      </button> -->
 
       <!-- Divider -->
-      <div class="w-full h-px bg-gray-200 mx-auto" />
+      <!-- <div class="w-full h-px bg-gray-200 mx-auto" /> -->
 
       <button ref="resetView"
-        class="w-9 h-9 rounded-full bg-white/90 hover:bg-white shadow-md flex items-center justify-center text-gray-700 hover:text-gray-900 transition backdrop-blur-sm border border-gray-200"
-        title="Reset View">
-        <svg xmlns="http://www.w3.org/2000/svg" class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor"
+        class="w-10 h-10 rounded-lg bg-white/90 hover:bg-white shadow-lg flex items-center justify-center text-gray-700 hover:text-gray-900 transition-all duration-200 backdrop-blur-sm border border-gray-200 hover:scale-105"
+        :title="$t('home.pinboard.reset_view')">
+        <svg xmlns="http://www.w3.org/2000/svg" class="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor"
           stroke-width="2">
           <path stroke-linecap="round" stroke-linejoin="round"
-            d="M9 9V4.5M9 9H4.5M9 9 3.75 3.75M9 15v4.5M9 15H4.5M9 15l-5.25 5.25M15 9h4.5M15 9V4.5M15 9l5.25-5.25M15 15h4.5M15 15v4.5m0-4.5 5.25 5.25" />
+            d="M4 4v6h6M20 20v-6h-6M20 4a8 8 0 00-14.32 3M4 20a8 8 0 0014.32-3" />
         </svg>
       </button>
     </div>
 
     <Transition name="fade">
       <div v-if="selectedCard"
-        class="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/60 backdrop-blur-sm "
+        class="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/60 backdrop-blur-sm"
         @click.self="closeModal">
-        <div class="bg-white max-w-sm w-full overflow-hidden shadow-2xl animate-in zoom-in duration-300 border-2 border-black">
+        <div
+          class="bg-white max-w-lg w-full overflow-hidden shadow-2xl animate-in zoom-in duration-300 border-2 border-black">
           <div class="relative p-4">
-            <div class="w-full aspect-3/4 h-auto overflow-hidden  shadow-inner bg-gray-100 border-2 border-black">
-              <img :src="selectedCard.image_url" :alt="selectedCard.title" class="w-full h-full object-cover " />
+
+            <!-- Container mengikuti rasio gambar -->
+            <div
+              class="w-full overflow-hidden shadow-inner bg-gray-100 border-2 border-black flex items-center justify-center">
+              <img :src="selectedCard.image_url" :alt="selectedCard.title" class="w-full h-auto object-contain"
+                loading="lazy" />
             </div>
+
             <button @click="closeModal"
               class="absolute top-6 right-6 bg-black/30 hover:bg-black/50 text-white p-2 rounded-full backdrop-blur-md h-10 w-10 flex items-center justify-center transition z-10">
               ✕
             </button>
+
           </div>
-          <div class="text-center p-6 pt-0">
+
+          <div class="text-center pt-0">
             <h2 class="text-2xl font-bold text-gray-900 mb-2 leading-tight">
               {{ selectedCard.title }}
             </h2>

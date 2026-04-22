@@ -103,6 +103,19 @@ onMounted(() => {
       </div>
     </section>
 
+    <!-- Intro Motto Ambalan -->
+    <section class="w-full bg-primary text-primary-foreground py-24">
+      <div class="container mx-auto px-4 sm:px-6 lg:px-8 max-w-5xl text-center">
+        <h2 class="font-display text-3xl md:text-5xl font-bold mb-8 leading-tight">
+          {{ $t('home.motto.title') }}<br />
+          {{ $t('home.motto.title_2') }}
+        </h2>
+        <p class="text-lg text-primary-foreground/80 leading-relaxed max-w-3xl mx-auto">
+          {{ $t('home.motto.description') }}
+        </p>
+      </div>
+    </section>
+
     <!-- Recent Activities -->
     <section class="py-24 bg-background">
       <div class="container mx-auto px-4 sm:px-6 lg:px-8 max-w-7xl">
@@ -123,7 +136,8 @@ onMounted(() => {
           <article v-for="activity in data" :key="activity.id"
             class="group group/card relative h-112.5 overflow-hidden rounded-sm bg-muted">
             <img :src="activity.cover_image" :alt="activity.title"
-              class="absolute inset-0 w-full h-full object-cover transition-transform duration-700 group-hover/card:scale-110" loading="lazy" />
+              class="absolute inset-0 w-full h-full object-cover transition-transform duration-700 group-hover/card:scale-110"
+              loading="lazy" />
             <div class="absolute inset-0 bg-linear-to-t from-black/80 via-black/40 to-transparent"></div>
 
             <div class="absolute inset-0 p-8 flex flex-col justify-end">

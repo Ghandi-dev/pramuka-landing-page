@@ -48,8 +48,8 @@ onMounted(() => {
     <!-- Header -->
     <header class="bg-background py-24 border-b border-border relative overflow-hidden">
       <!-- Decorative Lines -->
-      <div class="absolute top-0 right-10 w-px h-full bg-border/40"></div>
-      <div class="absolute top-0 left-20 w-px h-full bg-border/40"></div>
+      <!-- <div class="absolute top-0 right-10 w-px h-full bg-border/40"></div> -->
+      <!-- <div class="absolute top-0 left-20 w-px h-full bg-border/40"></div> -->
 
       <div class="container mx-auto px-4 sm:px-6 lg:px-8 max-w-7xl relative z-10 text-center">
         <h1 class="font-display text-5xl md:text-7xl font-bold text-foreground mb-6">{{ $t('activities.header.title') }}
@@ -67,7 +67,7 @@ onMounted(() => {
 
           <!-- Loading State -->
           <div v-if="loading" class="flex justify-center items-center py-20">
-              <div class="h-12 w-12 border-4 border-primary/30 border-t-primary rounded-full animate-spin"></div>
+            <div class="h-12 w-12 border-4 border-primary/30 border-t-primary rounded-full animate-spin"></div>
           </div>
 
           <template v-else>
@@ -80,7 +80,8 @@ onMounted(() => {
                 </div>
                 <!-- Binding .cover_image from Activity model -->
                 <img :src="activity.cover_image" :alt="activity.title"
-                  class="w-full h-full object-cover filter grayscale-[30%] group-hover:grayscale-0 transition-all duration-700 group-hover:scale-[1.03]" loading="lazy" />
+                  class="w-full h-full object-cover filter grayscale-[30%] group-hover:grayscale-0 transition-all duration-700 group-hover:scale-[1.03]"
+                  loading="lazy" />
               </div>
 
               <div :class="index % 2 !== 0 ? 'lg:order-1' : ''">
@@ -117,13 +118,13 @@ onMounted(() => {
             class="w-10 h-10 flex items-center justify-center rounded-sm border border-border bg-background text-foreground hover:bg-muted disabled:opacity-50 disabled:cursor-not-allowed transition-colors">
             &larr;
           </button>
-          
+
           <button v-for="page in totalPages" :key="page" @click="goToPage(page)"
             :class="page === currentPage ? 'bg-primary text-primary-foreground border-primary' : 'bg-background text-foreground border-border hover:bg-muted'"
             class="w-10 h-10 flex items-center justify-center font-medium rounded-sm border transition-colors">
             {{ page }}
           </button>
-          
+
           <button @click="goToPage(currentPage + 1)" :disabled="currentPage === totalPages"
             class="w-10 h-10 flex items-center justify-center rounded-sm border border-border bg-background text-foreground hover:bg-muted disabled:opacity-50 disabled:cursor-not-allowed transition-colors">
             &rarr;

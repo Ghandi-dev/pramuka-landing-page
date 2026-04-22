@@ -36,9 +36,14 @@ useSeoMeta({
             <img src="/images/logo_pa.webp" alt="Logo Ambalan Putra"
               class="w-full h-full object-contain scale-95 group-hover:scale-100 transition-transform duration-300" />
           </div>
-          <h3
-            class="font-display text-base sm:text-2xl font-bold text-foreground text-center group-hover:text-primary transition-colors">
-            Ambalan Putra</h3>
+          <div class="flex flex-col items-center">
+            <h3
+              class="font-display text-base sm:text-2xl font-bold text-foreground text-center group-hover:text-primary transition-colors">
+              Ambalan Putra</h3>
+            <h4
+              class="font-display text-base sm:text-xl font-bold text-foreground text-center group-hover:text-primary transition-colors">
+              Kapten Halim</h4>
+          </div>
         </div>
 
         <div class="flex flex-col items-center gap-4 sm:gap-6 group w-[120px] sm:w-auto">
@@ -47,9 +52,14 @@ useSeoMeta({
             <img src="/images/logo_pi.webp" alt="Logo Ambalan Putri"
               class="w-full h-full object-contain scale-95 group-hover:scale-100 transition-transform duration-300" />
           </div>
-          <h3
-            class="font-display text-base sm:text-2xl font-bold text-foreground text-center group-hover:text-accent transition-colors">
-            Ambalan Putri</h3>
+          <div class="flex flex-col items-center">
+            <h3
+              class="font-display text-base sm:text-2xl font-bold text-foreground text-center group-hover:text-accent transition-colors">
+              Ambalan Putri</h3>
+            <h4
+              class="font-display text-base sm:text-xl font-bold text-foreground text-center group-hover:text-accent transition-colors">
+              R.A Kartini</h4>
+          </div>
         </div>
       </div>
 

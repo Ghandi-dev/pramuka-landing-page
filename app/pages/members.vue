@@ -1,7 +1,9 @@
 <script setup lang="ts">
-import { onMounted } from 'vue'
+import { onMounted, ref, computed, watch } from 'vue'
 import { useI18n } from '#imports'
 import { useMemberService } from '~/services/memberService'
+import { ChevronLeft, ChevronRight } from 'lucide-vue-next'
+import Button from '~/components/ui/button/Button.vue'
 
 const { t } = useI18n()
 const siteUrl = 'https://pramukasmanpas.vercel.app'
@@ -19,6 +21,31 @@ useSeoMeta({
 })
 
 const { data, loading, fetchAllOrdered } = useMemberService()
+
+const currentPage = ref(1)
+const pageSize = ref(8)
+
+const totalItems = computed(() => data.value.length)
+const totalPages = computed(() => Math.ceil(totalItems.value / pageSize.value))
+
+const paginatedData = computed(() => {
+  const start = (currentPage.value - 1) * pageSize.value
+  const end = start + pageSize.value
+  return data.value.slice(start, end)
+})
+
+watch(data, () => {
+  currentPage.value = 1
+})
+
+const setPage = (page: number) => {
+  if (page < 1 || page > totalPages.value) return
+  currentPage.value = page
+  const gridElement = document.getElementById('members-grid')
+  if (gridElement) {
+    gridElement.scrollIntoView({ behavior: 'smooth', block: 'start' })
+  }
+}
 
 onMounted(() => {
   fetchAllOrdered()
@@ -50,11 +77,11 @@ onMounted(() => {
           <p class="text-lg font-medium">Bagan Struktur Organisasi Belum Tersedia.</p>
         </div>
 
-        <div v-else class="grid md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-8">
-          <div v-for="member in data" :key="member.id"
-            class="group bg-background rounded-sm border border-border p-6 hover:border-primary/50 transition-colors duration-300">
+        <div v-else id="members-grid" class="grid md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-8 scroll-mt-24">
+          <div v-for="member in paginatedData" :key="member.id"
+            class="group bg-background rounded-sm border border-border p-6 text-center hover:border-primary/50 transition-colors duration-300">
             <div
-              class="relative w-24 h-24 mb-6 rounded-full overflow-hidden border-2 border-transparent group-hover:border-primary transition-colors p-1">
+              class="relative w-24 h-24 mb-6 mx-auto rounded-full overflow-hidden border-2 border-transparent group-hover:border-primary transition-colors p-1">
               <div
                 class="w-full h-full rounded-full overflow-hidden bg-muted flex items-center justify-center text-3xl font-bold text-muted-foreground">
                 <img v-if="member.photo" :src="member.photo" :alt="member.name"
@@ -67,6 +94,27 @@ onMounted(() => {
               {{ member.name }}</h3>
             <p class="text-sm font-semibold tracking-wide uppercase text-accent">{{ member.position }}</p>
           </div>
+        </div>
+
+        <!-- Pagination Controls -->
+        <div v-if="totalPages > 1" class="mt-16 flex items-center justify-center gap-2">
+          <Button variant="outline" size="icon" :disabled="currentPage === 1" @click="setPage(currentPage - 1)"
+            class="rounded-sm border-border hover:border-primary hover:text-primary transition-colors">
+            <ChevronLeft class="w-4 h-4" />
+          </Button>
+
+          <div class="flex items-center gap-2 px-4">
+            <button v-for="page in totalPages" :key="page" @click="setPage(page)"
+              class="w-10 h-10 flex items-center justify-center rounded-sm text-sm font-medium transition-all"
+              :class="currentPage === page ? 'bg-primary text-primary-foreground shadow-lg scale-110' : 'text-muted-foreground hover:bg-muted hover:text-foreground'">
+              {{ page }}
+            </button>
+          </div>
+
+          <Button variant="outline" size="icon" :disabled="currentPage === totalPages" @click="setPage(currentPage + 1)"
+            class="rounded-sm border-border hover:border-primary hover:text-primary transition-colors">
+            <ChevronRight class="w-4 h-4" />
+          </Button>
         </div>
       </div>
 

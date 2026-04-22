@@ -260,7 +260,8 @@ onUnmounted(() => {
                   {{ messageCharCount }}/2000
                 </span>
               </div>
-              <textarea id="message" rows="5" v-model="form.message"
+              <textarea id="message" rows="5" :value="form.message"
+                @input="form.message = ($event.target as HTMLTextAreaElement).value"
                 class="flex w-full rounded-sm border border-input bg-background px-3 py-2 text-sm ring-offset-background placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 transition-colors resize-none"
                 placeholder="State your purpose here..." maxlength="2000" required></textarea>
             </div>
