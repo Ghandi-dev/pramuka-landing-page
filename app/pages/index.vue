@@ -1,17 +1,24 @@
 <script setup lang="ts">
-import { useHead } from '#imports'
 import PinBoard from '~/components/pinboard/PinBoard.vue';
-import { useLocalePath } from "#imports"
+import { useLocalePath, useI18n } from "#imports"
 import { useActivityService } from '~/services/activityService';
 
+const { t } = useI18n()
 const localePath = useLocalePath()
 const { data, loading, fetchAll } = useActivityService()
 
-useHead({
-  title: 'Home',
-  meta: [
-    { name: 'description', content: 'Selamat datang di Pramuka SMA Negeri 1 Pasawahan.' }
-  ]
+const siteUrl = 'https://pramukasmanpas.vercel.app'
+
+useSeoMeta({
+  title: () => t('seo.home.title'),
+  description: () => t('seo.home.description'),
+  ogTitle: () => `${t('seo.home.title')} - Pramuka SMA Negeri 1 Pasawahan`,
+  ogDescription: () => t('seo.home.description'),
+  ogImage: `${siteUrl}/images/pramuka1.webp`,
+  ogUrl: siteUrl,
+  twitterTitle: () => `${t('seo.home.title')} - Pramuka SMA Negeri 1 Pasawahan`,
+  twitterDescription: () => t('seo.home.description'),
+  twitterImage: `${siteUrl}/images/pramuka1.webp`,
 })
 
 onMounted(() => {
@@ -116,7 +123,7 @@ onMounted(() => {
           <article v-for="activity in data" :key="activity.id"
             class="group group/card relative h-112.5 overflow-hidden rounded-sm bg-muted">
             <img :src="activity.cover_image" :alt="activity.title"
-              class="absolute inset-0 w-full h-full object-cover transition-transform duration-700 group-hover/card:scale-110" />
+              class="absolute inset-0 w-full h-full object-cover transition-transform duration-700 group-hover/card:scale-110" loading="lazy" />
             <div class="absolute inset-0 bg-linear-to-t from-black/80 via-black/40 to-transparent"></div>
 
             <div class="absolute inset-0 p-8 flex flex-col justify-end">

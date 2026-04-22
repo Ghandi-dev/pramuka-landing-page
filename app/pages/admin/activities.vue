@@ -18,7 +18,7 @@ import { Textarea } from '@/components/ui/textarea'
 import { Label } from '@/components/ui/label'
 
 definePageMeta({ layout: 'admin' })
-useHead({ title: 'Kelola Kegiatan' })
+useHead({ title: 'Kelola Kegiatan', meta: [{ name: 'robots', content: 'noindex, nofollow' }] })
 
 const { data, loading, fetchAll, insert, update, remove, uploadImage, deleteImage } = useActivityService()
 

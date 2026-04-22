@@ -1,6 +1,10 @@
 // https://nuxt.com/docs/api/configuration/nuxt-config
 import tailwindcss from '@tailwindcss/vite'
 export default defineNuxtConfig({
+    site: {
+        url: 'https://www.pramukasmanpas.web.id',
+        name: 'Pramuka SMA Negeri 1 Pasawahan',
+    },
     runtimeConfig: {
         public: {
             supabaseUrl: process.env.SUPABASE_URL,
@@ -28,7 +32,7 @@ export default defineNuxtConfig({
     compatibilityDate: "2025-07-15",
     devtools: { enabled: true },
     css: ['~/assets/css/tailwind.css'],
-    modules: ["shadcn-nuxt", '@nuxtjs/i18n'],
+    modules: ["shadcn-nuxt", '@nuxtjs/i18n', '@nuxtjs/sitemap'],
     i18n: {
         locales: [
             { code: 'en', language: 'en-US', file: 'en.json' },
@@ -38,7 +42,19 @@ export default defineNuxtConfig({
     },
     app: {
         head: {
+            htmlAttrs: { lang: 'id' },
+            charset: 'utf-8',
+            viewport: 'width=device-width, initial-scale=1',
             titleTemplate: '%s - Pramuka SMA Negeri 1 Pasawahan',
+            meta: [
+                { name: 'theme-color', content: '#1a1a2e' },
+                { name: 'author', content: 'Pramuka SMA Negeri 1 Pasawahan' },
+                { property: 'og:site_name', content: 'Pramuka SMA Negeri 1 Pasawahan' },
+                { property: 'og:type', content: 'website' },
+                { property: 'og:locale', content: 'id_ID' },
+                { property: 'og:locale:alternate', content: 'en_US' },
+                { name: 'twitter:card', content: 'summary_large_image' },
+            ],
             link: [
                 { rel: 'preconnect', href: 'https://fonts.googleapis.com' },
                 { rel: 'preconnect', href: 'https://fonts.gstatic.com', crossorigin: '' },

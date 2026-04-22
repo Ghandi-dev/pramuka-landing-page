@@ -9,7 +9,7 @@ import {
 import useSupabaseCrud from '~/composables/useSupabaseCrud'
 
 definePageMeta({ layout: 'admin',middleware:'admin' })
-useHead({ title: 'Dashboard Admin' })
+useHead({ title: 'Dashboard Admin', meta: [{ name: 'robots', content: 'noindex, nofollow' }] })
 
 const announcementCount = ref(0)
 const activityCount = ref(0)

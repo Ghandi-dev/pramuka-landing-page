@@ -1,11 +1,19 @@
 <script setup lang="ts">
-import { useHead } from '#imports'
+import { useI18n } from '#imports'
 
-useHead({
-  title: 'Contact & Join',
-  meta: [
-    { name: 'description', content: 'Hubungi kami atau bergabung bersama Pramuka SMAN 1 Pasawahan.' }
-  ]
+const { t } = useI18n()
+const siteUrl = 'https://pramukasmanpas.vercel.app'
+
+useSeoMeta({
+  title: () => t('seo.contact.title'),
+  description: () => t('seo.contact.description'),
+  ogTitle: () => `${t('seo.contact.title')} - Pramuka SMA Negeri 1 Pasawahan`,
+  ogDescription: () => t('seo.contact.description'),
+  ogImage: `${siteUrl}/images/logo.webp`,
+  ogUrl: `${siteUrl}/contact`,
+  twitterTitle: () => `${t('seo.contact.title')} - Pramuka SMA Negeri 1 Pasawahan`,
+  twitterDescription: () => t('seo.contact.description'),
+  twitterImage: `${siteUrl}/images/logo.webp`,
 })
 
 // --- Anti-spam: track when form was loaded ---

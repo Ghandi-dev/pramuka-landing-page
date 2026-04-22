@@ -110,5 +110,27 @@
       "sending": "Sending...",
       "submit": "Transmit Message"
     }
+  },
+  "seo": {
+    "home": {
+      "title": "Home",
+      "description": "Welcome to the official website of Scouts SMA Negeri 1 Pasawahan. Building national character through the scouting movement."
+    },
+    "about": {
+      "title": "About Us",
+      "description": "History, Vision, and Mission of Scouts SMA Negeri 1 Pasawahan. Standing strong as a pillar for shaping youth character."
+    },
+    "activities": {
+      "title": "Activities",
+      "description": "Activities and documentation of Scouts SMAN 1 Pasawahan. From camping to community service."
+    },
+    "members": {
+      "title": "Members",
+      "description": "Organization Structure and Ambalan Council of Scouts SMAN 1 Pasawahan. Meet our leaders."
+    },
+    "contact": {
+      "title": "Contact Us",
+      "description": "Reach out or join Scouts SMAN 1 Pasawahan. We are ready to welcome you."
+    }
   }
 }

@@ -18,7 +18,7 @@ import ConfirmDialog from '~/components/admin/ConfirmDialog.vue'
 
 
 definePageMeta({ layout: 'admin',middleware:'admin' })
-useHead({ title: 'Kelola Tentang Kami' })
+useHead({ title: 'Kelola Tentang Kami', meta: [{ name: 'robots', content: 'noindex, nofollow' }] })
 
 const { data, loading, fetchAll, insert, update, remove } = useAboutService()
 

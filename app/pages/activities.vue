@@ -1,13 +1,21 @@
 <script setup lang="ts">
-import { useHead } from '#imports'
 import { computed, onMounted, ref } from 'vue'
+import { useI18n } from '#imports'
 import { useActivityService } from '~/services/activityService'
 
-useHead({
-  title: 'Activities',
-  meta: [
-    { name: 'description', content: 'Daftar kegiatan dan galeri Pramuka SMAN 1 Pasawahan.' }
-  ]
+const { t } = useI18n()
+const siteUrl = 'https://pramukasmanpas.vercel.app'
+
+useSeoMeta({
+  title: () => t('seo.activities.title'),
+  description: () => t('seo.activities.description'),
+  ogTitle: () => `${t('seo.activities.title')} - Pramuka SMA Negeri 1 Pasawahan`,
+  ogDescription: () => t('seo.activities.description'),
+  ogImage: `${siteUrl}/images/pramuka1.webp`,
+  ogUrl: `${siteUrl}/activities`,
+  twitterTitle: () => `${t('seo.activities.title')} - Pramuka SMA Negeri 1 Pasawahan`,
+  twitterDescription: () => t('seo.activities.description'),
+  twitterImage: `${siteUrl}/images/pramuka1.webp`,
 })
 
 const { data, loading, fetchAll } = useActivityService()
@@ -72,7 +80,7 @@ onMounted(() => {
                 </div>
                 <!-- Binding .cover_image from Activity model -->
                 <img :src="activity.cover_image" :alt="activity.title"
-                  class="w-full h-full object-cover filter grayscale-[30%] group-hover:grayscale-0 transition-all duration-700 group-hover:scale-[1.03]" />
+                  class="w-full h-full object-cover filter grayscale-[30%] group-hover:grayscale-0 transition-all duration-700 group-hover:scale-[1.03]" loading="lazy" />
               </div>
 
               <div :class="index % 2 !== 0 ? 'lg:order-1' : ''">

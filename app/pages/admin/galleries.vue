@@ -14,7 +14,7 @@ import GalleryFormDialog from '~/components/admin/gallery/GalleryFormDialog.vue'
 import GalleryDeleteDialog from '~/components/admin/gallery/GalleryDeleteDialog.vue'
 
 definePageMeta({ layout: 'admin', middleware: 'admin' })
-useHead({ title: 'Kelola Galeri' })
+useHead({ title: 'Kelola Galeri', meta: [{ name: 'robots', content: 'noindex, nofollow' }] })
 
 const { data, loading, fetchAll, insert, update, remove, uploadImage, deleteImage } = useGalleryService()
 

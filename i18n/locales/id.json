@@ -110,5 +110,27 @@
       "sending": "Mengirim...",
       "submit": "Kirim Pesan"
     }
+  },
+  "seo": {
+    "home": {
+      "title": "Beranda",
+      "description": "Selamat datang di website resmi Pramuka SMA Negeri 1 Pasawahan. Membangun karakter bangsa melalui gerakan kepramukaan."
+    },
+    "about": {
+      "title": "Tentang Kami",
+      "description": "Sejarah, Visi, dan Misi Pramuka SMA Negeri 1 Pasawahan. Berdiri kuat sebagai pilar penempa karakter pemuda."
+    },
+    "activities": {
+      "title": "Kegiatan",
+      "description": "Daftar kegiatan dan dokumentasi Pramuka SMAN 1 Pasawahan. Dari perkemahan hingga bakti sosial."
+    },
+    "members": {
+      "title": "Anggota",
+      "description": "Struktur Organisasi dan Dewan Ambalan Pramuka SMAN 1 Pasawahan. Mengenal sosok-sosok pemimpin kami."
+    },
+    "contact": {
+      "title": "Hubungi Kami",
+      "description": "Hubungi kami atau bergabung bersama Pramuka SMAN 1 Pasawahan. Kami siap menyambut Anda."
+    }
   }
 }

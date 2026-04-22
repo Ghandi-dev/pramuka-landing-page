@@ -1,13 +1,21 @@
 <script setup lang="ts">
-import { useHead } from '#imports'
 import { onMounted } from 'vue'
+import { useI18n } from '#imports'
 import { useMemberService } from '~/services/memberService'
 
-useHead({
-  title: 'Members',
-  meta: [
-    { name: 'description', content: 'Struktur Organisasi dan Dewan Ambalan Pramuka SMAN 1 Pasawahan.' }
-  ]
+const { t } = useI18n()
+const siteUrl = 'https://pramukasmanpas.vercel.app'
+
+useSeoMeta({
+  title: () => t('seo.members.title'),
+  description: () => t('seo.members.description'),
+  ogTitle: () => `${t('seo.members.title')} - Pramuka SMA Negeri 1 Pasawahan`,
+  ogDescription: () => t('seo.members.description'),
+  ogImage: `${siteUrl}/images/logo.webp`,
+  ogUrl: `${siteUrl}/members`,
+  twitterTitle: () => `${t('seo.members.title')} - Pramuka SMA Negeri 1 Pasawahan`,
+  twitterDescription: () => t('seo.members.description'),
+  twitterImage: `${siteUrl}/images/logo.webp`,
 })
 
 const { data, loading, fetchAllOrdered } = useMemberService()

@@ -23,7 +23,7 @@ const handleError = () => clearError({ redirect: '/' })
     <div class="w-full max-w-2xl text-center relative z-10 flex flex-col items-center justify-center space-y-8">
       <!-- Error Graphic -->
       <div class="relative w-full flex items-center justify-center py-10">
-        <img src="/images/404.png" alt="Error Illustration" class="w-40 h-40 object-contain" />
+        <img src="/images/404.webp" alt="Error Illustration" class="w-40 h-40 object-contain" />
       </div>
 
       <!-- Message -->

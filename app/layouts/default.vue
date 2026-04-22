@@ -1,6 +1,38 @@
 <script setup lang="ts">
 import AppHeader from '~/components/layout/AppHeader.vue'
 import AppFooter from '~/components/layout/AppFooter.vue'
+
+// JSON-LD Structured Data — Organization Schema
+useHead({
+  script: [
+    {
+      type: 'application/ld+json',
+      innerHTML: JSON.stringify({
+        "@context": "https://schema.org",
+        "@type": "Organization",
+        "name": "Pramuka SMA Negeri 1 Pasawahan",
+        "alternateName": "Gerakan Pramuka Gudep SMAN 1 Pasawahan",
+        "url": "https://pramukasmanpas.vercel.app",
+        "logo": "https://pramukasmanpas.vercel.app/images/logo.webp",
+        "email": "pramukasmanpas@gmail.com",
+        "address": {
+          "@type": "PostalAddress",
+          "streetAddress": "Jl. Kapten Halim No.1, Pasawahan",
+          "addressLocality": "Purwakarta",
+          "addressRegion": "Jawa Barat",
+          "postalCode": "41172",
+          "addressCountry": "ID"
+        },
+        "sameAs": [
+          "https://www.instagram.com/pramukasmanpas",
+          "https://www.facebook.com/share/g/14aXL3TXarD/",
+          "https://youtube.com/@sman1pasawahan",
+          "https://www.tiktok.com/@sman1pasawahanpwk"
+        ]
+      })
+    }
+  ]
+})
 </script>
 
 <template>

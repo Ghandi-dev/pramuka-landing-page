@@ -4,7 +4,7 @@ import ConfirmDialog from '~/components/admin/ConfirmDialog.vue'
 import { useMemberService, type OrganizationMember } from '~/services/memberService'
 
 definePageMeta({ layout: 'admin',middleware:'admin' })
-useHead({ title: 'Kelola Organisasi' })
+useHead({ title: 'Kelola Organisasi', meta: [{ name: 'robots', content: 'noindex, nofollow' }] })
 
 const { data, loading, fetchAllOrdered, insert, update, remove, reorder, uploadPhoto, deleteImage } = useMemberService()
 

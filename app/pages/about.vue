@@ -1,11 +1,19 @@
 <script setup lang="ts">
-import { useHead } from '#imports'
+import { useI18n } from '#imports'
 
-useHead({
-  title: 'About Us',
-  meta: [
-    { name: 'description', content: 'Sejarah dan Visi Misi Pramuka SMA Negeri 1 Pasawahan.' }
-  ]
+const { t } = useI18n()
+const siteUrl = 'https://pramukasmanpas.vercel.app'
+
+useSeoMeta({
+  title: () => t('seo.about.title'),
+  description: () => t('seo.about.description'),
+  ogTitle: () => `${t('seo.about.title')} - Pramuka SMA Negeri 1 Pasawahan`,
+  ogDescription: () => t('seo.about.description'),
+  ogImage: `${siteUrl}/images/logo_pa.webp`,
+  ogUrl: `${siteUrl}/about`,
+  twitterTitle: () => `${t('seo.about.title')} - Pramuka SMA Negeri 1 Pasawahan`,
+  twitterDescription: () => t('seo.about.description'),
+  twitterImage: `${siteUrl}/images/logo_pa.webp`,
 })
 </script>
 

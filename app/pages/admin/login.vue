@@ -14,7 +14,7 @@ definePageMeta({
     layout: false
 })
 
-useHead({ title: 'Login Admin' })
+useHead({ title: 'Login Admin', meta: [{ name: 'robots', content: 'noindex, nofollow' }] })
 
 const router = useRouter()
 const nuxtApp = useNuxtApp()

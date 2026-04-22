@@ -14,7 +14,7 @@ import { Label } from '@/components/ui/label'
 import ConfirmDialog from '~/components/admin/ConfirmDialog.vue'
 
 definePageMeta({ layout: 'admin', middleware: 'admin' })
-useHead({ title: 'Kelola Pesan' })
+useHead({ title: 'Kelola Pesan', meta: [{ name: 'robots', content: 'noindex, nofollow' }] })
 
 const { data, loading, fetchAll, remove, markAsRead } = useContactMessageService()
 
