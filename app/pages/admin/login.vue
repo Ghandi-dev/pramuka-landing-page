@@ -4,10 +4,10 @@ import type { SupabaseClient } from '@supabase/supabase-js'
 import { Label } from '@/components/ui/label'
 import { Input } from '@/components/ui/input'
 import {
-  Card,
-  CardContent,
-  CardHeader,
-  CardTitle,
+    Card,
+    CardContent,
+    CardHeader,
+    CardTitle,
 } from '@/components/ui/card'
 
 definePageMeta({
@@ -52,8 +52,8 @@ const handleLogin = async () => {
                         <img src="/images/logo_pa.webp" alt="Logo Ambalan Putra" class="h-14 w-14 object-contain" />
                         <img src="/images/logo_pi.webp" alt="Logo Ambalan Putri" class="h-14 w-14 object-contain" />
                     </div>
-                    <CardTitle class="text-2xl font-display font-bold">Login Admin</CardTitle>
-                    <CardDescription>Masukkan kredensial untuk mengakses dashboard</CardDescription>
+                    <CardTitle class="text-2xl font-display font-bold">Login</CardTitle>
+                    <CardDescription>Masukkan kredensial</CardDescription>
                 </CardHeader>
                 <CardContent>
                     <form @submit.prevent="handleLogin" class="space-y-4">
@@ -65,8 +65,8 @@ const handleLogin = async () => {
 
                         <div class="space-y-2">
                             <Label for="email">Email</Label>
-                            <Input id="email" v-model="email" type="email" placeholder="admin@pramuka.com"
-                                required autocomplete="email" />
+                            <Input id="email" v-model="email" type="email" placeholder="admin@pramuka.com" required
+                                autocomplete="email" />
                         </div>
                         <div class="space-y-2">
                             <Label for="password">Password</Label>
