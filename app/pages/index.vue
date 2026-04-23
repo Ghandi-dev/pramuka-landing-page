@@ -1,7 +1,8 @@
 <script setup lang="ts">
-import PinBoard from '~/components/pinboard/PinBoard.vue';
 import { useLocalePath, useI18n } from "#imports"
 import { useActivityService } from '~/services/activityService';
+
+const PinBoard = defineAsyncComponent(() => import('~/components/pinboard/PinBoard.vue'))
 
 const { t } = useI18n()
 const localePath = useLocalePath()
@@ -30,10 +31,10 @@ onMounted(() => {
   <div class="flex flex-col min-h-screen">
     <!-- Hero Section -->
     <section class="relative w-full min-h-[90vh] flex items-center bg-card overflow-hidden">
-      <!-- Decorative background elements -->
+      <!-- Decorative background — lightweight gradients instead of blur -->
       <div class="absolute inset-0 z-0">
-        <div class="absolute -top-24 -right-24 w-96 h-96 bg-primary/10 rounded-full blur-3xl mix-blend-multiply"></div>
-        <div class="absolute top-1/2 -left-24 w-72 h-72 bg-accent/10 rounded-full blur-3xl mix-blend-multiply"></div>
+        <div class="absolute -top-24 -right-24 w-96 h-96 bg-primary/10 rounded-full opacity-60"></div>
+        <div class="absolute top-1/2 -left-24 w-72 h-72 bg-accent/10 rounded-full opacity-60"></div>
       </div>
 
       <div
@@ -80,7 +81,7 @@ onMounted(() => {
     </section>
 
     <!-- Intro Banner -->
-    <section class="w-full bg-primary text-primary-foreground py-24">
+    <section class="w-full bg-primary text-primary-foreground py-24 cv-auto">
       <div class="container mx-auto px-4 sm:px-6 lg:px-8 max-w-5xl text-center">
         <h2 class="font-display text-3xl md:text-5xl font-bold mb-8 leading-tight">
           {{ $t('home.banner.title') }}<br />
@@ -92,8 +93,8 @@ onMounted(() => {
       </div>
     </section>
 
-    <!-- Pinboard -->
-    <section class=" py-24 bg-background">
+    <!-- Pinboard (lazy loaded) -->
+    <section class="py-24 bg-background cv-auto">
       <div class="container mx-auto px-4 sm:px-6 lg:px-8 max-w-7xl">
         <div class="max-w-xl mb-4">
           <h2 class="font-display text-4xl font-bold text-foreground mb-4">{{ $t('home.pinboard.title') }}</h2>
@@ -104,7 +105,7 @@ onMounted(() => {
     </section>
 
     <!-- Intro Motto Ambalan -->
-    <section class="w-full bg-primary text-primary-foreground py-24">
+    <section class="w-full bg-primary text-primary-foreground py-24 cv-auto">
       <div class="container mx-auto px-4 sm:px-6 lg:px-8 max-w-5xl text-center">
         <h2 class="font-display text-3xl md:text-5xl font-bold mb-8 leading-tight">
           {{ $t('home.motto.title') }}<br />
@@ -117,7 +118,7 @@ onMounted(() => {
     </section>
 
     <!-- Recent Activities -->
-    <section class="py-24 bg-background">
+    <section class="py-24 bg-background cv-auto">
       <div class="container mx-auto px-4 sm:px-6 lg:px-8 max-w-7xl">
         <div class="flex flex-col md:flex-row justify-between items-end mb-16 gap-6">
           <div class="max-w-xl">
@@ -136,7 +137,7 @@ onMounted(() => {
           <article v-for="activity in data" :key="activity.id"
             class="group group/card relative h-112.5 overflow-hidden rounded-sm bg-muted">
             <img :src="activity.cover_image" :alt="activity.title"
-              class="absolute inset-0 w-full h-full object-cover transition-transform duration-700 group-hover/card:scale-110"
+              class="absolute inset-0 w-full h-full object-cover transition-transform duration-500 group-hover/card:scale-105"
               loading="lazy" />
             <div class="absolute inset-0 bg-linear-to-t from-black/80 via-black/40 to-transparent"></div>
 
@@ -163,3 +164,10 @@ onMounted(() => {
     </section>
   </div>
 </template>
+
+<style scoped>
+.cv-auto {
+  content-visibility: auto;
+  contain-intrinsic-size: auto 600px;
+}
+</style>

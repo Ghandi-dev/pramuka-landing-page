@@ -14,6 +14,7 @@ const resetView = ref()
 
 // State untuk Modal
 const selectedCard = ref<any>(null)
+const imageReady = ref(false)
 
 // Refs untuk Edge Hit DOM Nodes bypassing Vue reactivity
 const edgeTop = ref<HTMLElement | null>(null)
@@ -24,13 +25,31 @@ const edgeLeft = ref<HTMLElement | null>(null)
 let edgeHitTimeout: ReturnType<typeof setTimeout> | null = null
 let rafId: number | null = null
 
-const openModal = (data: any) => {
-  selectedCard.value = data
+const openModal = async (cardData: any) => {
+  // Pre-decode image before showing modal to avoid jank
+  imageReady.value = false
+  selectedCard.value = cardData
+  document.body.style.overflow = 'hidden'
+
+  try {
+    const img = new Image()
+    img.src = cardData.image_url
+    await img.decode()
+  } catch {
+    // If decode fails, show anyway
+  }
+  imageReady.value = true
 }
 
 const closeModal = () => {
   selectedCard.value = null
+  imageReady.value = false
+  document.body.style.overflow = ''
 }
+
+onUnmounted(() => {
+  document.body.style.overflow = ''
+})
 
 onMounted(() => {
   let hasFetched = false;
@@ -186,36 +205,45 @@ onMounted(() => {
       </button>
     </div>
 
-    <Transition name="fade">
-      <div v-if="selectedCard"
-        class="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/60 backdrop-blur-sm"
-        @click.self="closeModal">
-        <div
-          class="bg-white max-w-lg w-full overflow-hidden shadow-2xl animate-in zoom-in duration-300 border-2 border-black">
-          <div class="relative p-4">
+    <Teleport to="body">
+      <Transition name="fade">
+        <div v-if="selectedCard"
+          class="fixed inset-0 z-[9999] flex items-center justify-center p-4 bg-black/70 overscroll-contain touch-none"
+          style="will-change: opacity"
+          @click.self="closeModal">
+          <div
+            class="bg-white max-w-lg w-full overflow-hidden shadow-2xl border-2 border-black">
+            <div class="relative p-4">
 
-            <!-- Container mengikuti rasio gambar -->
-            <div
-              class="w-full overflow-hidden shadow-inner bg-gray-100 border-2 border-black flex items-center justify-center">
-              <img :src="selectedCard.image_url" :alt="selectedCard.title" class="w-full h-auto object-contain"
-                loading="lazy" />
+              <!-- Container mengikuti rasio gambar -->
+              <div
+                class="w-full overflow-hidden shadow-inner bg-gray-100 border-2 border-black flex items-center justify-center min-h-[200px]">
+
+                <!-- Spinner while image is decoding -->
+                <div v-if="!imageReady" class="flex items-center justify-center py-16">
+                  <div class="h-8 w-8 border-3 border-gray-300 border-t-gray-600 rounded-full animate-spin"></div>
+                </div>
+
+                <img v-show="imageReady" :src="selectedCard.image_url" :alt="selectedCard.title"
+                  class="w-full h-auto object-contain" />
+              </div>
+
+              <button @click="closeModal"
+                class="absolute top-6 right-6 bg-black/30 hover:bg-black/50 text-white p-2 rounded-full h-10 w-10 flex items-center justify-center transition z-10">
+                ✕
+              </button>
+
             </div>
 
-            <button @click="closeModal"
-              class="absolute top-6 right-6 bg-black/30 hover:bg-black/50 text-white p-2 rounded-full backdrop-blur-md h-10 w-10 flex items-center justify-center transition z-10">
-              ✕
-            </button>
-
-          </div>
-
-          <div class="text-center pt-0">
-            <h2 class="text-2xl font-bold text-gray-900 mb-2 leading-tight">
-              {{ selectedCard.title }}
-            </h2>
+            <div class="text-center pt-0">
+              <h2 class="text-2xl font-bold text-gray-900 mb-2 leading-tight">
+                {{ selectedCard.title }}
+              </h2>
+            </div>
           </div>
         </div>
-      </div>
-    </Transition>
+      </Transition>
+    </Teleport>
 
   </div>
 </template>
@@ -223,7 +251,7 @@ onMounted(() => {
 <style scoped>
 .fade-enter-active,
 .fade-leave-active {
-  transition: opacity 0.3s ease;
+  transition: opacity 0.2s ease;
 }
 
 .fade-enter-from,

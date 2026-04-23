@@ -30,18 +30,17 @@ defineEmits<{
             <form @submit.prevent="$emit('save')" class="space-y-4 pt-2">
                 <div class="space-y-2">
                     <Label for="title">Judul Foto</Label>
-                    <Input id="title" v-model="form.title" placeholder="Contoh: Api Unggun 2024" required />
+                    <Input id="title" v-model="form.title" placeholder="Contoh: Api Unggun 2024 / boleh dikosongkan " />
                 </div>
                 <div class="space-y-2">
                     <Label for="description">Deskripsi</Label>
-                    <Textarea id="description" v-model="form.description" placeholder="Keterangan singkat..." class="min-h-[80px]" />
+                    <Textarea id="description" v-model="form.description"
+                        placeholder="Keterangan singkat... / boleh dikosongkan " class="min-h-[80px]" />
                 </div>
                 <div class="space-y-2">
                     <Label>Gambar</Label>
-                    <ImageUploader 
-                        :model-value="form.image_url" 
-                        :loading="uploading"
-                        @file-selected="$emit('file-selected', $event)" 
+                    <ImageUploader :model-value="form.image_url" :loading="uploading"
+                        @file-selected="$emit('file-selected', $event)"
                         @update:model-value="(v) => form.image_url = v || ''" />
                 </div>
                 <div class="flex justify-end gap-3 pt-2">

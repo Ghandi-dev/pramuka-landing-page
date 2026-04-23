@@ -7,13 +7,13 @@ definePageMeta({
 </script>
 
 <template>
-    <div class="flex min-h-screen bg-background">
+    <div class="flex h-screen overflow-hidden bg-background">
         <AdminSidebar v-model:open="sidebarOpen" />
 
         <div class="flex-1 flex flex-col min-w-0">
             <AdminTopbar @toggle-sidebar="sidebarOpen = !sidebarOpen" />
 
-            <main class="flex-1 p-4 lg:p-6 overflow-auto">
+            <main class="flex-1 px-4 pb-4 lg:px-6 lg:pb-4 overflow-auto">
                 <slot />
             </main>
         </div>

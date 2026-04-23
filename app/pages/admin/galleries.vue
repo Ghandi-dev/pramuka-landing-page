@@ -36,8 +36,8 @@ const saving = ref(false)
 const deleting = ref(false)
 const uploading = ref(false)
 
-const galleryPinboardRef = ref<{ 
-    pinboardCanvas: HTMLElement, 
+const galleryPinboardRef = ref<{
+    pinboardCanvas: HTMLElement,
     pinboardWrapper: HTMLElement,
     edgeTop: HTMLElement,
     edgeBottom: HTMLElement,
@@ -69,40 +69,66 @@ const generateInitialPosition = (existing: GalleryItem[], canvasWidth = 8000, ca
     const centerX = canvasWidth / 2
     const centerY = canvasHeight / 2
 
-    const radius = 350
-    const minDistance = 140
+    // Card is w-40 (160px) + p-4 (32px) ≈ 192px wide, plus margin
+    const minDistance = 220
 
-    for (let i = 0; i < 50; i++) {
-        const x = Math.round(centerX + (Math.random() - 0.5) * radius * 2)
-        const y = Math.round(centerY + (Math.random() - 0.5) * radius * 2)
+    // Expand search radius based on how many items already exist
+    const baseRadius = 300
+    const radius = baseRadius + Math.floor(existing.length / 5) * 120
+
+    // Phase 1: Random placement within radius (100 attempts)
+    for (let i = 0; i < 100; i++) {
+        const angle = Math.random() * Math.PI * 2
+        const dist = Math.random() * radius
+        const x = Math.round(centerX + Math.cos(angle) * dist)
+        const y = Math.round(centerY + Math.sin(angle) * dist)
 
         const isTooClose = existing.some(item => {
             const dx = item.x - x
             const dy = item.y - y
-            return Math.sqrt(dx * dx + dy * dy) < minDistance
+            return Math.abs(dx) < minDistance && Math.abs(dy) < minDistance
         })
 
         if (!isTooClose) return { x, y }
     }
 
-    for (let i = 1; i <= 100; i++) {
-        const angle = i * Math.PI * 0.5
-        const spiralRadius = radius + (i * 10)
+    // Phase 2: Golden-angle spiral outward from center (even distribution)
+    const goldenAngle = Math.PI * (3 - Math.sqrt(5)) // ~137.5 degrees
+    for (let i = 0; i < 200; i++) {
+        const angle = i * goldenAngle
+        const spiralRadius = minDistance * 0.8 * Math.sqrt(i + 1)
         const x = Math.round(centerX + Math.cos(angle) * spiralRadius)
         const y = Math.round(centerY + Math.sin(angle) * spiralRadius)
 
+        // Stay within canvas bounds
+        if (x < 100 || x > canvasWidth - 100 || y < 100 || y > canvasHeight - 100) continue
+
         const isTooClose = existing.some(item => {
             const dx = item.x - x
             const dy = item.y - y
-            return Math.sqrt(dx * dx + dy * dy) < minDistance
+            return Math.abs(dx) < minDistance && Math.abs(dy) < minDistance
         })
 
         if (!isTooClose) return { x, y }
     }
 
+    // Phase 3: Grid scan as last resort — guaranteed non-overlapping
+    const step = minDistance
+    for (let gy = step; gy < canvasHeight - step; gy += step) {
+        for (let gx = step; gx < canvasWidth - step; gx += step) {
+            const isTooClose = existing.some(item => {
+                const dx = item.x - gx
+                const dy = item.y - gy
+                return Math.abs(dx) < minDistance && Math.abs(dy) < minDistance
+            })
+            if (!isTooClose) return { x: gx, y: gy }
+        }
+    }
+
+    // Canvas truly full — offset from center
     return {
-        x: centerX + Math.random() * 200 - 100,
-        y: centerY + Math.random() * 200 - 100
+        x: centerX + existing.length * minDistance * 0.3,
+        y: centerY
     }
 }
 
@@ -190,9 +216,10 @@ onMounted(() => {
             </div>
         </Transition>
 
-        <GalleryHeader @add="openCreate" />
-
-        <GalleryTabs v-model="activeTab" />
+        <div class="sticky top-0 z-25 bg-background flex flex-col gap-2">
+            <GalleryHeader @add="openCreate" />
+            <GalleryTabs v-model="activeTab" />
+        </div>
 
         <GalleryGrid v-if="activeTab === 'grid'" :data="data" :loading="loading" @edit="openEdit"
             @delete="openDelete" />

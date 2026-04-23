@@ -6,7 +6,7 @@ defineEmits(['update:modelValue'])
 </script>
 
 <template>
-    <div class="flex gap-1 bg-muted rounded-lg p-1 w-fit">
+    <div class="flex gap-1 bg-muted rounded-lg p-1 w-fit mb-2">
         <button @click="$emit('update:modelValue', 'grid')" :class="[
             'px-4 py-2 rounded-md text-sm font-medium transition-all',
             modelValue === 'grid' ? 'bg-background shadow-sm text-foreground' : 'text-muted-foreground hover:text-foreground'
