@@ -51,6 +51,7 @@ const menuItems = [
     { label: 'Galeri', icon: Images, to: '/admin/galleries' },
     { label: 'Organisasi', icon: Users, to: '/admin/members' },
     { label: 'Pesan Masuk', icon: Mail, to: '/admin/messages' },
+    { label: 'Twibbon', icon: Images, to: '/admin/twibbon' },
 ]
 
 const isActive = (path: string) => {
