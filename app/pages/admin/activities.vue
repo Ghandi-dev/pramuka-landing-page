@@ -17,6 +17,8 @@ import { Input } from '@/components/ui/input'
 import { Textarea } from '@/components/ui/textarea'
 import { Label } from '@/components/ui/label'
 
+import { toast } from 'vue-sonner'
+
 definePageMeta({ layout: 'admin' })
 useHead({ title: 'Kelola Kegiatan', meta: [{ name: 'robots', content: 'noindex, nofollow' }] })
 
@@ -28,7 +30,6 @@ const confirmOpen = ref(false)
 const deleteTarget = ref<Activity | null>(null)
 const saving = ref(false)
 const deleting = ref(false)
-const notification = ref<{ type: 'success' | 'error'; message: string } | null>(null)
 
 const selectedFile = ref<File | null>(null)
 const uploading = ref(false)
@@ -41,11 +42,6 @@ const form = ref({
     cover_image: '',
 })
 const editId = ref<string | null>(null)
-
-const showNotification = (type: 'success' | 'error', message: string) => {
-    notification.value = { type, message }
-    setTimeout(() => { notification.value = null }, 3000)
-}
 
 const columns: ColumnDef<Activity, any>[] = [
     { accessorKey: 'title', header: 'Judul Kegiatan', cell: ({ row }) => h('span', { class: 'font-medium' }, row.getValue('title')) },
@@ -110,19 +106,19 @@ const handleSave = async () => {
 
         if (isEditing.value && editId.value) {
             await update(editId.value, form.value)
-            showNotification('success', 'Kegiatan berhasil diperbarui')
+            toast.success('Kegiatan berhasil diperbarui')
             if (oldImageUrl && oldImageUrl !== imageUrl) {
                 await deleteImage(oldImageUrl)
             }
         } else {
             await insert(form.value)
-            showNotification('success', 'Kegiatan berhasil ditambahkan')
+            toast.success('Kegiatan berhasil ditambahkan')
         }
         dialogOpen.value = false
         await fetchAll()
     } catch (e: any) {
         console.log(e);
-        showNotification('error', e.message || 'Gagal menyimpan')
+        toast.error(e.message || 'Gagal menyimpan')
     } finally {
         saving.value = false
         uploading.value = false
@@ -137,11 +133,11 @@ const handleDelete = async () => {
             await deleteImage(deleteTarget.value.cover_image)
         }
         await remove(deleteTarget.value.id)
-        showNotification('success', 'Kegiatan berhasil dihapus')
+        toast.success('Kegiatan berhasil dihapus')
         confirmOpen.value = false
         await fetchAll()
     } catch (e: any) {
-        showNotification('error', e.message || 'Gagal menghapus')
+        toast.error(e.message || 'Gagal menghapus')
     } finally {
         deleting.value = false
     }
@@ -152,16 +148,6 @@ onMounted(() => fetchAll())
 
 <template>
     <div class="flex flex-col gap-6">
-        <!-- Notification -->
-        <Transition name="notification">
-            <div v-if="notification" :class="[
-                'fixed top-4 right-4 z-[100] px-4 py-3 rounded-lg shadow-lg text-sm font-medium max-w-sm',
-                notification.type === 'success' ? 'bg-emerald-600 text-white' : 'bg-destructive text-destructive-foreground'
-            ]">
-                {{ notification.message }}
-            </div>
-        </Transition>
-
         <!-- Header -->
         <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
             <div>
@@ -226,9 +212,3 @@ onMounted(() => fetchAll())
         <ConfirmDialog v-model:open="confirmOpen" :loading="deleting" @confirm="handleDelete" />
     </div>
 </template>
-
-<style scoped>
-.notification-enter-active { animation: slideIn 0.3s ease; }
-.notification-leave-active { animation: slideIn 0.3s ease reverse; }
-@keyframes slideIn { from { transform: translateX(100%); opacity: 0; } to { transform: translateX(0); opacity: 1; } }
-</style>

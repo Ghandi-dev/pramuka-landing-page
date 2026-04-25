@@ -21,7 +21,7 @@ const { data, loading, fetchAll, insert, update, remove, uploadImage, deleteImag
 const activeTab = ref<'grid' | 'pinboard'>('grid')
 
 // Composables
-const { notification, showNotification } = useGalleryNotifications()
+const { showNotification } = useGalleryNotifications()
 const {
     dialogOpen, isEditing, confirmOpen, deleteTarget, form, editId, selectedFile,
     openCreate, openEdit, openDelete, onFileSelected
@@ -206,16 +206,6 @@ onMounted(() => {
 
 <template>
     <div class="flex flex-col gap-6">
-        <!-- Notification -->
-        <Transition name="notification">
-            <div v-if="notification" :class="[
-                'fixed top-4 right-4 z-[100] px-4 py-3 rounded-lg shadow-lg text-sm font-medium max-w-sm',
-                notification.type === 'success' ? 'bg-emerald-600 text-white' : 'bg-destructive text-destructive-foreground'
-            ]">
-                {{ notification.message }}
-            </div>
-        </Transition>
-
         <div class="sticky top-0 z-25 bg-background flex flex-col gap-2">
             <GalleryHeader @add="openCreate" />
             <GalleryTabs v-model="activeTab" />
@@ -233,25 +223,3 @@ onMounted(() => {
         <GalleryDeleteDialog v-model="confirmOpen" :deleting="deleting" @confirm="handleDelete" />
     </div>
 </template>
-
-<style scoped>
-.notification-enter-active {
-    animation: slideIn 0.3s ease;
-}
-
-.notification-leave-active {
-    animation: slideIn 0.3s ease reverse;
-}
-
-@keyframes slideIn {
-    from {
-        transform: translateX(100%);
-        opacity: 0;
-    }
-
-    to {
-        transform: translateX(0);
-        opacity: 1;
-    }
-}
-</style>
