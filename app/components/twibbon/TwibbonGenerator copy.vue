@@ -1,7 +1,6 @@
 <script setup lang="ts">
 import Button from "../ui/button/Button.vue";
 import Slider from "../ui/slider/Slider.vue";
-import { Card, CardContent } from "../ui/card";
 
 const props = defineProps<{
   frameUrl: string;
@@ -40,11 +39,18 @@ watch(
 );
 
 const containerStyle = computed(() => {
+  const isPortrait = frameSize.value.height > frameSize.value.width;
   return {
-    width: "fit-content",
+    // Use a square aspect ratio fallback while the image is loading
+    aspectRatio:
+      frameSize.value.width > 0
+        ? `${frameSize.value.width} / ${frameSize.value.height}`
+        : "1 / 1",
+    width: "100%",
+    // Default to 350px width if frame size isn't known yet
+    maxWidth: isPortrait || frameSize.value.width === 0 ? "350px" : "500px",
     maxHeight: "65vh",
     margin: "0 auto",
-    position: "relative" as const,
   };
 });
 
@@ -148,25 +154,16 @@ function uploadImage(e: Event) {
   const file = (e.target as HTMLInputElement).files?.[0];
   if (!file) return;
 
-  // Revoke the old URL to free up memory if it exists
-  if (userImage.value && userImage.value.startsWith("blob:")) {
-    URL.revokeObjectURL(userImage.value);
-  }
+  const reader = new FileReader();
+  reader.onload = () => {
+    userImage.value = reader.result as string;
+    // Reset position when new image is uploaded
+    imagePosition.value = { x: 0, y: 0 };
+    imageScale.value = 1;
+  };
 
-  // Create a new blob URL instead of base64 for better performance
-  userImage.value = URL.createObjectURL(file);
-  
-  // Reset position when new image is uploaded
-  imagePosition.value = { x: 0, y: 0 };
-  imageScale.value = 1;
+  reader.readAsDataURL(file);
 }
-
-// Cleanup object URL when component is destroyed
-onUnmounted(() => {
-  if (userImage.value && userImage.value.startsWith("blob:")) {
-    URL.revokeObjectURL(userImage.value);
-  }
-});
 
 function downloadImage() {
   if (!userImage.value || !props.frameUrl || !imageEl.value || !container.value)
@@ -259,132 +256,125 @@ function downloadImage() {
         class="relative border-2 border-dashed border-input rounded-lg p-6 text-center hover:border-primary/50 transition-colors cursor-pointer">
         <input type="file" accept="image/*" @change="uploadImage"
           class="absolute inset-0 w-full h-full opacity-0 cursor-pointer" />
-        <div class="flex flex-col items-center gap-2">
+        <div v-if="!userImage" class="flex flex-col items-center gap-2">
           <svg xmlns="http://www.w3.org/2000/svg" class="w-10 h-10 text-muted-foreground" fill="none"
             viewBox="0 0 24 24" stroke="currentColor">
             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5"
               d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z" />
           </svg>
           <div>
-            <p v-if="!userImage" class="text-sm font-medium text-foreground">
+            <p class="text-sm font-medium text-foreground">
               Klik untuk upload foto
-            </p>
-            <p v-else class="text-sm font-medium text-foreground">
-              Klik Kembali untuk ubah foto
             </p>
             <p class="text-xs text-muted-foreground mt-1">
               PNG, JPG hingga 5MB
             </p>
           </div>
         </div>
+        <div v-else class="flex items-center justify-between">
+          <span class="text-sm text-foreground">Foto berhasil diupload</span>
+        </div>
       </div>
     </div>
 
-    <!-- Editor Section -->
-    <Card class="w-full max-w-xl border-2 shadow-2xl bg-card overflow-hidden">
-      <CardContent class="flex flex-col items-center gap-6">
-        <!-- Editor -->
-        <div class="relative w-full">
-          <div v-if="props.frameUrl" ref="container" :style="containerStyle" class="overflow-hidden leading-[0]">
-            <!-- Visible spacer to drive container height and width correctly -->
-            <img :src="props.frameUrl"
-              class="block h-auto w-auto max-w-[300px] sm:max-w-[450px] max-h-[60vh] opacity-0 pointer-events-none mx-auto"
-              aria-hidden="true" />
+    <!-- Editor -->
+    <div class="relative">
+      <div v-if="props.frameUrl" ref="container" :style="containerStyle"
+        class="relative bg-white overflow-hidden rounded-2xl border-4 border-card shadow-lg bg-gradient-to-br from-muted to-muted/50">
+        <!-- Invisible spacer: gives the container its natural height from the frame's aspect ratio -->
+        <!-- <img v-if="props.frameUrl" :src="props.frameUrl" class="w-full h-auto invisible" aria-hidden="true" /> -->
 
-            <img v-if="userImage" ref="imageEl" :src="userImage"
-              class="absolute inset-0 w-full h-full object-contain cursor-grab" :class="{
-                'cursor-grabbing': isDragging,
-                'touch-none': !isLocked,
-                'pointer-events-none': isLocked
-              }" :style="{
-                transform: `translate(${imagePosition.x}px, ${imagePosition.y}px) scale(${imageScale})`,
-                transformOrigin: 'center center',
-              }" @mousedown="startDrag" @mousemove="onDrag" @mouseup="endDrag" @mouseleave="endDrag"
-              @touchstart="startDrag" @touchmove="onDrag" @touchend="endDrag" @touchcancel="endDrag"
-              @wheel="handleWheel" />
+        <img v-if="userImage" ref="imageEl" :src="userImage"
+          class="absolute inset-0 w-full h-full object-contain cursor-grab" :class="{
+            'cursor-grabbing': isDragging,
+            'touch-none': !isLocked,
+            'pointer-events-none': isLocked
+          }" :style="{
+            transform: `translate(${imagePosition.x}px, ${imagePosition.y}px) scale(${imageScale})`,
+            transformOrigin: 'center center',
+          }" @mousedown="startDrag" @mousemove="onDrag" @mouseup="endDrag" @mouseleave="endDrag"
+          @touchstart="startDrag" @touchmove="onDrag" @touchend="endDrag" @touchcancel="endDrag" @wheel="handleWheel" />
 
-            <img :src="props.frameUrl"
-              class="pointer-events-none absolute inset-0 w-full h-full object-cover z-10 transition-opacity duration-300"
-              :class="isDragging ? 'opacity-40' : 'opacity-100'" />
+        <img v-if="props.frameUrl" :src="props.frameUrl"
+          class="pointer-events-none absolute inset-0 w-full h-full object-contain z-10" />
 
-            <div v-if="!userImage" class="absolute inset-0 flex items-center justify-center">
-              <p class="text-sm text-muted-foreground">Upload foto untuk mulai</p>
-            </div>
-          </div>
+        <button v-if="userImage" @click.stop="userImage = null"
+          class="absolute top-2 right-2 z-20 text-xs bg-background/80 backdrop-blur px-2 py-1 rounded-md text-destructive hover:text-destructive/80 shadow">
+          Hapus
+        </button>
+
+        <div v-if="!userImage" class="absolute inset-0 flex items-center justify-center">
+          <p class="text-sm text-muted-foreground">Upload foto untuk mulai</p>
         </div>
+      </div>
 
-        <!-- Control Panel -->
-        <div v-if="userImage"
-          class="w-full flex flex-col gap-5 bg-muted/40 border border-border/50 rounded-xl p-4 sm:p-6 backdrop-blur-sm shadow-sm mt-2">
-
-          <!-- Zoom Section -->
-          <div class="w-full space-y-4">
-            <div class="flex items-center justify-between">
-              <div class="flex items-center gap-2 text-muted-foreground">
-                <svg xmlns="http://www.w3.org/2000/svg" class="w-3.5 h-3.5" fill="none" viewBox="0 0 24 24"
-                  stroke="currentColor">
-                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                    d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0zM10 7v3m0 0v3m0-3h3m-3 0H7" />
-                </svg>
-                <span class="text-[10px] font-bold uppercase tracking-widest">Adjust Zoom</span>
-              </div>
-              <span
-                class="text-xs font-mono font-bold text-primary bg-primary/10 px-2 py-0.5 rounded-full border border-primary/20">
-                {{ Math.round(imageScale * 100) }}%
-              </span>
-            </div>
-            <Slider v-model="sliderValue" :min="0.1" :max="5" :step="0.01" class="cursor-pointer" />
+      <!-- Zoom Controls (below container) -->
+      <div v-if="userImage"
+        class="flex items-center justify-center gap-2 bg-card/90 backdrop-blur-sm rounded-full px-3 py-1.5 shadow-md mt-3 mx-auto w-fit">
+        <!-- Mobile Zoom Slider -->
+        <div v-if="userImage" class="w-full max-w-xs px-4 -mt-4">
+          <div class="flex items-center justify-between mb-2">
+            <span class="text-xs font-medium text-muted-foreground">Zoom Level</span>
+            <span class="text-xs font-mono text-muted-foreground">{{ Math.round(imageScale * 100) }}%</span>
           </div>
-
-          <!-- Subtle Divider -->
-          <div class="h-px w-full bg-border/40" />
-
-          <!-- Action Buttons Row -->
-          <div class="flex flex-wrap items-center justify-between w-full gap-4">
-            <!-- Left Group: Zoom Tools -->
-            <div class="flex items-center gap-2">
-              <button @click="imageScale = Math.max(0.1, imageScale - 0.1)"
-                class="w-10 h-10 flex items-center justify-center rounded-lg hover:bg-muted active:scale-95 transition-all bg-background border shadow-sm"
-                title="Zoom Out">
-                <svg xmlns="http://www.w3.org/2000/svg" class="w-4 h-4" fill="none" viewBox="0 0 24 24"
-                  stroke="currentColor">
-                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M20 12H4" />
-                </svg>
-              </button>
-              <button @click="imageScale = Math.min(5, imageScale + 0.1)"
-                class="w-10 h-10 flex items-center justify-center rounded-lg hover:bg-muted active:scale-95 transition-all bg-background border shadow-sm"
-                title="Zoom In">
-                <svg xmlns="http://www.w3.org/2000/svg" class="w-4 h-4" fill="none" viewBox="0 0 24 24"
-                  stroke="currentColor">
-                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4" />
-                </svg>
-              </button>
-            </div>
-
-            <!-- Right Group: Download -->
-            <div class="flex items-center gap-2 flex-1 sm:flex-none justify-end">
-              <Button @click="downloadImage" size="default"
-                class="h-10 px-6 gap-2 font-bold shadow-lg shadow-primary/20 hover:shadow-primary/30 transition-all active:scale-95">
-                <svg xmlns="http://www.w3.org/2000/svg" class="w-4 h-4" fill="none" viewBox="0 0 24 24"
-                  stroke="currentColor">
-                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5"
-                    d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4" />
-                </svg>
-                Download
-              </Button>
-            </div>
-          </div>
+          <Slider v-model="sliderValue" :min="0.1" :max="5" :step="0.01" />
         </div>
-      </CardContent>
-    </Card>
+        <button @click="imageScale = Math.max(0.1, imageScale - 0.2)"
+          class="w-8 h-8 flex items-center justify-center rounded-full hover:bg-muted transition-colors"
+          title="Zoom Out">
+          <svg xmlns="http://www.w3.org/2000/svg" class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M20 12H4" />
+          </svg>
+        </button>
+        <button @click="imageScale = Math.min(5, imageScale + 0.2)"
+          class="w-8 h-8 flex items-center justify-center rounded-full hover:bg-muted transition-colors"
+          title="Zoom In">
+          <svg xmlns="http://www.w3.org/2000/svg" class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4" />
+          </svg>
+        </button>
+        <button @click="
+          imageScale = 1;
+        imagePosition = { x: 0, y: 0 };
+        " class="w-8 h-8 flex items-center justify-center rounded-full hover:bg-muted transition-colors" title="Reset">
+          <svg xmlns="http://www.w3.org/2000/svg" class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+              d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15" />
+          </svg>
+        </button>
+        <div class="w-px h-6 bg-muted mx-1" />
+        <button @click="isLocked = !isLocked"
+          class="w-10 h-8 flex items-center justify-center rounded-md transition-colors"
+          :class="isLocked ? 'bg-primary text-primary-foreground' : 'hover:bg-muted'"
+          :title="isLocked ? 'Buka Kunci' : 'Kunci Posisi'">
+          <svg v-if="isLocked" xmlns="http://www.w3.org/2000/svg" class="w-4 h-4" fill="none" viewBox="0 0 24 24"
+            stroke="currentColor">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+              d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z" />
+          </svg>
+          <svg v-else xmlns="http://www.w3.org/2000/svg" class="w-4 h-4" fill="none" viewBox="0 0 24 24"
+            stroke="currentColor">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+              d="M8 11V7a4 4 0 118 0m-4 8v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2z" />
+          </svg>
+        </button>
+      </div>
+    </div>
+
+    <!-- Download Button -->
+    <Button v-if="userImage" @click="downloadImage" class="w-full max-w-xs" size="lg">
+      <svg xmlns="http://www.w3.org/2000/svg" class="w-5 h-5 mr-2" fill="none" viewBox="0 0 24 24"
+        stroke="currentColor">
+        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+          d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4" />
+      </svg>
+      Download Twibbon
+    </Button>
 
     <!-- Tips -->
-    <div v-if="userImage" class="text-xs text-muted-foreground bg-muted/50 rounded-lg p-3 w-full">
+    <div v-if="userImage" class="text-xs text-muted-foreground bg-muted/50 rounded-lg p-3 max-w-md">
       <p class="font-medium text-foreground mb-1">💡 Tips:</p>
-      <ul class="list-disc list-inside">
-        <li>Gunakan dua jari atau slider untuk zoom.</li>
-        <li>Geser foto untuk mengatur posisi.</li>
-      </ul>
+      <p>Geser mouse wheel untuk zoom, drag foto untuk posisi.</p>
     </div>
   </div>
 </template>
