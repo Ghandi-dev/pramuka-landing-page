@@ -2,8 +2,17 @@
 import AppHeader from '~/components/layout/AppHeader.vue'
 import AppFooter from '~/components/layout/AppFooter.vue'
 
-// JSON-LD Structured Data — Organization Schema
+const route = useRoute()
+const { public: { siteUrl } } = useRuntimeConfig()
+
+// SEO: Dynamic Canonical & Organization Schema
 useHead({
+  link: [
+    {
+      rel: 'canonical',
+      href: () => `${siteUrl}${route.path === '/' ? '' : route.path}`
+    }
+  ],
   script: [
     {
       type: 'application/ld+json',
@@ -11,9 +20,9 @@ useHead({
         "@context": "https://schema.org",
         "@type": "Organization",
         "name": "Pramuka SMA Negeri 1 Pasawahan",
-        "alternateName": "Gerakan Pramuka Gudep SMAN 1 Pasawahan",
-        "url": "https://pramukasmanpas.vercel.app",
-        "logo": "https://pramukasmanpas.vercel.app/images/logo.webp",
+        "alternateName": "Pramuka SMANPAS",
+        "url": siteUrl,
+        "logo": `${siteUrl}/images/logo.png`,
         "email": "pramukasmanpas@gmail.com",
         "address": {
           "@type": "PostalAddress",

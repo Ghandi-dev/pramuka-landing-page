@@ -4,7 +4,7 @@ import { useI18n } from '#imports'
 import { useActivityService } from '~/services/activityService'
 
 const { t } = useI18n()
-const siteUrl = 'https://pramukasmanpas.vercel.app'
+const siteUrl = useRuntimeConfig().public.siteUrl as string
 
 useSeoMeta({
   title: () => t('seo.activities.title'),

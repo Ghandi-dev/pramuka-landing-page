@@ -7,6 +7,7 @@ export default defineNuxtConfig({
     },
     runtimeConfig: {
         public: {
+            siteUrl: 'https://www.pramukasmanpas.web.id',
             supabaseUrl: process.env.SUPABASE_URL,
             supabasePublishableKey: process.env.SUPABASE_PUBLISHABLE_KEY,
         },
@@ -56,6 +57,7 @@ export default defineNuxtConfig({
                 { name: 'twitter:card', content: 'summary_large_image' },
             ],
             link: [
+                { rel: 'canonical', href: 'https://www.pramukasmanpas.web.id' },
                 { rel: 'preconnect', href: 'https://fonts.googleapis.com' },
                 { rel: 'preconnect', href: 'https://fonts.gstatic.com', crossorigin: '' },
                 { rel: 'stylesheet', href: 'https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,200..800&family=Outfit:wght@100..900&display=swap' }

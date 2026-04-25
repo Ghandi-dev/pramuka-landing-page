@@ -3,7 +3,7 @@
     "home": "Beranda",
     "about": "Tentang Kami",
     "activities": "Kegiatan",
-    "members": "Anggota",
+    "members": "Struktur Ambalan",
     "contact": "Kontak",
     "cta": "Masuk"
   },
@@ -124,24 +124,24 @@
   },
   "seo": {
     "home": {
-      "title": "Beranda",
-      "description": "Selamat datang di website resmi Pramuka SMA Negeri 1 Pasawahan. Membangun karakter bangsa melalui gerakan kepramukaan."
+      "title": "Pramuka SMANPAS | Karakter & Kepemimpinan",
+      "description": "Website resmi Pramuka SMA Negeri 1 Pasawahan (SMANPAS) Purwakarta. Temukan info kegiatan, pendaftaran anggota, dan dokumentasi ambalan terbaik."
     },
     "about": {
-      "title": "Tentang Kami",
-      "description": "Sejarah, Visi, dan Misi Pramuka SMA Negeri 1 Pasawahan. Berdiri kuat sebagai pilar penempa karakter pemuda."
+      "title": "Tentang Pramuka SMANPAS",
+      "description": "Pelajari sejarah, visi, dan misi Pramuka SMA Negeri 1 Pasawahan (SMANPAS). Membangun karakter tangguh dengan nilai Tri Satya dan Dasa Darma."
     },
     "activities": {
-      "title": "Kegiatan",
-      "description": "Daftar kegiatan dan dokumentasi Pramuka SMAN 1 Pasawahan. Dari perkemahan hingga bakti sosial."
+      "title": "Kegiatan Pramuka SMANPAS",
+      "description": "Daftar kegiatan, perkemahan, dan pengabdian masyarakat Pramuka SMA Negeri 1 Pasawahan. Dokumentasi aksi nyata ambalan SMANPAS."
     },
     "members": {
-      "title": "Anggota",
-      "description": "Struktur Organisasi dan Dewan Ambalan Pramuka SMAN 1 Pasawahan. Mengenal sosok-sosok pemimpin kami."
+      "title": "Struktur Ambalan Pramuka SMANPAS",
+      "description": "Profil Dewan Ambalan dan struktur organisasi Pramuka SMA Negeri 1 Pasawahan. Mengenal para pejuang tangguh SMANPAS."
     },
     "contact": {
-      "title": "Hubungi Kami",
-      "description": "Hubungi kami atau bergabung bersama Pramuka SMAN 1 Pasawahan. Kami siap menyambut Anda."
+      "title": "Hubungi Pramuka SMANPAS",
+      "description": "Kontak resmi Pramuka SMA Negeri 1 Pasawahan (SMANPAS). Kirim pesan untuk kolaborasi, pendaftaran anggota baru, atau pertanyaan umum."
     }
   }
 }

@@ -2,7 +2,7 @@
 import { useI18n } from '#imports'
 
 const { t } = useI18n()
-const siteUrl = 'https://pramukasmanpas.vercel.app'
+const siteUrl = useRuntimeConfig().public.siteUrl as string
 
 useSeoMeta({
   title: () => t('seo.contact.title'),

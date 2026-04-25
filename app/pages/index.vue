@@ -8,7 +8,7 @@ const { t } = useI18n()
 const localePath = useLocalePath()
 const { data, loading, fetchAll } = useActivityService()
 
-const siteUrl = 'https://pramukasmanpas.vercel.app'
+const siteUrl = useRuntimeConfig().public.siteUrl as string
 
 useSeoMeta({
   title: () => t('seo.home.title'),
@@ -74,7 +74,7 @@ onMounted(() => {
           <div
             class="absolute inset-0 bg-primary/5 rounded-2xl transform rotate-3 scale-105 transition-transform duration-700 hover:rotate-6">
           </div>
-          <img src="/images/pramuka1.webp" alt="Pramuka Activities"
+          <img src="/images/pramuka1.webp" alt="Kegiatan Ambalan Pramuka SMA Negeri 1 Pasawahan SMANPAS Purwakarta"
             class="relative z-10 w-full h-full object-cover rounded-2xl shadow-2xl grayscale-20 hover:grayscale-0 transition-all duration-700" />
         </div>
       </div>
@@ -136,7 +136,7 @@ onMounted(() => {
         <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
           <article v-for="activity in data" :key="activity.id"
             class="group group/card relative h-112.5 overflow-hidden rounded-sm bg-muted">
-            <img :src="activity.cover_image" :alt="activity.title"
+            <img :src="activity.cover_image" :alt="`Kegiatan ${activity.title} - Pramuka SMA Negeri 1 Pasawahan SMANPAS`"
               class="absolute inset-0 w-full h-full object-cover transition-transform duration-500 group-hover/card:scale-105"
               loading="lazy" />
             <div class="absolute inset-0 bg-linear-to-t from-black/80 via-black/40 to-transparent"></div>

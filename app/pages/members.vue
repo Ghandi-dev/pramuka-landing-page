@@ -6,7 +6,7 @@ import { ChevronLeft, ChevronRight } from 'lucide-vue-next'
 import Button from '~/components/ui/button/Button.vue'
 
 const { t } = useI18n()
-const siteUrl = 'https://pramukasmanpas.vercel.app'
+const siteUrl = useRuntimeConfig().public.siteUrl as string
 
 useSeoMeta({
   title: () => t('seo.members.title'),
