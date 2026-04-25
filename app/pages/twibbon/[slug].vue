@@ -7,6 +7,8 @@ import {
 
 const { fetchByField } = useTwibbonCampaignService();
 const route = useRoute();
+const { t } = useI18n();
+const siteUrl = useRuntimeConfig().public.siteUrl as string;
 
 const campaign = ref<TwibbonCampaign | null>(null);
 const loading = ref(true);
@@ -17,6 +19,17 @@ onMounted(async () => {
   }
 
   loading.value = false;
+});
+
+// Dynamic SEO Meta
+useSeoMeta({
+  title: () => campaign.value ? `${campaign.value.title} - Twibbon SMAN 1 Pasawahan` : t('twibbon.page.notFound'),
+  description: () => campaign.value?.description || t('twibbon.page.notFoundDesc'),
+  ogTitle: () => campaign.value ? `${campaign.value.title} - SMANPAS` : t('twibbon.page.notFound'),
+  ogDescription: () => campaign.value?.description,
+  ogImage: () => campaign.value?.frame_url,
+  ogUrl: () => `${siteUrl}${route.path}`,
+  twitterCard: 'summary_large_image',
 });
 </script>
 
@@ -43,7 +56,7 @@ onMounted(async () => {
               d="M15 19l-7-7 7-7"
             />
           </svg>
-          Kembali
+          {{ $t('twibbon.page.back') }}
         </NuxtLink>
 
         <h1 v-if="campaign" class="text-3xl font-bold text-foreground">
@@ -89,16 +102,16 @@ onMounted(async () => {
           />
         </svg>
         <h2 class="text-xl font-semibold text-foreground">
-          Campaign Tidak Ditemukan
+          {{ $t('twibbon.page.notFound') }}
         </h2>
         <p class="text-muted-foreground mt-2">
-          Campaign yang Anda cari tidak ada atau telah dihapus.
+          {{ $t('twibbon.page.notFoundDesc') }}
         </p>
         <NuxtLink
           to="/"
           class="mt-6 inline-flex items-center px-4 py-2 bg-primary text-primary-foreground rounded-md hover:bg-primary/90 transition-colors"
         >
-          Kembali ke Beranda
+          {{ $t('twibbon.page.backHome') }}
         </NuxtLink>
       </div>
     </div>

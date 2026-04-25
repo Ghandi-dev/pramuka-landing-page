@@ -143,5 +143,34 @@
       "title": "Contact Us",
       "description": "Reach out or join Scouts SMAN 1 Pasawahan. We are ready to welcome you."
     }
+  },
+  "twibbon": {
+    "upload": {
+      "label": "Upload Your Photo",
+      "title": "Click to upload photo",
+      "change": "Click again to change photo",
+      "hint": "PNG, JPG up to 5MB",
+      "placeholder": "Upload photo to start"
+    },
+    "controls": {
+      "zoom": "Adjust Zoom",
+      "zoomIn": "Zoom In",
+      "zoomOut": "Zoom Out",
+      "reset": "Reset Position",
+      "lock": "Lock Position",
+      "unlock": "Unlock Position",
+      "download": "Download"
+    },
+    "tips": {
+      "title": "Tips:",
+      "zoom": "Use two fingers or the slider to zoom.",
+      "drag": "Drag the photo to adjust its position."
+    },
+    "page": {
+      "back": "Back",
+      "notFound": "Campaign Not Found",
+      "notFoundDesc": "The campaign you are looking for does not exist or has been deleted.",
+      "backHome": "Back to Home"
+    }
   }
 }

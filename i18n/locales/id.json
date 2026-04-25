@@ -143,5 +143,34 @@
       "title": "Hubungi Pramuka SMANPAS",
       "description": "Kontak resmi Pramuka SMA Negeri 1 Pasawahan (SMANPAS). Kirim pesan untuk kolaborasi, pendaftaran anggota baru, atau pertanyaan umum."
     }
+  },
+  "twibbon": {
+    "upload": {
+      "label": "Upload Foto Anda",
+      "title": "Klik untuk upload foto",
+      "change": "Klik kembali untuk ubah foto",
+      "hint": "PNG, JPG hingga 5MB",
+      "placeholder": "Upload foto untuk mulai"
+    },
+    "controls": {
+      "zoom": "Sesuaikan Zoom",
+      "zoomIn": "Perbesar",
+      "zoomOut": "Perkecil",
+      "reset": "Setel Ulang Posisi",
+      "lock": "Kunci Posisi",
+      "unlock": "Buka Kunci",
+      "download": "Unduh"
+    },
+    "tips": {
+      "title": "Tips:",
+      "zoom": "Gunakan dua jari atau slider untuk zoom.",
+      "drag": "Geser foto untuk mengatur posisi."
+    },
+    "page": {
+      "back": "Kembali",
+      "notFound": "Campaign Tidak Ditemukan",
+      "notFoundDesc": "Campaign yang Anda cari tidak ada atau telah dihapus.",
+      "backHome": "Kembali ke Beranda"
+    }
   }
 }
