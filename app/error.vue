@@ -23,17 +23,8 @@ const handleError = () => clearError({ redirect: '/' })
     <div class="w-full max-w-2xl text-center relative z-10 flex flex-col items-center justify-center space-y-8">
       <!-- Error Graphic -->
       <div class="relative w-full flex items-center justify-center py-10">
-        <img src="/images/404.webp" alt="Error Illustration" class="w-40 h-40 object-contain" />
-      </div>
-
-      <!-- Message -->
-      <div class="max-w-md space-y-4">
-        <p class="text-lg md:text-xl text-gray-600 font-medium">
-          {{ error.statusCode === 404
-            ? 'Ciee... nyasar ya? Halaman yang kamu cari sepertinya sudah pindah atau memang tidak pernah ada.'
-            : error.message || 'Wah, sepertinya ada sedikit gangguan teknis. Sistem kami sedang berusaha memperbaikinya.'
-          }}
-        </p>
+        <Error404 src="/images/404.webp"
+          message="Ciee... nyasar ya? Halaman yang kamu cari sepertinya sudah pindah atau memang tidak pernah ada." />
       </div>
 
       <!-- Actions -->
