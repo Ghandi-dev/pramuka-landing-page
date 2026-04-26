@@ -3,7 +3,9 @@ import { Plus, Pencil, Trash2, GripVertical, Users } from 'lucide-vue-next'
 import ConfirmDialog from '~/components/admin/ConfirmDialog.vue'
 import { useMemberService, type OrganizationMember } from '~/services/memberService'
 
-definePageMeta({ layout: 'admin',middleware:'admin' })
+import { toast } from 'vue-sonner'
+
+definePageMeta({ layout: 'admin', middleware: 'admin' })
 useHead({ title: 'Kelola Organisasi', meta: [{ name: 'robots', content: 'noindex, nofollow' }] })
 
 const { data, loading, fetchAllOrdered, insert, update, remove, reorder, uploadPhoto, deleteImage } = useMemberService()
@@ -15,16 +17,10 @@ const deleteTarget = ref<OrganizationMember | null>(null)
 const saving = ref(false)
 const deleting = ref(false)
 const uploading = ref(false)
-const notification = ref<{ type: 'success' | 'error'; message: string } | null>(null)
 
 const form = ref({ name: '', position: '', photo: '' as string | null, order_number: 0 })
 const editId = ref<string | null>(null)
 const selectedFile = ref<File | null>(null)
-
-const showNotification = (type: 'success' | 'error', message: string) => {
-    notification.value = { type, message }
-    setTimeout(() => { notification.value = null }, 3000)
-}
 
 const openCreate = () => {
     isEditing.value = false
@@ -58,8 +54,8 @@ const handleSave = async () => {
         let oldPhotoUrl: string | null = null
 
         if (isEditing.value && editId.value) {
-           const originalMember = data.value.find(m => m.id === editId.value)
-           oldPhotoUrl = originalMember?.photo || null
+            const originalMember = data.value.find(m => m.id === editId.value)
+            oldPhotoUrl = originalMember?.photo || null
         }
 
         if (selectedFile.value) {
@@ -77,18 +73,18 @@ const handleSave = async () => {
 
         if (isEditing.value && editId.value) {
             await update(editId.value, payload)
-            showNotification('success', 'Anggota berhasil diperbarui')
+            toast.success('Anggota berhasil diperbarui')
             if (oldPhotoUrl && oldPhotoUrl !== photoUrl) {
                 await deleteImage(oldPhotoUrl)
             }
         } else {
             await insert(payload)
-            showNotification('success', 'Anggota berhasil ditambahkan')
+            toast.success('Anggota berhasil ditambahkan')
         }
         dialogOpen.value = false
         await fetchAllOrdered()
     } catch (e: any) {
-        showNotification('error', e.message || 'Gagal menyimpan')
+        toast.error(e.message || 'Gagal menyimpan')
     } finally {
         saving.value = false
         uploading.value = false
@@ -103,11 +99,11 @@ const handleDelete = async () => {
             await deleteImage(deleteTarget.value.photo)
         }
         await remove(deleteTarget.value.id)
-        showNotification('success', 'Anggota berhasil dihapus')
+        toast.success('Anggota berhasil dihapus')
         confirmOpen.value = false
         await fetchAllOrdered()
     } catch (e: any) {
-        showNotification('error', e.message || 'Gagal menghapus')
+        toast.error(e.message || 'Gagal menghapus')
     } finally {
         deleting.value = false
     }
@@ -149,9 +145,9 @@ const onDrop = async (index: number) => {
     // Save to Supabase
     try {
         await reorder(items.map((item, i) => ({ id: item.id, order_number: i })))
-        showNotification('success', 'Urutan berhasil diperbarui')
+        toast.success('Urutan berhasil diperbarui')
     } catch (e: any) {
-        showNotification('error', 'Gagal menyimpan urutan')
+        toast.error('Gagal menyimpan urutan')
         await fetchAllOrdered()
     }
 }
@@ -166,20 +162,11 @@ onMounted(() => fetchAllOrdered())
 
 <template>
     <div class="flex flex-col gap-6">
-        <!-- Notification -->
-        <Transition name="notification">
-            <div v-if="notification" :class="[
-                'fixed top-4 right-4 z-[100] px-4 py-3 rounded-lg shadow-lg text-sm font-medium max-w-sm',
-                notification.type === 'success' ? 'bg-emerald-600 text-white' : 'bg-destructive text-destructive-foreground'
-            ]">
-                {{ notification.message }}
-            </div>
-        </Transition>
-
         <!-- Header -->
         <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
             <div>
-                <h1 class="text-2xl lg:text-3xl font-display font-bold text-foreground tracking-tight">Struktur Organisasi</h1>
+                <h1 class="text-2xl lg:text-3xl font-display font-bold text-foreground tracking-tight">Struktur
+                    Organisasi</h1>
                 <p class="text-muted-foreground mt-1">Kelola anggota organisasi dan urutannya</p>
             </div>
             <Button @click="openCreate">
@@ -217,9 +204,8 @@ onMounted(() => fetchAllOrdered())
 
         <!-- Member list (draggable) -->
         <div v-else class="space-y-2">
-            <div v-for="(member, index) in data" :key="member.id" :draggable="true"
-                @dragstart="onDragStart(index)" @dragover="(e) => onDragOver(e, index)"
-                @drop="onDrop(index)" @dragend="onDragEnd" :class="[
+            <div v-for="(member, index) in data" :key="member.id" :draggable="true" @dragstart="onDragStart(index)"
+                @dragover="(e) => onDragOver(e, index)" @drop="onDrop(index)" @dragend="onDragEnd" :class="[
                     'flex items-center gap-4 p-4 rounded-lg border bg-card transition-all cursor-grab active:cursor-grabbing',
                     dropIndex === index ? 'border-primary shadow-md' : 'border-border hover:border-border/80 hover:shadow-sm',
                     dragIndex === index ? 'opacity-50' : ''
@@ -231,7 +217,8 @@ onMounted(() => fetchAllOrdered())
                 <div class="h-12 w-12 rounded-full overflow-hidden bg-muted shrink-0">
                     <img v-if="member.photo" :src="member.photo" :alt="member.name"
                         class="w-full h-full object-cover" />
-                    <div v-else class="w-full h-full flex items-center justify-center text-muted-foreground font-semibold text-lg">
+                    <div v-else
+                        class="w-full h-full flex items-center justify-center text-muted-foreground font-semibold text-lg">
                         {{ member.name.charAt(0) }}
                     </div>
                 </div>
@@ -289,9 +276,3 @@ onMounted(() => fetchAllOrdered())
         <ConfirmDialog v-model:open="confirmOpen" :loading="deleting" @confirm="handleDelete" />
     </div>
 </template>
-
-<style scoped>
-.notification-enter-active { animation: slideIn 0.3s ease; }
-.notification-leave-active { animation: slideIn 0.3s ease reverse; }
-@keyframes slideIn { from { transform: translateX(100%); opacity: 0; } to { transform: translateX(0); opacity: 1; } }
-</style>
