@@ -28,9 +28,30 @@ const deleteTarget = ref<ContactMessage | null>(null)
 const deleting = ref(false)
 
 const columns: ColumnDef<ContactMessage, any>[] = [
-    { accessorKey: 'full_name', header: 'Nama', cell: ({ row }) => h('span', { class: 'font-medium' }, row.getValue('full_name')) },
-    { accessorKey: 'email', header: 'Email' },
-    { accessorKey: 'subject', header: 'Subjek' },
+    {
+        accessorKey: 'full_name',
+        header: 'Nama',
+        cell: ({ row }) => h('div', {
+            class: 'max-w-[150px] truncate font-medium',
+            title: row.getValue('full_name')
+        }, row.getValue('full_name'))
+    },
+    {
+        accessorKey: 'email',
+        header: 'Email',
+        cell: ({ row }) => h('div', {
+            class: 'max-w-[150px] truncate text-muted-foreground',
+            title: row.getValue('email')
+        }, row.getValue('email'))
+    },
+    {
+        accessorKey: 'subject',
+        header: 'Subjek',
+        cell: ({ row }) => h('div', {
+            class: 'max-w-[150px] lg:max-w-[300px] truncate font-medium text-foreground',
+            title: row.getValue('subject')
+        }, row.getValue('subject'))
+    },
     { accessorKey: 'created_at', header: 'Tanggal', cell: ({ row }) => new Date(row.getValue('created_at')).toLocaleDateString('id-ID', { day: 'numeric', month: 'short', year: 'numeric' }) },
     {
         accessorKey: 'status',

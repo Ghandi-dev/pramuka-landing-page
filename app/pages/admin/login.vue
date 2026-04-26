@@ -25,6 +25,8 @@ const password = ref('')
 const loading = ref(false)
 const errorMsg = ref('')
 
+const { fetchProfile } = useAdminAuth()
+
 const handleLogin = async () => {
     loading.value = true
     errorMsg.value = ''
@@ -34,6 +36,8 @@ const handleLogin = async () => {
             password: password.value,
         })
         if (error) throw error
+        
+        await fetchProfile()
         router.push('/admin')
     } catch (e: any) {
         errorMsg.value = e.message || 'Login gagal. Periksa kredensial Anda.'

@@ -9,6 +9,7 @@ export default defineNuxtRouteMiddleware(async (to, from) => {
 
     const nuxtApp = useNuxtApp()
     const supabase = nuxtApp.$supabase as SupabaseClient
+    const { profile, fetchProfile } = useAdminAuth()
 
     const {
         data: { session }
@@ -16,5 +17,10 @@ export default defineNuxtRouteMiddleware(async (to, from) => {
 
     if (!session) {
         return navigateTo('/admin/login')
+    }
+
+    // Fetch profile if not already loaded
+    if (!profile.value) {
+        await fetchProfile()
     }
 })

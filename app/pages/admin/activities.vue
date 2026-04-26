@@ -44,9 +44,23 @@ const form = ref({
 const editId = ref<string | null>(null)
 
 const columns: ColumnDef<Activity, any>[] = [
-    { accessorKey: 'title', header: 'Judul Kegiatan', cell: ({ row }) => h('span', { class: 'font-medium' }, row.getValue('title')) },
+    {
+        accessorKey: 'title',
+        header: 'Judul Kegiatan',
+        cell: ({ row }) => h('div', {
+            class: 'max-w-[200px] lg:max-w-[300px] truncate font-medium',
+            title: row.getValue('title')
+        }, row.getValue('title'))
+    },
     { accessorKey: 'activity_date', header: 'Tanggal' },
-    { accessorKey: 'location', header: 'Lokasi' },
+    {
+        accessorKey: 'location',
+        header: 'Lokasi',
+        cell: ({ row }) => h('div', {
+            class: 'max-w-[150px] lg:max-w-[250px] truncate',
+            title: row.getValue('location')
+        }, row.getValue('location') || '-')
+    },
     {
         id: 'actions',
         header: 'Aksi',

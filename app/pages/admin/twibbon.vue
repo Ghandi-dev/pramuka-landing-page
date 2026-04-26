@@ -52,8 +52,22 @@ const copyLink = (slug: string) => {
 const columns: ColumnDef<TwibbonCampaign, any>[] = [
     { accessorKey: 'title', header: 'Judul Twibbon', cell: ({ row }) => h('span', { class: 'font-medium' }, row.getValue('title')) },
     { accessorKey: 'slug', header: 'Slug' },
-    { accessorKey: 'description', header: 'Deskripsi' },
-    { accessorKey: 'frame_url', header: 'Frame URL' },
+    {
+        accessorKey: 'description',
+        header: 'Deskripsi',
+        cell: ({ row }) => h('div', {
+            class: 'max-w-[200px] lg:max-w-[300px] truncate',
+            title: row.getValue('description')
+        }, row.getValue('description'))
+    },
+    {
+        accessorKey: 'frame_url',
+        header: 'Frame URL',
+        cell: ({ row }) => h('div', {
+            class: 'max-w-[150px] truncate text-xs text-muted-foreground',
+            title: row.getValue('frame_url')
+        }, row.getValue('frame_url'))
+    },
     { accessorKey: 'is_active', header: 'Aktif' },
     {
         id: 'actions',
