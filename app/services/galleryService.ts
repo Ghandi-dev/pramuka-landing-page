@@ -1,5 +1,6 @@
 import type { SupabaseClient } from '@supabase/supabase-js'
 import useSupabaseCrud from '~/composables/useSupabaseCrud'
+import { useImageService } from './imageService'
 
 export interface GalleryItem {
     id: string
@@ -16,24 +17,7 @@ export function useGalleryService() {
     const nuxtApp = useNuxtApp()
     const supabase = nuxtApp.$supabase as SupabaseClient
     const crud = useSupabaseCrud<GalleryItem>('galleries')
-
-    const uploadImage = async (file: File): Promise<string> => {
-        const formData = new FormData()
-        formData.append('file', file)
-
-        const response = await fetch('/api/upload', {
-            method: 'POST',
-            body: formData,
-        })
-
-        const data = await response.json()
-
-        if (!response.ok) {
-            throw new Error(data.statusMessage || data.message || 'Failed to upload image')
-        }
-
-        return data.url
-    }
+    const { uploadImage, deleteImage } = useImageService()
 
     const updatePosition = async (id: string, x: number, y: number) => {
         const { error: err } = await supabase
@@ -42,22 +26,6 @@ export function useGalleryService() {
             .eq('id', id)
 
         if (err) throw err
-    }
-
-    const deleteImage = async (imageUrl: string) => {
-        if (!imageUrl || !imageUrl.includes('res.cloudinary.com')) return;
-
-        try {
-            await fetch('/api/upload', {
-                method: 'DELETE',
-                headers: {
-                    'Content-Type': 'application/json'
-                },
-                body: JSON.stringify({ imageUrl })
-            })
-        } catch (error) {
-            console.error('Failed to delete old image', error)
-        }
     }
 
     return {

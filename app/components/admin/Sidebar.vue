@@ -52,6 +52,7 @@ const menuItems = [
     { label: 'Organisasi', icon: Users, to: '/admin/members' },
     { label: 'Pesan Masuk', icon: Mail, to: '/admin/messages' },
     { label: 'Twibbon', icon: Images, to: '/admin/twibbon' },
+    { label: 'User', icon: Users, to: '/admin/users' },
 ]
 
 const isActive = (path: string) => {
@@ -59,10 +60,13 @@ const isActive = (path: string) => {
     return route.path.startsWith(path)
 }
 
+const { clearProfile } = useAdminAuth()
+
 const handleLogout = async () => {
     const nuxtApp = useNuxtApp()
     const supabase = nuxtApp.$supabase as SupabaseClient
     await supabase.auth.signOut()
+    clearProfile()
     router.push('/admin/login')
 }
 
@@ -76,8 +80,8 @@ const closeMobile = () => emit('update:open', false)
         <!-- Brand -->
         <div class="flex items-center gap-3 px-6 h-16 border-b border-sidebar-border shrink-0">
             <div class="w-10 h-10 shrink-0 overflow-hidden">
-            <img src="/images/logo.webp" alt="Pramuka Logo" class="w-full h-full object-contain" />
-          </div>
+                <img src="/images/logo.webp" alt="Pramuka Logo" class="w-full h-full object-contain" />
+            </div>
             <span class="font-display font-bold text-lg text-sidebar-foreground tracking-tight">Admin Panel</span>
         </div>
 
@@ -120,8 +124,8 @@ const closeMobile = () => emit('update:open', false)
                 <div class="flex items-center justify-between px-6 h-16 border-b border-sidebar-border shrink-0">
                     <div class="flex items-center gap-3">
                         <div class="w-10 h-10 shrink-0 overflow-hidden">
-            <img src="/images/logo.webp" alt="Pramuka Logo" class="w-full h-full object-contain" />
-          </div>
+                            <img src="/images/logo.webp" alt="Pramuka Logo" class="w-full h-full object-contain" />
+                        </div>
                         <span class="font-display font-bold text-lg text-sidebar-foreground">Admin</span>
                     </div>
                     <button @click="closeMobile"

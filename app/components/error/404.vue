@@ -2,12 +2,17 @@
 defineProps<{
     src: string
     alt?: string
+    message?: string
 }>()
 </script>
 
 <template>
-    <div
-        class="bg-white/80 backdrop-blur-md p-4 rounded-2xl shadow-xl border border-white/20 transform rotate-[-5deg] hover:rotate-0 transition-transform duration-300">
-        <img :src="src" :alt="alt || 'Error Illustration'" class="w-40 md:w-56 object-contain" />
+    <div class="flex flex-col items-center justify-center">
+        <img :src="src" :alt="alt || 'Error Illustration'" class="w-40 md:w-56 object-contain mb-4" />
+        <div class="max-w-md space-y-4">
+            <p class="text-lg md:text-xl text-gray-600 font-medium">
+                {{ message }}
+            </p>
+        </div>
     </div>
 </template>
