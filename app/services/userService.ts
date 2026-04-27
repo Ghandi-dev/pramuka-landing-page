@@ -2,6 +2,8 @@ import useSupabaseCrud from "~/composables/useSupabaseCrud";
 import type { SupabaseClient } from "@supabase/supabase-js";
 import { useImageService } from "./imageService";
 
+const config = useRuntimeConfig();
+
 export interface Profiles {
   id: string;
   name: string;
@@ -39,6 +41,7 @@ export function useUserService() {
       email: user.email,
       password: user.password,
       options: {
+        emailRedirectTo: `${config.public.siteUrl}/admin/login`,
         data: {
           name: user.name,
           role: user.role ?? "member",
