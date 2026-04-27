@@ -7,6 +7,7 @@ import { useAdminAuth } from "~/composables/useAdminAuth";
 
 definePageMeta({
   layout: false,
+  middleware: ["guest"],
 });
 
 useHead({
