@@ -47,10 +47,7 @@ export function useMemberService() {
     }
 
     const removeMember = async (id: string, photoUrl?: string | null) => {
-        if (photoUrl) {
-            await deleteImage(photoUrl)
-        }
-        return await crud.remove(id)
+        return await crud.remove(id, photoUrl)
     }
 
     return {

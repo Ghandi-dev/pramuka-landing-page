@@ -2,7 +2,6 @@
 import { h } from "vue";
 import { Plus, Pencil, Trash2, User } from "lucide-vue-next";
 import { useUserService, type Profiles } from "~/services/userService";
-import { toast } from "vue-sonner";
 import type { ColumnDef } from "@tanstack/vue-table";
 import Button from "~/components/ui/button/Button.vue";
 import DataTable from "~/components/admin/DataTable.vue";
@@ -156,7 +155,7 @@ onMounted(async () => {
         <DialogHeader>
           <DialogTitle>{{
             isEditing ? "Edit User" : "Tambah User Baru"
-            }}</DialogTitle>
+          }}</DialogTitle>
         </DialogHeader>
         <form @submit.prevent="handleSave" class="space-y-4 pt-2">
           <div class="space-y-2">

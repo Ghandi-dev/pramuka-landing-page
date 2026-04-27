@@ -16,10 +16,7 @@ export function useActivityService() {
     const { uploadImage, deleteImage } = useImageService()
 
     const removeActivity = async (id: string, imageUrl?: string | null) => {
-        if (imageUrl) {
-            await deleteImage(imageUrl)
-        }
-        return await crud.remove(id)
+        return await crud.remove(id, imageUrl)
     }
 
     return {

@@ -105,7 +105,7 @@ export function useUserService() {
     data,
     loading,
     fetchAll,
-    createUser,
+    insert: createUser,
     update,
     remove: removeUser,
     uploadImage,
