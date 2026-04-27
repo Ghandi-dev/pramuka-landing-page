@@ -23,7 +23,7 @@ defineEmits<{
 
 <template>
     <Dialog :open="modelValue" @update:open="$emit('update:modelValue', $event)">
-        <DialogContent class="sm:max-w-lg">
+        <DialogContent class="sm:max-w-lg max-h-[90vh] overflow-y-auto">
             <DialogHeader>
                 <DialogTitle>{{ isEditing ? 'Edit Foto' : 'Tambah Foto' }}</DialogTitle>
             </DialogHeader>
@@ -35,7 +35,7 @@ defineEmits<{
                 <div class="space-y-2">
                     <Label for="description">Deskripsi</Label>
                     <Textarea id="description" v-model="form.description"
-                        placeholder="Keterangan singkat... / boleh dikosongkan " class="min-h-[80px]" />
+                        placeholder="Keterangan singkat... / boleh dikosongkan " class="h-[100px] resize-none" />
                 </div>
                 <div class="space-y-2">
                     <Label>Gambar</Label>

@@ -15,9 +15,17 @@ export function useTwibbonCampaignService() {
   const crud = useSupabaseCrud<TwibbonCampaign>("twibbon_campaigns");
   const { uploadImage, deleteImage } = useImageService();
 
-  return {
-    ...crud,
-    uploadImage,
-    deleteImage,
-  };
+    const removeCampaign = async (id: string, frameUrl?: string | null) => {
+        if (frameUrl) {
+            await deleteImage(frameUrl)
+        }
+        return await crud.remove(id)
+    }
+
+    return {
+        ...crud,
+        remove: removeCampaign,
+        uploadImage,
+        deleteImage,
+    };
 }

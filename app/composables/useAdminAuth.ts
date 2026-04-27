@@ -1,45 +1,90 @@
-import type { SupabaseClient } from '@supabase/supabase-js'
-import type { Profiles } from '~/services/userService'
+import type { Profiles } from "~/services/userService";
 
 export const useAdminAuth = () => {
-    const profile = useState<Profiles | null>('admin-profile', () => null)
-    const loading = useState<boolean>('admin-profile-loading', () => false)
+  const profile = useState<Profiles | null>("admin-profile", () => null);
+  const loading = useState<boolean>("admin-profile-loading", () => false);
+  const token = useCookie("auth_token", {
+    maxAge: 60 * 60 * 24 * 7, // 7 days
+    sameSite: "lax",
+    secure: process.env.NODE_ENV === "production",
+    path: "/",
+  });
 
-    const fetchProfile = async () => {
-        // Only fetch if not already loaded or explicit refresh
-        const nuxtApp = useNuxtApp()
-        const supabase = nuxtApp.$supabase as SupabaseClient
-        
-        loading.value = true
-        try {
-            const { data: { user } } = await supabase.auth.getUser()
-            if (!user) throw new Error('No user session found')
-
-            const { data, error } = await supabase
-                .from('profiles')
-                .select('*')
-                .eq('id', user.id)
-                .single()
-
-            if (error) throw error
-            profile.value = data as Profiles
-            return data as Profiles
-        } catch (e) {
-            profile.value = null
-            return null
-        } finally {
-            loading.value = false;
-        }
+  const fetchProfile = async (): Promise<Profiles | null> => {
+    if (!token.value) {
+      profile.value = null;
+      return null;
     }
 
-    const clearProfile = () => {
-        profile.value = null
-    }
+    // If profile is already set, don't fetch again unless explicitly needed
+    if (profile.value) return profile.value;
 
-    return {
-        profile,
-        loading,
-        fetchProfile,
-        clearProfile
+    loading.value = true;
+    try {
+      const data = await $fetch("/api/auth/me", {
+        headers: {
+          Authorization: `Bearer ${token.value}`,
+        },
+      });
+
+      if (data) {
+        profile.value = data as Profiles;
+        return profile.value;
+      }
+      return null;
+    } catch (e: any) {
+      // If unauthorized, try to refresh
+      if (e.statusCode === 401) {
+        return await refreshAccessToken();
+      }
+      profile.value = null;
+      token.value = null;
+      return null;
+    } finally {
+      loading.value = false;
     }
-}
+  };
+
+  const refreshAccessToken = async (): Promise<Profiles | null> => {
+    try {
+      const response = await $fetch("/api/auth/refresh", {
+        method: "POST",
+      }) as any;
+
+      if (response.token) {
+        token.value = response.token;
+        // After refresh, fetch profile again
+        return await fetchProfile();
+      }
+      return null;
+    } catch (e) {
+      clearProfile();
+      return null;
+    }
+  };
+
+  const setProfile = (data: Profiles, jwt: string) => {
+    profile.value = data;
+    token.value = jwt;
+  };
+
+  const clearProfile = async () => {
+    try {
+      await $fetch("/api/auth/logout", { method: "POST" });
+    } catch (e) {
+      // Ignore logout errors
+    } finally {
+      profile.value = null;
+      token.value = null;
+    }
+  };
+
+  return {
+    profile,
+    loading,
+    token,
+    fetchProfile,
+    setProfile,
+    clearProfile,
+  };
+};

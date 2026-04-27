@@ -1,14 +1,20 @@
 import type { SupabaseClient } from "@supabase/supabase-js";
+import { useImageService } from "~/services/imageService";
 
 export default function useSupabaseCrud<T extends Record<string, any>>(
   tableName: string,
 ) {
   const nuxtApp = useNuxtApp();
   const supabase = nuxtApp.$supabase as SupabaseClient;
+  const { token } = useAdminAuth();
+  const { deleteImage } = useImageService();
 
   const data = ref<T[]>([]) as Ref<T[]>;
   const loading = ref(false);
   const error = ref<string | null>(null);
+
+  // Helper to check if we should use the admin proxy
+  const useProxy = () => !!token.value;
 
   const fetchAll = async (
     orderBy: string = "created_at",
@@ -19,20 +25,26 @@ export default function useSupabaseCrud<T extends Record<string, any>>(
     error.value = null;
 
     try {
-      let query = supabase
-        .from(tableName)
-        .select("*")
-        .order(orderBy, { ascending });
+      if (useProxy()) {
+        const result = await $fetch(`/api/admin/db/${tableName}`, {
+          headers: { Authorization: `Bearer ${token.value}` },
+          query: { orderBy, ascending, limit },
+        });
+        data.value = (result as T[]) ?? [];
+      } else {
+        let query = supabase
+          .from(tableName)
+          .select("*")
+          .order(orderBy, { ascending });
 
-      if (limit) {
-        query = query.limit(limit);
+        if (limit) {
+          query = query.limit(limit);
+        }
+
+        const { data: result, error: err } = await query;
+        if (err) throw err;
+        data.value = (result as T[]) ?? [];
       }
-
-      const { data: result, error: err } = await query;
-
-      if (err) throw err;
-
-      data.value = (result as T[]) ?? [];
     } catch (e: any) {
       error.value = e.message || "Failed to fetch data";
     } finally {
@@ -44,14 +56,21 @@ export default function useSupabaseCrud<T extends Record<string, any>>(
     loading.value = true;
     error.value = null;
     try {
-      const { data: result, error: err } = await supabase
-        .from(tableName)
-        .select("*")
-        .eq("id", id)
-        .single();
+      if (useProxy()) {
+        const result = await $fetch(`/api/admin/db/${tableName}/${id}`, {
+          headers: { Authorization: `Bearer ${token.value}` },
+        });
+        return result as T;
+      } else {
+        const { data: result, error: err } = await supabase
+          .from(tableName)
+          .select("*")
+          .eq("id", id)
+          .single();
 
-      if (err) throw err;
-      return result as T;
+        if (err) throw err;
+        return result as T;
+      }
     } catch (e: any) {
       error.value = e.message || "Failed to fetch data";
       return null;
@@ -64,14 +83,22 @@ export default function useSupabaseCrud<T extends Record<string, any>>(
     loading.value = true;
     error.value = null;
     try {
-      const { data: result, error: err } = await supabase
-        .from(tableName)
-        .select("*")
-        .eq(field, value)
-        .single();
+      if (useProxy()) {
+        const result = await $fetch(`/api/admin/db/${tableName}`, {
+          headers: { Authorization: `Bearer ${token.value}` },
+          query: { field, value, single: "true" },
+        });
+        return result as T;
+      } else {
+        const { data: result, error: err } = await supabase
+          .from(tableName)
+          .select("*")
+          .eq(field, value)
+          .single();
 
-      if (err) throw err;
-      return result as T;
+        if (err) throw err;
+        return result as T;
+      }
     } catch (e: any) {
       error.value = e.message || "Failed to fetch data";
       return null;
@@ -81,25 +108,42 @@ export default function useSupabaseCrud<T extends Record<string, any>>(
   };
 
   const fetchCount = async (): Promise<number> => {
-    const { count, error: err } = await supabase
-      .from(tableName)
-      .select("*", { count: "exact", head: true });
+    try {
+      if (useProxy()) {
+        const result = await $fetch<{ count: number }>(
+          `/api/admin/db/${tableName}`,
+          {
+            headers: { Authorization: `Bearer ${token.value}` },
+            query: { count: "true" },
+          },
+        );
+        return result.count;
+      } else {
+        const { count, error: err } = await supabase
+          .from(tableName)
+          .select("*", { count: "exact", head: true });
 
-    if (err) throw err;
-    return count ?? 0;
+        if (err) throw err;
+        return count ?? 0;
+      }
+    } catch (e: any) {
+      console.error("Failed to fetch count:", e);
+      return 0;
+    }
   };
 
   const insert = async (item: Partial<T>) => {
+    if (!useProxy()) {
+      throw new Error("Unauthorized: Only admins can perform this action");
+    }
     loading.value = true;
     error.value = null;
     try {
-      const { data: result, error: err } = await supabase
-        .from(tableName)
-        .insert(item as any)
-        .select()
-        .single();
-
-      if (err) throw err;
+      const result = await $fetch(`/api/admin/db/${tableName}`, {
+        method: "POST",
+        headers: { Authorization: `Bearer ${token.value}` },
+        body: item,
+      });
       return result as T;
     } catch (e: any) {
       error.value = e.message || "Failed to insert";
@@ -109,37 +153,61 @@ export default function useSupabaseCrud<T extends Record<string, any>>(
     }
   };
 
-  const update = async (id: string, item: Partial<T>) => {
+  const update = async (
+    id: string,
+    payload: Partial<T>,
+    oldImageUrl?: string | null,
+  ) => {
+    if (!useProxy()) {
+      throw new Error("Unauthorized: Only admins can perform this action");
+    }
     loading.value = true;
     error.value = null;
     try {
-      const { data: result, error: err } = await supabase
-        .from(tableName)
-        .update(item as any)
-        .eq("id", id)
-        .select()
-        .single();
+      await $fetch(`/api/admin/db/${tableName}/${id}`, {
+        method: "PUT",
+        headers: { Authorization: `Bearer ${token.value}` },
+        body: payload,
+      });
 
-      if (err) throw err;
-      return result as T;
+      // Cleanup old image if replaced
+      const imgFields = [
+        "image_url",
+        "cover_image",
+        "photo",
+        "frame_url",
+        "avatar_url",
+      ];
+      for (const field of imgFields) {
+        const newValue = (payload as any)[field];
+        if (oldImageUrl && newValue && oldImageUrl !== newValue) {
+          await deleteImage(oldImageUrl);
+          break;
+        }
+      }
     } catch (e: any) {
-      error.value = e.message || "Failed to update";
+      error.value = e.message || "Failed to update record";
       throw e;
     } finally {
       loading.value = false;
     }
   };
 
-  const remove = async (id: string) => {
+  const remove = async (id: string, imageUrl?: string | null) => {
+    if (!useProxy()) {
+      throw new Error("Unauthorized: Only admins can perform this action");
+    }
     loading.value = true;
     error.value = null;
     try {
-      const { error: err } = await supabase
-        .from(tableName)
-        .delete()
-        .eq("id", id);
+      if (imageUrl) {
+        await deleteImage(imageUrl);
+      }
 
-      if (err) throw err;
+      await $fetch(`/api/admin/db/${tableName}/${id}`, {
+        method: "DELETE",
+        headers: { Authorization: `Bearer ${token.value}` },
+      });
     } catch (e: any) {
       error.value = e.message || "Failed to delete";
       throw e;

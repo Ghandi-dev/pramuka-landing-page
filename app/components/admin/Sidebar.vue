@@ -46,7 +46,7 @@ onMounted(() => {
 
 const menuItems = [
     { label: 'Dashboard', icon: LayoutDashboard, to: '/admin' },
-    { label: 'Tentang Kami', icon: Info, to: '/admin/about' },
+    // { label: 'Tentang Kami', icon: Info, to: '/admin/about' },
     { label: 'Kegiatan', icon: CalendarDays, to: '/admin/activities' },
     { label: 'Galeri', icon: Images, to: '/admin/galleries' },
     { label: 'Organisasi', icon: Users, to: '/admin/members' },
@@ -63,11 +63,8 @@ const isActive = (path: string) => {
 const { clearProfile } = useAdminAuth()
 
 const handleLogout = async () => {
-    const nuxtApp = useNuxtApp()
-    const supabase = nuxtApp.$supabase as SupabaseClient
-    await supabase.auth.signOut()
     clearProfile()
-    router.push('/admin/login')
+    router.push('/auth/login')
 }
 
 const closeMobile = () => emit('update:open', false)

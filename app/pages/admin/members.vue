@@ -95,10 +95,7 @@ const handleDelete = async () => {
     if (!deleteTarget.value) return
     deleting.value = true
     try {
-        if (deleteTarget.value.photo) {
-            await deleteImage(deleteTarget.value.photo)
-        }
-        await remove(deleteTarget.value.id)
+        await remove(deleteTarget.value.id, deleteTarget.value.photo)
         toast.success('Anggota berhasil dihapus')
         confirmOpen.value = false
         await fetchAllOrdered()
@@ -244,7 +241,7 @@ onMounted(() => fetchAllOrdered())
 
         <!-- Create/Edit Dialog -->
         <Dialog v-model:open="dialogOpen">
-            <DialogContent class="sm:max-w-lg">
+            <DialogContent class="sm:max-w-lg max-h-[90vh] overflow-y-auto">
                 <DialogHeader>
                     <DialogTitle>{{ isEditing ? 'Edit Anggota' : 'Tambah Anggota' }}</DialogTitle>
                 </DialogHeader>

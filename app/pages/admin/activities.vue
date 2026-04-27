@@ -22,26 +22,17 @@ import { toast } from 'vue-sonner'
 definePageMeta({ layout: 'admin' })
 useHead({ title: 'Kelola Kegiatan', meta: [{ name: 'robots', content: 'noindex, nofollow' }] })
 
-const { data, loading, fetchAll, insert, update, remove, uploadImage, deleteImage } = useActivityService()
+const service = useActivityService()
+const { data, loading, fetchAll } = service
 
-const dialogOpen = ref(false)
-const isEditing = ref(false)
-const confirmOpen = ref(false)
-const deleteTarget = ref<Activity | null>(null)
-const saving = ref(false)
-const deleting = ref(false)
-
-const selectedFile = ref<File | null>(null)
-const uploading = ref(false)
-
-const form = ref({
-    title: '',
-    description: '',
-    activity_date: '',
-    location: '',
-    cover_image: '',
+const {
+    dialogOpen, isEditing, confirmOpen, deleteTarget, saving, deleting, uploading,
+    form, selectedFile, openCreate, openEdit, openDelete, onFileSelected, handleSave, handleDelete
+} = useAdminPage<Activity>(service, {
+    itemName: 'Kegiatan',
+    imageField: 'cover_image',
+    defaultForm: { title: '', description: '', activity_date: new Date().toISOString().split('T')[0]!, location: '', cover_image: '' }
 })
-const editId = ref<string | null>(null)
 
 const columns: ColumnDef<Activity, any>[] = [
     {
@@ -79,83 +70,7 @@ const columns: ColumnDef<Activity, any>[] = [
     },
 ]
 
-const openCreate = () => {
-    isEditing.value = false
-    editId.value = null
-    selectedFile.value = null
-    form.value = { title: '', description: '', activity_date: new Date().toISOString().split('T')[0]!, location: '', cover_image: '' }
-    dialogOpen.value = true
-}
-
-const openEdit = (item: Activity) => {
-    isEditing.value = true
-    editId.value = item.id
-    selectedFile.value = null
-    form.value = { title: item.title, description: item.description || '', activity_date: item.activity_date, location: item.location || '', cover_image: item.cover_image || '' }
-    dialogOpen.value = true
-}
-
-const openDelete = (item: Activity) => {
-    deleteTarget.value = item
-    confirmOpen.value = true
-}
-
-const handleSave = async () => {
-    saving.value = true
-    try {
-        let imageUrl = form.value.cover_image
-        let oldImageUrl: string | null = null
-
-        if (isEditing.value && editId.value) {
-           const originalActivity = data.value.find(a => a.id === editId.value)
-           oldImageUrl = originalActivity?.cover_image || null
-        }
-
-        if (selectedFile.value) {
-            uploading.value = true
-            imageUrl = await uploadImage(selectedFile.value)
-            form.value.cover_image = imageUrl
-            uploading.value = false
-        }
-
-        if (isEditing.value && editId.value) {
-            await update(editId.value, form.value)
-            toast.success('Kegiatan berhasil diperbarui')
-            if (oldImageUrl && oldImageUrl !== imageUrl) {
-                await deleteImage(oldImageUrl)
-            }
-        } else {
-            await insert(form.value)
-            toast.success('Kegiatan berhasil ditambahkan')
-        }
-        dialogOpen.value = false
-        await fetchAll()
-    } catch (e: any) {
-        console.log(e);
-        toast.error(e.message || 'Gagal menyimpan')
-    } finally {
-        saving.value = false
-        uploading.value = false
-    }
-}
-
-const handleDelete = async () => {
-    if (!deleteTarget.value) return
-    deleting.value = true
-    try {
-        if (deleteTarget.value.cover_image) {
-            await deleteImage(deleteTarget.value.cover_image)
-        }
-        await remove(deleteTarget.value.id)
-        toast.success('Kegiatan berhasil dihapus')
-        confirmOpen.value = false
-        await fetchAll()
-    } catch (e: any) {
-        toast.error(e.message || 'Gagal menghapus')
-    } finally {
-        deleting.value = false
-    }
-}
+// Logic now handled by useAdminPage
 
 onMounted(() => fetchAll())
 </script>
@@ -179,7 +94,7 @@ onMounted(() => fetchAll())
 
         <!-- Create/Edit Dialog -->
         <Dialog v-model:open="dialogOpen">
-            <DialogContent class="sm:max-w-lg">
+            <DialogContent class="sm:max-w-[500px] max-h-[90vh] overflow-y-auto">
                 <DialogHeader>
                     <DialogTitle>{{ isEditing ? 'Edit Kegiatan' : 'Tambah Kegiatan' }}</DialogTitle>
                 </DialogHeader>
@@ -191,7 +106,7 @@ onMounted(() => fetchAll())
                     <div class="space-y-2">
                         <Label for="description">Deskripsi</Label>
                         <Textarea id="description" v-model="form.description" placeholder="Deskripsi kegiatan..."
-                            class="min-h-[100px]" />
+                            class="h-[120px] resize-none" />
                     </div>
                     <div class="grid grid-cols-2 gap-4">
                         <div class="space-y-2">

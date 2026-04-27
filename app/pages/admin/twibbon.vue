@@ -21,27 +21,18 @@ import { useTwibbonCampaignService, type TwibbonCampaign } from '~/services/twib
 definePageMeta({ layout: 'admin' })
 useHead({ title: 'Kelola Twibbon', meta: [{ name: 'robots', content: 'noindex, nofollow' }] })
 
-const { data, loading, fetchAll, insert, update, remove, uploadImage, deleteImage } = useTwibbonCampaignService();
+const service = useTwibbonCampaignService();
+const { data, loading, fetchAll } = service;
 const config = useRuntimeConfig()
 
-const dialogOpen = ref(false)
-const isEditing = ref(false)
-const confirmOpen = ref(false)
-const deleteTarget = ref<TwibbonCampaign | null>(null)
-const saving = ref(false)
-const deleting = ref(false)
-
-const selectedFile = ref<File | null>(null)
-const uploading = ref(false)
-
-const form = ref({
-    title: '',
-    slug: '',
-    description: '',
-    frame_url: '',
-    is_active: true,
+const {
+    dialogOpen, isEditing, confirmOpen, deleteTarget, saving, deleting, uploading,
+    form, selectedFile, openCreate, openEdit, openDelete, handleSave, handleDelete
+} = useAdminPage<TwibbonCampaign>(service, {
+    itemName: 'Twibbon',
+    imageField: 'frame_url',
+    defaultForm: { title: '', slug: '', description: '', frame_url: '', is_active: true }
 })
-const editId = ref<string | null>(null)
 
 const copyLink = (slug: string) => {
     const url = `${config.public.siteUrl}/twibbon/${slug}`
@@ -92,89 +83,7 @@ const columns: ColumnDef<TwibbonCampaign, any>[] = [
     },
 ]
 
-const openCreate = () => {
-    isEditing.value = false
-    editId.value = null
-    selectedFile.value = null
-    form.value = {
-        title: '',
-        slug: '',
-        description: '',
-        frame_url: '',
-        is_active: true,
-    }
-    dialogOpen.value = true
-}
-
-const openEdit = (item: TwibbonCampaign) => {
-    isEditing.value = true
-    editId.value = item.id
-    selectedFile.value = null
-    form.value = { title: item.title, slug: item.slug, description: item.description || '', frame_url: item.frame_url || '', is_active: item.is_active }
-    dialogOpen.value = true
-}
-
-const openDelete = (item: TwibbonCampaign) => {
-    deleteTarget.value = item
-    confirmOpen.value = true
-}
-
-const handleSave = async () => {
-    saving.value = true
-    try {
-        let imageUrl = form.value.frame_url
-        let oldImageUrl: string | null = null
-
-        if (isEditing.value && editId.value) {
-            const originalTwibbon = data.value.find(a => a.id === editId.value)
-            oldImageUrl = originalTwibbon?.frame_url || null
-        }
-
-        if (selectedFile.value) {
-            uploading.value = true
-            imageUrl = await uploadImage(selectedFile.value)
-            form.value.frame_url = imageUrl
-            uploading.value = false
-        }
-
-        if (isEditing.value && editId.value) {
-            await update(editId.value, form.value)
-            toast.success('Twibbon berhasil diperbarui')
-            if (oldImageUrl && oldImageUrl !== imageUrl) {
-                await deleteImage(oldImageUrl)
-            }
-        } else {
-            await insert(form.value)
-            toast.success('Twibbon berhasil ditambahkan')
-        }
-        dialogOpen.value = false
-        await fetchAll()
-    } catch (e: any) {
-        console.log(e);
-        toast.error(e.message || 'Gagal menyimpan')
-    } finally {
-        saving.value = false
-        uploading.value = false
-    }
-}
-
-const handleDelete = async () => {
-    if (!deleteTarget.value) return
-    deleting.value = true
-    try {
-        if (deleteTarget.value.frame_url) {
-            await deleteImage(deleteTarget.value.frame_url)
-        }
-        await remove(deleteTarget.value.id)
-        toast.success('Twibbon berhasil dihapus')
-        confirmOpen.value = false
-        await fetchAll()
-    } catch (e: any) {
-        toast.error(e.message || 'Gagal menghapus')
-    } finally {
-        deleting.value = false
-    }
-}
+// Logic now handled by useAdminPage
 
 onMounted(() => fetchAll())
 </script>
@@ -198,7 +107,7 @@ onMounted(() => fetchAll())
 
         <!-- Create/Edit Dialog -->
         <Dialog v-model:open="dialogOpen">
-            <DialogContent class="sm:max-w-lg">
+            <DialogContent class="sm:max-w-lg max-h-[90vh] overflow-y-auto">
                 <DialogHeader>
                     <DialogTitle>{{ isEditing ? 'Edit Twibbon' : 'Tambah Twibbon' }}</DialogTitle>
                 </DialogHeader>
@@ -214,7 +123,7 @@ onMounted(() => fetchAll())
                     <div class="space-y-2">
                         <Label for="description">Deskripsi</Label>
                         <Textarea id="description" v-model="form.description" placeholder="Deskripsi Twibbon..."
-                            class="min-h-[100px]" />
+                            class="h-[120px] resize-none" />
                     </div>
                     <div class="space-y-2">
                         <Label>Cover Image</Label>

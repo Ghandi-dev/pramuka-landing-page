@@ -11,30 +11,30 @@ import useSupabaseCrud from '~/composables/useSupabaseCrud'
 definePageMeta({ layout: 'admin',middleware:'admin' })
 useHead({ title: 'Dashboard Admin', meta: [{ name: 'robots', content: 'noindex, nofollow' }] })
 
-const announcementCount = ref(0)
 const activityCount = ref(0)
 const galleryCount = ref(0)
 const memberCount = ref(0)
+const messageCount = ref(0)
 const loading = ref(true)
 
 onMounted(async () => {
     try {
-        const announcementCrud = useSupabaseCrud('announcements')
         const activityCrud = useSupabaseCrud('activities')
         const galleryCrud = useSupabaseCrud('galleries')
         const memberCrud = useSupabaseCrud('organization_members')
+        const messageCrud = useSupabaseCrud('contact_messages')
 
         const [a, b, c, d] = await Promise.all([
-            announcementCrud.fetchCount(),
             activityCrud.fetchCount(),
             galleryCrud.fetchCount(),
             memberCrud.fetchCount(),
+            messageCrud.fetchCount(),
         ])
 
-        announcementCount.value = a
-        activityCount.value = b
-        galleryCount.value = c
-        memberCount.value = d
+        activityCount.value = a
+        galleryCount.value = b
+        memberCount.value = c
+        messageCount.value = d
     } catch (e) {
         console.error('Failed to load dashboard stats:', e)
     } finally {
@@ -43,10 +43,10 @@ onMounted(async () => {
 })
 
 const stats = computed(() => [
-    { label: 'Total Pengumuman', value: announcementCount.value, icon: Megaphone, color: 'text-blue-500', bg: 'bg-blue-500/10' },
     { label: 'Total Kegiatan', value: activityCount.value, icon: CalendarDays, color: 'text-emerald-500', bg: 'bg-emerald-500/10' },
     { label: 'Galeri Foto', value: galleryCount.value, icon: Images, color: 'text-amber-500', bg: 'bg-amber-500/10' },
     { label: 'Anggota Organisasi', value: memberCount.value, icon: Users, color: 'text-violet-500', bg: 'bg-violet-500/10' },
+    { label: 'Pesan Masuk', value: messageCount.value, icon: Megaphone, color: 'text-blue-500', bg: 'bg-blue-500/10' },
 ])
 </script>
 

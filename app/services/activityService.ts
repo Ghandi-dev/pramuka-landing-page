@@ -15,8 +15,16 @@ export function useActivityService() {
     const crud = useSupabaseCrud<Activity>('activities')
     const { uploadImage, deleteImage } = useImageService()
 
+    const removeActivity = async (id: string, imageUrl?: string | null) => {
+        if (imageUrl) {
+            await deleteImage(imageUrl)
+        }
+        return await crud.remove(id)
+    }
+
     return {
         ...crud,
+        remove: removeActivity,
         uploadImage,
         deleteImage,
     }
