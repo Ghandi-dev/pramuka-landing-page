@@ -4,52 +4,75 @@ import { generateRandomToken } from "~~/server/utils/token";
 
 export default defineEventHandler(async (event) => {
   const body = await readBody(event);
-  const { email } = body;
+  const { email, token: oldToken } = body;
   const config = useRuntimeConfig();
 
-  if (!email) {
+  if (!email && !oldToken) {
     throw createError({
       statusCode: 400,
-      statusMessage: "Email wajib diisi.",
+      statusMessage: "Email atau token wajib diisi.",
     });
   }
 
   const supabase = useSupabaseAdmin();
+  let userEmail = email;
+  let userId = null;
 
   // 1. Find user
-  const { data: user, error: userError } = await supabase
-    .from("users")
-    .select("*")
-    .eq("email", email)
-    .single();
+  if (oldToken) {
+    const { data: verification } = await supabase
+      .from("email_verifications")
+      .select("user_id, users(email)")
+      .eq("token", oldToken)
+      .single();
 
-  if (userError || !user) {
+    if (verification) {
+      userId = verification.user_id;
+      userEmail = (verification.users as any).email;
+    }
+  }
+
+  if (!userEmail) {
+    const { data: user } = await supabase
+      .from("users")
+      .select("id, email, email_verified")
+      .eq("email", email)
+      .single();
+
+    if (user) {
+      userId = user.id;
+      userEmail = user.email;
+    }
+  }
+
+  if (!userId || !userEmail) {
     // Silently return success to avoid email enumeration
     return {
-      message: "Jika email terdaftar, instruksi verifikasi telah dikirim.",
+      message: "Jika akun terdaftar, instruksi verifikasi telah dikirim.",
     };
   }
 
   // 2. Check if already verified
-  if (user.email_verified) {
+  const { data: userData } = await supabase.from('users').select('email_verified').eq('id', userId).single();
+  if (userData?.email_verified) {
     return { message: "Email sudah diverifikasi." };
   }
 
   // 3. Delete old tokens
-  await supabase.from("email_verifications").delete().eq("user_id", user.id);
+  await supabase.from("email_verifications").delete().eq("user_id", userId);
 
   // 4. Generate new token
-  const token = generateRandomToken();
+  const newToken = generateRandomToken();
   const expiresAt = new Date(Date.now() + 24 * 60 * 60 * 1000);
 
   await supabase.from("email_verifications").insert({
-    user_id: user.id,
-    token,
+    user_id: userId,
+    token: newToken,
     expires_at: expiresAt.toISOString(),
   });
 
   // 5. Send email
-  const verificationLink = `${config.public.siteUrl}/verify-email?token=${token}`;
+  const verificationLink = `${config.public.siteUrl}/auth/verify-email?token=${newToken}`;
   const html = `
         <h1>Verifikasi Email Anda</h1>
         <p>Silakan klik tautan di bawah ini untuk memverifikasi email Anda:</p>
@@ -57,7 +80,7 @@ export default defineEventHandler(async (event) => {
         <p>Tautan ini akan kedaluwarsa dalam 24 jam.</p>
     `;
 
-  await sendMail(email, "Verifikasi Email - Pramuka SMAN 1 Pasawahan", html);
+  await sendMail(userEmail, "Verifikasi Email - Pramuka SMAN 1 Pasawahan", html);
 
   return {
     message: "Instruksi verifikasi telah dikirim ke email Anda.",

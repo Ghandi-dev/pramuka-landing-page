@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { LogIn, Loader2 } from "lucide-vue-next";
+import { LogIn, Loader2, ArrowLeft } from "lucide-vue-next";
 import { Label } from "@/components/ui/label";
 import { Input } from "@/components/ui/input";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
@@ -20,7 +20,9 @@ const router = useRouter();
 const email = ref("");
 const password = ref("");
 const loading = ref(false);
+const resending = ref(false);
 const errorMsg = ref("");
+const isUnverified = ref(false);
 
 const { setProfile } = useAdminAuth();
 const route = useRoute();
@@ -52,9 +54,33 @@ const handleLogin = async () => {
     setProfile(response.user as any, response.token);
     router.push("/admin");
   } catch (e: any) {
+    if (e.statusCode === 403) {
+      isUnverified.value = true;
+    }
     errorMsg.value = e.data?.statusMessage || e.message || "Login gagal. Periksa kredensial Anda.";
   } finally {
     loading.value = false;
+  }
+};
+
+const handleResendVerification = async () => {
+  resending.value = true;
+  try {
+    const response = await $fetch("/api/auth/resend-verification", {
+      method: "POST",
+      body: { email: email.value },
+    }) as any;
+
+    import("vue-sonner").then(({ toast }) => {
+      toast.success(response.message || "Email verifikasi telah dikirim ulang");
+    });
+    isUnverified.value = false; // Hide the button after success
+  } catch (e: any) {
+    import("vue-sonner").then(({ toast }) => {
+      toast.error(e.data?.statusMessage || "Gagal mengirim ulang verifikasi");
+    });
+  } finally {
+    resending.value = false;
   }
 };
 </script>
@@ -75,8 +101,13 @@ const handleLogin = async () => {
           <form @submit.prevent="handleLogin" class="space-y-4">
             <!-- Error message -->
             <div v-if="errorMsg"
-              class="p-3 rounded-lg bg-destructive/10 border border-destructive/20 text-destructive text-sm">
-              {{ errorMsg }}
+              class="p-3 rounded-lg bg-destructive/10 border border-destructive/20 text-destructive text-sm flex flex-col gap-2">
+              <span>{{ errorMsg }}</span>
+              <Button v-if="isUnverified" type="button" variant="link"
+                class="text-destructive font-bold p-0 h-auto justify-start underline decoration-dotted underline-offset-4"
+                @click="handleResendVerification" :disabled="resending">
+                {{ resending ? "Mengirim ulang..." : "Kirim ulang email verifikasi" }}
+              </Button>
             </div>
 
             <div class="space-y-2">
@@ -102,6 +133,14 @@ const handleLogin = async () => {
           </form>
         </CardContent>
       </Card>
+
+      <!-- Back to Landing Page -->
+      <div class="mt-6 text-center">
+        <NuxtLink to="/" class="inline-flex items-center gap-2 text-sm text-muted-foreground hover:text-primary transition-colors group">
+          <ArrowLeft class="w-4 h-4 transition-transform group-hover:-translate-x-1" />
+          Kembali ke Halaman Beranda
+        </NuxtLink>
+      </div>
     </div>
   </div>
 </template>

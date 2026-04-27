@@ -63,7 +63,7 @@ const isActive = (path: string) => {
 const { clearProfile } = useAdminAuth()
 
 const handleLogout = async () => {
-    clearProfile()
+    await clearProfile()
     router.push('/auth/login')
 }
 

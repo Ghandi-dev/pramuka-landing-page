@@ -47,9 +47,9 @@ export const useAdminAuth = () => {
 
   const refreshAccessToken = async (): Promise<Profiles | null> => {
     try {
-      const response = await $fetch("/api/auth/refresh", {
+      const response = (await $fetch("/api/auth/refresh", {
         method: "POST",
-      }) as any;
+      })) as any;
 
       if (response.token) {
         token.value = response.token;
@@ -74,6 +74,7 @@ export const useAdminAuth = () => {
     } catch (e) {
       // Ignore logout errors
     } finally {
+      // Clear local state immediately to prevent middleware race conditions
       profile.value = null;
       token.value = null;
     }
