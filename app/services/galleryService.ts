@@ -28,8 +28,16 @@ export function useGalleryService() {
         if (err) throw err
     }
 
+    const removeGalleryItem = async (id: string, imageUrl?: string | null) => {
+        if (imageUrl) {
+            await deleteImage(imageUrl)
+        }
+        return await crud.remove(id)
+    }
+
     return {
         ...crud,
+        remove: removeGalleryItem,
         uploadImage,
         updatePosition,
         deleteImage,

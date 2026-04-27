@@ -46,8 +46,16 @@ export function useMemberService() {
         if (failed?.error) throw failed.error
     }
 
+    const removeMember = async (id: string, photoUrl?: string | null) => {
+        if (photoUrl) {
+            await deleteImage(photoUrl)
+        }
+        return await crud.remove(id)
+    }
+
     return {
         ...crud,
+        remove: removeMember,
         fetchAllOrdered,
         reorder,
         uploadPhoto: uploadImage,

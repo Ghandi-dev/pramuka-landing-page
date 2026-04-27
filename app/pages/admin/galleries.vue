@@ -187,8 +187,7 @@ const handleDelete = async () => {
     if (!deleteTarget.value) return
     deleting.value = true
     try {
-        await deleteImage(deleteTarget.value.image_url)
-        await remove(deleteTarget.value.id)
+        await remove(deleteTarget.value.id, deleteTarget.value.image_url)
         showNotification('success', 'Foto berhasil dihapus')
         confirmOpen.value = false
         await fetchAll()

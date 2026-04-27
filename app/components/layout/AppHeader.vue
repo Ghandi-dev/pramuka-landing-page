@@ -56,7 +56,7 @@ function toggleMenu() {
         <div class="flex items-center gap-4">
           <LanguageSwitcher />
 
-          <NuxtLink :to="localePath('/admin/login')"
+          <NuxtLink :to="localePath('/auth/login')"
             class="hidden md:inline-flex h-10 items-center justify-center rounded-sm bg-primary px-6 text-sm font-medium text-primary-foreground transition-all hover:bg-primary/90 hover:shadow-lg hover:shadow-primary/20 hover:-translate-y-0.5">
             {{ t('nav.cta') }}
           </NuxtLink>
@@ -85,7 +85,7 @@ function toggleMenu() {
         </NuxtLink>
 
         <div class="pt-8 mt-8 border-t border-border">
-          <NuxtLink :to="localePath('/admin/login')"
+          <NuxtLink :to="localePath('/auth/login')"
             class="inline-flex h-12 w-full items-center justify-center rounded-sm bg-primary px-8 text-base font-medium text-primary-foreground"
             @click="isMobileMenuOpen = false">
             {{ t('nav.cta') }}

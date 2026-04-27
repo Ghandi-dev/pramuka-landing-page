@@ -2,8 +2,6 @@ import useSupabaseCrud from "~/composables/useSupabaseCrud";
 import type { SupabaseClient } from "@supabase/supabase-js";
 import { useImageService } from "./imageService";
 
-const config = useRuntimeConfig();
-
 export interface Profiles {
   id: string;
   name: string;
@@ -18,7 +16,10 @@ export function useUserService() {
   const supabase = nuxtApp.$supabase as SupabaseClient;
 
   const crud = useSupabaseCrud<Profiles>("profiles");
+  const { data, loading } = crud;
   const { uploadImage, deleteImage } = useImageService();
+
+  const { token } = useAdminAuth();
 
   const createUser = async (user: {
     name: string;
@@ -27,40 +28,86 @@ export function useUserService() {
     avatar_url: string;
     role?: string;
   }) => {
-    // check user email using rest api
-    const { data: checkUser } = await supabase
-      .from("profiles")
-      .select("*")
-      .eq("email", user.email);
-    if (checkUser && checkUser.length > 0) {
-      deleteImage(user.avatar_url);
-      throw new Error("Email sudah terdaftar");
-    }
-
-    const { data, error } = await supabase.auth.signUp({
-      email: user.email,
-      password: user.password,
-      options: {
-        emailRedirectTo: `${config.public.siteUrl}/admin/login`,
-        data: {
-          name: user.name,
-          role: user.role ?? "member",
-          avatar_url: user.avatar_url,
-        },
+    const response = await $fetch("/api/auth/register", {
+      method: "POST",
+      headers: {
+        Authorization: `Bearer ${token.value}`,
+      },
+      body: {
+        name: user.name,
+        email: user.email,
+        password: user.password,
+        role: user.role,
+        avatar_url: user.avatar_url,
       },
     });
 
-    if (error) {
-      deleteImage(user.avatar_url);
-      throw error;
-    }
+    return response;
+  };
 
-    return data.user;
+  const fetchAll = async () => {
+    loading.value = true;
+    try {
+      const result = await $fetch("/api/admin/users", {
+        headers: {
+          Authorization: `Bearer ${token.value}`,
+        },
+      });
+      data.value = result as Profiles[];
+    } catch (error) {
+      console.error("Error fetching users:", error);
+      throw error;
+    } finally {
+      loading.value = false;
+    }
+  };
+
+  const update = async (id: string, profileData: Partial<Profiles>) => {
+    loading.value = true;
+    try {
+      const result = await $fetch(`/api/admin/users/${id}`, {
+        method: "PUT",
+        headers: {
+          Authorization: `Bearer ${token.value}`,
+        },
+        body: profileData,
+      });
+      return result as Profiles;
+    } catch (error) {
+      console.error("Error updating user:", error);
+      throw error;
+    } finally {
+      loading.value = false;
+    }
+  };
+
+  const removeUser = async (id: string, avatarUrl?: string | null) => {
+    loading.value = true;
+    try {
+      if (avatarUrl) {
+        await deleteImage(avatarUrl);
+      }
+      await $fetch(`/api/admin/users/${id}`, {
+        method: "DELETE",
+        headers: {
+          Authorization: `Bearer ${token.value}`,
+        },
+      });
+    } catch (error) {
+      console.error("Error deleting user:", error);
+      throw error;
+    } finally {
+      loading.value = false;
+    }
   };
 
   return {
-    ...crud,
+    data,
+    loading,
+    fetchAll,
     createUser,
+    update,
+    remove: removeUser,
     uploadImage,
   };
 }
