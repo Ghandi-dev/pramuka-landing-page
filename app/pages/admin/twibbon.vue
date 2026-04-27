@@ -18,7 +18,7 @@ import { Label } from '@/components/ui/label'
 import { toast } from 'vue-sonner'
 import { useTwibbonCampaignService, type TwibbonCampaign } from '~/services/twibbonService'
 
-definePageMeta({ layout: 'admin' })
+definePageMeta({ layout: 'admin', middleware: 'admin' })
 useHead({ title: 'Kelola Twibbon', meta: [{ name: 'robots', content: 'noindex, nofollow' }] })
 
 const service = useTwibbonCampaignService();

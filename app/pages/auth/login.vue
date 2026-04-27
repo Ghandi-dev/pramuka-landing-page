@@ -22,6 +22,19 @@ const loading = ref(false);
 const errorMsg = ref("");
 
 const { setProfile } = useAdminAuth();
+const route = useRoute();
+
+onMounted(() => {
+  if (route.query.unauthorized) {
+    import("vue-sonner").then(({ toast }) => {
+      toast.error("Silakan login terlebih dahulu untuk mengakses halaman admin", {
+        id: "unauthorized-toast"
+      });
+    });
+    // Remove query param without refreshing
+    router.replace({ query: {} });
+  }
+});
 
 const handleLogin = async () => {
   loading.value = true;

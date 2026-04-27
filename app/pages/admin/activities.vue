@@ -19,7 +19,7 @@ import { Label } from '@/components/ui/label'
 
 import { toast } from 'vue-sonner'
 
-definePageMeta({ layout: 'admin' })
+definePageMeta({ layout: 'admin', middleware: 'admin' })
 useHead({ title: 'Kelola Kegiatan', meta: [{ name: 'robots', content: 'noindex, nofollow' }] })
 
 const service = useActivityService()

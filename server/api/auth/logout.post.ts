@@ -11,6 +11,7 @@ export default defineEventHandler(async (event) => {
 
     // Clear cookies
     deleteCookie(event, 'refresh_token')
+    deleteCookie(event, 'auth_token')
     
     return {
         message: 'Logout berhasil'
