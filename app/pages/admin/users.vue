@@ -31,6 +31,11 @@ useHead({
 
 const service = useUserService()
 const { data, loading, fetchAll } = service
+const { profile } = useAdminAuth()
+
+const filteredData = computed(() => {
+  return data.value.filter(u => u.id !== profile.value?.id)
+})
 
 const {
   dialogOpen, isEditing, confirmOpen, deleteTarget, saving, deleting, uploading,
@@ -148,7 +153,7 @@ onMounted(async () => {
       </Button>
     </div>
 
-    <DataTable :columns="columns" :data="data" :loading="loading" search-placeholder="Cari user..." />
+    <DataTable :columns="columns" :data="filteredData" :loading="loading" search-placeholder="Cari user..." />
 
     <Dialog v-model:open="dialogOpen">
       <DialogContent class="sm:max-w-md max-h-[90vh] overflow-y-auto">

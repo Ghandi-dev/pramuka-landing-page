@@ -17,7 +17,17 @@ const memberCount = ref(0)
 const messageCount = ref(0)
 const loading = ref(true)
 
+const route = useRoute()
+const router = useRouter()
+
 onMounted(async () => {
+    if (route.query.already_logged_in) {
+        import('vue-sonner').then(({ toast }) => {
+            toast.info('Anda sudah login', { id: 'already-logged-in' })
+        })
+        router.replace({ query: {} })
+    }
+
     try {
         const activityCrud = useSupabaseCrud('activities')
         const galleryCrud = useSupabaseCrud('galleries')
