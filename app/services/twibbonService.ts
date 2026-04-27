@@ -16,10 +16,7 @@ export function useTwibbonCampaignService() {
   const { uploadImage, deleteImage } = useImageService();
 
     const removeCampaign = async (id: string, frameUrl?: string | null) => {
-        if (frameUrl) {
-            await deleteImage(frameUrl)
-        }
-        return await crud.remove(id)
+        return await crud.remove(id, frameUrl)
     }
 
     return {
