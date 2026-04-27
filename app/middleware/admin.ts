@@ -4,18 +4,18 @@ export default defineNuxtRouteMiddleware(async (to, from) => {
   if (to.path === "/auth/login") return;
   const { profile, token, fetchProfile } = useAdminAuth();
   if (!token.value) {
-    return navigateTo("/auth/login");
+    return navigateTo("/auth/login?unauthorized=true");
   }
   // Fetch profile if not already loaded (this will use our custom fetchProfile)
   if (!profile.value) {
     await fetchProfile();
     // If still no profile, it means token is invalid or expired
     if (!profile.value) {
-      return navigateTo("/auth/login");
+      return navigateTo("/auth/login?unauthorized=true");
     }
   }
   // Double check if role is admin
   if (profile.value.role !== "admin") {
-    return navigateTo("/auth/login");
+    return navigateTo("/auth/login?unauthorized=true");
   }
 });
