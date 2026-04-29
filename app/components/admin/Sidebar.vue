@@ -10,6 +10,7 @@ import {
     X,
     Sun,
     Moon,
+    User,
 } from 'lucide-vue-next'
 import type { SupabaseClient } from '@supabase/supabase-js'
 
@@ -53,6 +54,7 @@ const menuItems = [
     { label: 'Pesan Masuk', icon: Mail, to: '/admin/messages' },
     { label: 'Twibbon', icon: Images, to: '/admin/twibbon' },
     { label: 'User', icon: Users, to: '/admin/users' },
+    { label: 'Profil Saya', icon: User, to: '/admin/profile' },
 ]
 
 const isActive = (path: string) => {
