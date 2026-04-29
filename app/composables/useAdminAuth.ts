@@ -63,6 +63,42 @@ export const useAdminAuth = () => {
     }
   };
 
+  const updateProfile = async (data: Partial<Profiles>) => {
+    try {
+      const response = await $fetch("/api/auth/update-profile", {
+        method: "PUT",
+        headers: {
+          Authorization: `Bearer ${token.value}`,
+        },
+        body: data,
+      });
+      if (response && profile.value) {
+        profile.value = { ...profile.value, ...response } as Profiles;
+      }
+      return response;
+    } catch (e) {
+      throw e;
+    }
+  };
+
+  const changePassword = async (oldPassword: string, newPassword: string) => {
+    try {
+      const response = await $fetch("/api/auth/change-password", {
+        method: "POST",
+        headers: {
+          Authorization: `Bearer ${token.value}`,
+        },
+        body: {
+          old_password: oldPassword,
+          new_password: newPassword,
+        },
+      });
+      return response;
+    } catch (e) {
+      throw e;
+    }
+  };
+
   const setProfile = (data: Profiles, jwt: string) => {
     profile.value = data;
     token.value = jwt;
@@ -87,5 +123,7 @@ export const useAdminAuth = () => {
     fetchProfile,
     setProfile,
     clearProfile,
+    updateProfile,
+    changePassword,
   };
 };

@@ -1,6 +1,7 @@
 <script setup lang="ts">
-import { h } from "vue";
-import { Plus, Pencil, Trash2, User } from "lucide-vue-next";
+import { h, ref } from "vue";
+import { toast } from "vue-sonner";
+import { Plus, Pencil, Trash2, User, Eye, EyeOff, Loader2 } from "lucide-vue-next";
 import { useUserService, type Profiles } from "~/services/userService";
 import type { ColumnDef } from "@tanstack/vue-table";
 import Button from "~/components/ui/button/Button.vue";
@@ -43,8 +44,19 @@ const {
 } = useAdminPage<Profiles>(service as any, {
   itemName: 'User',
   imageField: 'avatar_url',
-  defaultForm: { name: '', email: '', password: '', role: 'member', avatar_url: '' }
+  defaultForm: { name: '', email: '', password: '', confirm_password: '', role: 'member', avatar_url: '' }
 })
+
+const showPassword = ref(false)
+const showConfirmPassword = ref(false)
+
+const submitUser = async () => {
+  if (!isEditing.value && form.value.password !== form.value.confirm_password) {
+    toast.error("Konfirmasi password tidak cocok.");
+    return;
+  }
+  await handleSave();
+}
 
 const columns: ColumnDef<Profiles, any>[] = [
   {
@@ -160,23 +172,45 @@ onMounted(async () => {
         <DialogHeader>
           <DialogTitle>{{
             isEditing ? "Edit User" : "Tambah User Baru"
-          }}</DialogTitle>
+            }}</DialogTitle>
         </DialogHeader>
-        <form @submit.prevent="handleSave" class="space-y-4 pt-2">
+        <form @submit.prevent="submitUser" class="space-y-4 pt-2">
           <div class="space-y-2">
             <Label for="name">Nama Lengkap</Label>
             <Input id="name" v-model="form.name" placeholder="Nama Lengkap" required />
           </div>
 
-          <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+          <div class="space-y-2">
+            <Label for="email">Email</Label>
+            <Input id="email" type="email" v-model="form.email" placeholder="email@example.com" :disabled="isEditing"
+              required />
+          </div>
+
+          <div class="grid grid-cols-1 sm:grid-cols-2 gap-4" v-if="!isEditing">
             <div class="space-y-2">
-              <Label for="email">Email</Label>
-              <Input id="email" type="email" v-model="form.email" placeholder="email@example.com" :disabled="isEditing"
-                required />
-            </div>
-            <div class="space-y-2" v-if="!isEditing">
               <Label for="password">Password</Label>
-              <Input id="password" type="password" v-model="form.password" placeholder="••••••••" required />
+              <div class="relative">
+                <Input id="password" :type="showPassword ? 'text' : 'password'" v-model="form.password"
+                  placeholder="••••••••" required class="pr-10" />
+                <button type="button" @click="showPassword = !showPassword"
+                  class="absolute right-3 top-1/2 -translate-y-1/2 text-muted-foreground hover:text-foreground">
+                  <EyeOff v-if="showPassword" class="w-4 h-4" />
+                  <Eye v-else class="w-4 h-4" />
+                </button>
+              </div>
+            </div>
+
+            <div class="space-y-2">
+              <Label for="confirm_password">Konfirmasi Password</Label>
+              <div class="relative">
+                <Input id="confirm_password" :type="showConfirmPassword ? 'text' : 'password'"
+                  v-model="form.confirm_password" placeholder="••••••••" required class="pr-10" />
+                <button type="button" @click="showConfirmPassword = !showConfirmPassword"
+                  class="absolute right-3 top-1/2 -translate-y-1/2 text-muted-foreground hover:text-foreground">
+                  <EyeOff v-if="showConfirmPassword" class="w-4 h-4" />
+                  <Eye v-else class="w-4 h-4" />
+                </button>
+              </div>
             </div>
           </div>
 
@@ -207,6 +241,7 @@ onMounted(async () => {
           <div class="flex justify-end gap-3 pt-2">
             <Button type="button" variant="outline" @click="dialogOpen = false">Batal</Button>
             <Button type="submit" :disabled="saving || uploading">
+              <Loader2 v-if="saving || uploading" class="w-4 h-4 mr-2 animate-spin" />
               {{ saving || uploading ? "Menyimpan..." : "Simpan" }}
             </Button>
           </div>
