@@ -14,7 +14,8 @@ const { data: campaign, pending: loading } = await useAsyncData<TwibbonCampaign 
   `twibbon-campaign-${route.params.slug}`,
   async () => {
     if (route.params.slug) {
-      return await fetchByField("slug", route.params.slug as string);
+      const data = await fetchByField("slug", route.params.slug as string);
+      return data;
     }
     return null;
   }

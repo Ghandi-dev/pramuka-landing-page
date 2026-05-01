@@ -29,12 +29,14 @@ watch(
   () => props.frameUrl,
   (url) => {
     if (!url) return;
-    const img = new Image();
-    img.crossOrigin = "anonymous";
-    img.onload = () => {
-      frameSize.value = { width: img.width, height: img.height };
-    };
-    img.src = url;
+    if (import.meta.client) {
+      const img = new Image();
+      img.crossOrigin = "anonymous";
+      img.onload = () => {
+        frameSize.value = { width: img.width, height: img.height };
+      };
+      img.src = url;
+    }
   },
   { immediate: true }
 );
