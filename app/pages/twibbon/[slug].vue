@@ -10,16 +10,15 @@ const route = useRoute();
 const { t } = useI18n();
 const siteUrl = useRuntimeConfig().public.siteUrl as string;
 
-const campaign = ref<TwibbonCampaign | null>(null);
-const loading = ref(true);
-
-onMounted(async () => {
-  if (route.params.slug) {
-    campaign.value = await fetchByField("slug", route.params.slug as string);
+const { data: campaign, pending: loading } = await useAsyncData<TwibbonCampaign | null>(
+  `twibbon-campaign-${route.params.slug}`,
+  async () => {
+    if (route.params.slug) {
+      return await fetchByField("slug", route.params.slug as string);
+    }
+    return null;
   }
-
-  loading.value = false;
-});
+);
 
 // Dynamic SEO Meta
 useSeoMeta({

@@ -1,9 +1,25 @@
 <script setup lang="ts">
-import { ref, computed } from "vue"
+import { ref, computed, onMounted } from "vue"
 import { useI18n, useLocalePath } from "#imports"
 
 const { t } = useI18n()
 const localePath = useLocalePath()
+
+const { profile, loading, token, fetchProfile } = useAdminAuth()
+
+const isAuthChecking = computed(() => {
+  // Jika sedang loading dari fetchProfile
+  if (loading.value) return true
+  // Jika ada token di cookie tapi profile belum terload (akan difetch di onMounted)
+  if (token.value && !profile.value) return true
+  return false
+})
+
+onMounted(() => {
+  if (token.value && !profile.value) {
+    fetchProfile()
+  }
+})
 
 const isMobileMenuOpen = ref(false)
 
@@ -56,9 +72,13 @@ function toggleMenu() {
         <div class="flex items-center gap-4">
           <LanguageSwitcher />
 
-          <NuxtLink :to="localePath('/auth/login')"
-            class="hidden md:inline-flex h-10 items-center justify-center rounded-sm bg-primary px-6 text-sm font-medium text-primary-foreground transition-all hover:bg-primary/90 hover:shadow-lg hover:shadow-primary/20 hover:-translate-y-0.5">
-            {{ t('nav.cta') }}
+          <NuxtLink :to="profile ? localePath('/admin') : localePath('/auth/login')"
+            class="hidden md:inline-flex h-10 min-w-[120px] items-center justify-center rounded-sm bg-primary px-6 text-sm font-medium text-primary-foreground transition-all hover:bg-primary/90 hover:shadow-lg hover:shadow-primary/20 hover:-translate-y-0.5">
+            <svg v-if="isAuthChecking" class="animate-spin h-4 w-4" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+              <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
+              <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
+            </svg>
+            <span v-else>{{ profile ? 'Dashboard' : t('nav.cta') }}</span>
           </NuxtLink>
 
           <button @click="toggleMenu" class="md:hidden flex flex-col justify-center gap-1.5 w-8 h-8 rounded-full"
@@ -85,10 +105,14 @@ function toggleMenu() {
         </NuxtLink>
 
         <div class="pt-8 mt-8 border-t border-border">
-          <NuxtLink :to="localePath('/auth/login')"
+          <NuxtLink :to="profile ? localePath('/admin') : localePath('/auth/login')"
             class="inline-flex h-12 w-full items-center justify-center rounded-sm bg-primary px-8 text-base font-medium text-primary-foreground"
             @click="isMobileMenuOpen = false">
-            {{ t('nav.cta') }}
+            <svg v-if="isAuthChecking" class="animate-spin h-5 w-5" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+              <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
+              <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
+            </svg>
+            <span v-else>{{ profile ? 'Dashboard' : t('nav.cta') }}</span>
           </NuxtLink>
         </div>
       </nav>
